@@ -44,7 +44,7 @@ class AccessibleImageImpl implements AccessibleImage {
 		$this->prefixId = $configure->getParameter('prefix-generated-ids');
 		$this->classListImageAreas = $configure->getParameter('class-list-image-areas');
 		$this->classLongDescriptionLink = $configure->getParameter('class-longdescription-link');
-		$this->textLongDescriptionLink = $configure->getParameter('text-longdescription-link');
+		$this->sufixLongDescriptionLink = $configure->getParameter('sufix-longdescription-link');
 		$this->dataListForImage = $configure->getParameter('data-list-for-image');
 		$this->dataLongDescriptionForImage = $configure->getParameter('data-longdescription-for-image');
 		$this->dataIgnore = $configure->getParameter('data-ignore');
@@ -104,9 +104,9 @@ class AccessibleImageImpl implements AccessibleImage {
 			if ($this->parser->find('[' . $this->dataLongDescriptionForImage . '=' . $element->getAttribute('id') . ']')->firstResult() == null) {
 				$text = null;
 				if ($element->hasAttribute('alt')) {
-					$text = $element->getAttribute('alt') . ' ' . $this->textLongDescriptionLink;
+					$text = $element->getAttribute('alt') . ' ' . $this->sufixLongDescriptionLink;
 				} else {
-					$text = $this->textLongDescriptionLink;
+					$text = $this->sufixLongDescriptionLink;
 				}
 				$longDescription = $element->getAttribute('longdesc');
 				$anchor = $this->parser->createElement('a');
