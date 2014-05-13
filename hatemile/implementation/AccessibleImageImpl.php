@@ -34,7 +34,7 @@ class AccessibleImageImpl implements AccessibleImage {
 	protected $prefixId;
 	protected $classListImageAreas;
 	protected $classLongDescriptionLink;
-	protected $textLongDescriptionLink;
+	protected $sufixLongDescriptionLink;
 	protected $dataListForImage;
 	protected $dataLongDescriptionForImage;
 	protected $dataIgnore;
