@@ -17,33 +17,68 @@ limitations under the License.
 
 namespace hatemile\util\simplehtmldom;
 
-require_once __DIR__ . '/../HTMLDOMParser.php';
-require_once __DIR__ . '/../CommonFunctions.php';
-require_once __DIR__ . '/../Configure.php';
-require_once __DIR__ . '/SimpleHTMLDOMElement.php';
+require_once dirname(__FILE__) . '/../HTMLDOMParser.php';
+require_once dirname(__FILE__) . '/../CommonFunctions.php';
+require_once dirname(__FILE__) . '/../Configure.php';
+require_once dirname(__FILE__) . '/SimpleHTMLDOMElement.php';
 
 use hatemile\util\HTMLDOMParser;
 use hatemile\util\CommonFunctions;
 use hatemile\util\simplehtmldom\SimpleHTMLDOMElement;
 use hatemile\util\Configure;
 
+/**
+ * The class SimpleHTMLDOMParser is official implementation of HTMLDOMParser
+ * interface for the Simple HTML DOM library.
+ * @version 2014-07-23
+ */
 class SimpleHTMLDOMParser implements HTMLDOMParser {
+	
+	/**
+	 * The root element of the parser.
+	 * @var \simple_html_dom
+	 */
 	protected $document;
+	
+	/**
+	 * The found elements.
+	 * @var \simple_html_dom_node
+	 */
 	protected $results;
+	
+	/**
+	 * The prefix of generated id.
+	 * @var string
+	 */
 	protected $prefixId;
+	
+	/**
+	 * Initializes a new object that encapsulate the parser of Simple HTML DOM
+	 * library.
+	 * @param string|\simple_html_dom $codeOrParser The html code of page or the
+	 * parser from Simple HTML DOM library.
+	 * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
+	 */
+	public function __construct($codeOrParser, Configure $configure) {
+		if (is_string($codeOrParser)) {
+			$this->document = str_get_html($codeOrParser, true, true, DEFAULT_TARGET_CHARSET, false);
+		} else if ($codeOrParser instanceof \simple_html_dom) {
+			$this->document = $codeOrParser;
+		}
+		$this->prefixId = $configure->getParameter('prefix-generated-ids');
+	}
 	
 	protected function getSelectorOfElement($selector) {
 		if ($selector instanceof SimpleHTMLDOMElement) {
-			CommonFunctions::generateId($selector, $this->prefixId);
-			return '#' . $selector->getAttribute('id');
+			$autoid = false;
+			if (!$selector->hasAttribute('id')) {
+				CommonFunctions::generateId($selector, $this->prefixId);
+				$autoid = true;
+			}
+			return array('selector' => '#' . $selector->getAttribute('id'), 'autoid' => $autoid);
 		} else {
-			return $selector;
+			return array('selector' => $selector, 'autoid' => false);
 		}
-	}
-
-	public function __construct($code, Configure $configure) {
-		$this->document = str_get_html($code, true, true, DEFAULT_TARGET_CHARSET, false);
-		$this->prefixId = $configure->getParameter('prefix-generated-ids');
 	}
 	
 	public function find($selector) {
@@ -54,49 +89,63 @@ class SimpleHTMLDOMParser implements HTMLDOMParser {
 		}
 		return $this;
 	}
-
+	
 	public function findChildren($selector) {
-		$selector = $this->getSelectorOfElement($selector);
+		$sel = $this->getSelectorOfElement($selector);
 		$results = $this->results;
 		$this->results = array();
 		foreach ($results as $result) {
-			$elements = $result->find($selector);
+			$elements = $result->find($sel['selector']);
 			foreach ($elements as $element) {
 				if ($element->parent == $result) {
 					array_push($this->results, $element);
 				}
 			}
 		}
+		if ($sel['autoid']) {
+			$selector->removeAttribute('id');
+		}
 		return $this;
 	}
 	
 	public function findDescendants($selector) {
-		$selector = $this->getSelectorOfElement($selector);
+		$sel = $this->getSelectorOfElement($selector);
 		$results = $this->results;
 		$this->results = array();
 		foreach ($results as $result) {
-			$this->results = array_merge($this->results, $result->find($selector));
+			$this->results = array_merge($this->results, $result->find($sel['selector']));
+		}
+		if ($sel['autoid']) {
+			$selector->removeAttribute('id');
 		}
 		return $this;
 	}
 	
 	public function findAncestors($selector) {
-		$selector = $this->getSelectorOfElement($selector);
+		$sel = $this->getSelectorOfElement($selector);
 		$selectorChildren = array();
 		foreach ($this->results as $result) {
-			$sel = $this->getSelectorOfElement(new SimpleHTMLDOMElement($result));
-			array_push($selectorChildren, $sel);
+			$selChildren = $this->getSelectorOfElement(new SimpleHTMLDOMElement($result));
+			array_push($selectorChildren, $selChildren);
 		}
-		$parents = $this->document->find($selector);
+		$parents = $this->document->find($sel['selector']);
 		$this->results = array();
 		foreach ($parents as $parent) {
 			foreach ($selectorChildren as $selectorChild) {
-				$result = $parent->find($selectorChild);
+				$result = $parent->find($selectorChild['selector']);
 				if (!empty($result)) {
 					array_push($this->results, $parent);
 					break;
 				}
 			}
+		}
+		foreach ($selectorChildren as $selectorChild) {
+			if ($selectorChild['autoid']) {
+				$this->find($selectorChild['selector'])->firstResult()->removeAttribute('id');
+			}
+		}
+		if ($sel['autoid']) {
+			$selector->removeAttribute('id');
 		}
 		return $this;
 	}
@@ -114,7 +163,7 @@ class SimpleHTMLDOMParser implements HTMLDOMParser {
 		}
 		return new SimpleHTMLDOMElement($this->results[sizeof($this->results) - 1]);
 	}
-
+	
 	public function listResults() {
 		$array = array();
 		foreach ($this->results as $item) {
@@ -126,9 +175,13 @@ class SimpleHTMLDOMParser implements HTMLDOMParser {
 	public function createElement($tag) {
 		return new SimpleHTMLDOMElement(str_get_html('<' . $tag . '></' . $tag . '>')->firstChild());
 	}
-
+	
 	public function getHTML() {
 		return $this->document->save();
+	}
+	
+	public function getParser() {
+		return $this->document;
 	}
 	
 	public function clearParser() {

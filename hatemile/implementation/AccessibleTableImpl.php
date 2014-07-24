@@ -17,11 +17,11 @@ limitations under the License.
 
 namespace hatemile\implementation;
 
-require_once __DIR__ . '/../util/HTMLDOMElement.php';
-require_once __DIR__ . '/../util/HTMLDOMParser.php';
-require_once __DIR__ . '/../util/Configure.php';
-require_once __DIR__ . '/../util/CommonFunctions.php';
-require_once __DIR__ . '/../AccessibleTable.php';
+require_once dirname(__FILE__) . '/../util/HTMLDOMElement.php';
+require_once dirname(__FILE__) . '/../util/HTMLDOMParser.php';
+require_once dirname(__FILE__) . '/../util/Configure.php';
+require_once dirname(__FILE__) . '/../util/CommonFunctions.php';
+require_once dirname(__FILE__) . '/../AccessibleTable.php';
 
 use hatemile\util\HTMLDOMElement;
 use hatemile\util\HTMLDOMParser;
@@ -29,36 +29,78 @@ use hatemile\util\Configure;
 use hatemile\util\CommonFunctions;
 use hatemile\AccessibleTable;
 
+/**
+ * The AccessibleTableImpl class is official implementation of AccessibleTable
+ * interface.
+ * @version 2014-07-23
+ */
 class AccessibleTableImpl implements AccessibleTable {
+	
+	/**
+	 * The HTML parser.
+	 * @var \hatemile\util\HTMLDOMParser
+	 */
 	protected $parser;
+	
+	/**
+	 * The prefix of generated id.
+	 * @var string
+	 */
 	protected $prefixId;
+	
+	/**
+	 * The name of attribute for that the element not can be modified by
+	 * HaTeMiLe.
+	 * @var string
+	 */
 	protected $dataIgnore;
-
+	
+	/**
+	 * Initializes a new object that manipulate the accessibility of the tables
+	 * of parser.
+	 * @param \hatemile\util\HTMLDOMParser $parser The HTML parser.
+	 * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
+	 */
 	public function __construct(HTMLDOMParser $parser, Configure $configure) {
 		$this->parser = $parser;
 		$this->prefixId = $configure->getParameter('prefix-generated-ids');
-		$this->dataIgnore = $configure->getParameter('data-ignore');
+		$this->dataIgnore = 'data-' . $configure->getParameter('data-ignore');
 	}
-
+	
+	/**
+	 * Returns a list that represents the table.
+	 * @param \hatemile\util\HTMLDOMElement $part The table header, table
+	 * footer or table body.
+	 * @return \hatemile\util\HTMLDOMElement[][] The list that represents
+	 * the table.
+	 */
 	protected function generatePart(HTMLDOMElement $part) {
 		$rows = $this->parser->find($part)->findChildren('tr')->listResults();
 		$table = array();
 		foreach ($rows as $row) {
-			array_push($table, $this->generateColspan($this->parser->find($row)->findChildren('td,th')->listResults()));
+			array_push($table, $this->generateColspan($this->parser->find($row)->findChildren('td,th')
+					->listResults()));
 		}
 		return $this->generateRowspan($table);
 	}
-
+	
+	/**
+	 * Returns a list that represents the table with the rowspans.
+	 * @param \hatemile\util\HTMLDOMElement[][] $rows The list that represents
+	 * the table without the rowspans.
+	 * @return \hatemile\util\HTMLDOMElement[][] The list that represents the
+	 * table with the rowspans.
+	 */
 	protected function generateRowspan($rows) {
 		$copy = array_merge($rows);
 		$table = array();
 		if (!empty($rows)) {
 			for ($i = 0, $lengthRows = sizeof($rows); $i < $lengthRows; $i++) {
 				$columnIndex = 0;
-				$cells = array_merge($copy[$i]);
 				if (empty($table[$i])) {
 					$table[$i] = array();
 				}
+				$cells = array_merge($copy[$i]);
 				for ($j = 0, $lengthCells = sizeof($cells); $j < $lengthCells; $j++) {
 					$cell = $cells[$j];
 					$m = $j + $columnIndex;
@@ -84,7 +126,14 @@ class AccessibleTableImpl implements AccessibleTable {
 		}
 		return $table;
 	}
-
+	
+	/**
+	 * Returns a list that represents the line of table with the colspans.
+	 * @param \hatemile\util\HTMLDOMElement[] $row The list that represents the
+	 * line of table without the colspans.
+	 * @return \hatemile\util\HTMLDOMElement[] The list that represents the line
+	 * of table with the colspans.
+	 */
 	protected function generateColspan($row) {
 		$copy = array_merge($row);
 		$cells = array_merge($row);
@@ -99,7 +148,14 @@ class AccessibleTableImpl implements AccessibleTable {
 		}
 		return $copy;
 	}
-
+	
+	/**
+	 * Validate the list that represents the table header.
+	 * @param \hatemile\util\HTMLDOMElement[][] $header The list that
+	 * represents the table header.
+	 * @return boolean True if the table header is valid or false if the table
+	 * header is not valid.
+	 */
 	protected function validateHeader($header) {
 		if (empty($header)) {
 			return false;
@@ -108,43 +164,53 @@ class AccessibleTableImpl implements AccessibleTable {
 		foreach ($header as $elements) {
 			if (empty($elements)) {
 				return false;
-			} else if ($length == -1) {
+			} else if ($length === -1) {
 				$length = sizeof($elements);
-			} else if (sizeof($elements) != $length) {
+			} else if (sizeof($elements) !== $length) {
 				return false;
 			}
 		}
 		return true;
 	}
-
+	
+	/**
+	 * Returns a list with ids of rows of same column.
+	 * @param \hatemile\util\HTMLDOMElement[][] $header The list that represents
+	 * the table header.
+	 * @param integer $index The index of columns.
+	 * @return string[] The list with ids of rows of same column.
+	 */
 	protected function returnListIdsColumns($header, $index) {
 		$ids = array();
 		foreach ($header as $row) {
-			if ($row[$index]->getTagName() == 'TH') {
+			if ($row[$index]->getTagName() === 'TH') {
 				array_push($ids, $row[$index]->getAttribute('id'));
 			}
 		}
 		return $ids;
 	}
 	
+	/**
+	 * Fix the table body or table footer.
+	 * @param \hatemile\util\HTMLDOMElement $element The table body or table
+	 * footer.
+	 */
 	protected function fixBodyOrFooter(HTMLDOMElement $element) {
 		$table = $this->generatePart($element);
 		foreach ($table as $cells) {
 			$headersIds = array();
 			foreach ($cells as $cell) {
-				if ($cell->getTagName() == 'TH') {
+				if ($cell->getTagName() === 'TH') {
 					CommonFunctions::generateId($cell, $this->prefixId);
-					$cell->setAttribute('scope', 'row');
 					array_push($headersIds, $cell->getAttribute('id'));
+					
+					$cell->setAttribute('scope', 'row');
 				}
 			}
 			if (!empty($headersIds)) {
 				foreach ($cells as $cell) {
-					if ($cell->getTagName() == 'TD') {
-						$headers = null;
-						if ($cell->hasAttribute('headers')) {
-							$headers = $cell->getAttribute('headers');
-						}
+					if ($cell->getTagName() === 'TD') {
+						$headers = $cell->getAttribute('headers');
 						foreach ($headersIds as $headerId) {
 							$headers = CommonFunctions::increaseInList($headers, $headerId);
 						}
@@ -154,54 +220,43 @@ class AccessibleTableImpl implements AccessibleTable {
 			}
 		}
 	}
-
-	public function fixHeader(HTMLDOMElement $element) {
-		if ($element->getTagName() == 'THEAD') {
-			$cells = $this->parser->find($element)->findChildren('tr')->findChildren('th')->listResults();
-			foreach ($cells as $cell) {
-				CommonFunctions::generateId($cell, $this->prefixId);
-				$cell->setAttribute('scope', 'col');
-			}
+	
+	/**
+	 * Fix the table header.
+	 * @param \hatemile\util\HTMLDOMElement $tableHeader The table header.
+	 */
+	protected function fixHeader(HTMLDOMElement $tableHeader) {
+		$cells = $this->parser->find($tableHeader)->findChildren('tr')->findChildren('th')
+				->listResults();
+		foreach ($cells as $cell) {
+			CommonFunctions::generateId($cell, $this->prefixId);
+			
+			$cell->setAttribute('scope', 'col');
 		}
 	}
-
-	public function fixFooter(HTMLDOMElement $element) {
-		if ($element->getTagName() == 'TFOOT') {
-			$this->fixBodyOrFooter($element);
-		}
-	}
-
-	public function fixBody(HTMLDOMElement $element) {
-		if ($element->getTagName() == 'TBODY') {
-			$this->fixBodyOrFooter($element);
-		}
-	}
-
-	public function fixTable(HTMLDOMElement $element) {
-		$header = $this->parser->find($element)->findChildren('thead')->firstResult();
-		$body = $this->parser->find($element)->findChildren('tbody')->firstResult();
-		$footer = $this->parser->find($element)->findChildren('tfoot')->firstResult();
-		if (!empty($header)) {
+	
+	public function fixTable(HTMLDOMElement $table) {
+		$header = $this->parser->find($table)->findChildren('thead')->firstResult();
+		$body = $this->parser->find($table)->findChildren('tbody')->firstResult();
+		$footer = $this->parser->find($table)->findChildren('tfoot')->firstResult();
+		if ($header !== null) {
 			$this->fixHeader($header);
-
+			
 			$headerCells = $this->generatePart($header);
-			if (($this->validateHeader($headerCells)) && (!empty($body))) {
+			if (($body !== null) && ($this->validateHeader($headerCells))) {
 				$lengthHeader = sizeof($headerCells[0]);
-				$table = $this->generatePart($body);
-				if (!empty($footer)) {
-					$table = array_merge($table, $this->generatePart($footer));
+				$fakeTable = $this->generatePart($body);
+				if ($footer !== null) {
+					$fakeTable = array_merge($fakeTable, $this->generatePart($footer));
 				}
-				foreach ($table as $cells) {
-					$i = 0;
-					if (sizeof($cells) == $lengthHeader) {
+				foreach ($fakeTable as $cells) {
+					if (sizeof($cells) === $lengthHeader) {
+						$i = 0;
 						foreach ($cells as $cell) {
-							$ids = $this->returnListIdsColumns($headerCells, $i);
-							$headers = null;
-							if ($cell->hasAttribute('headers')) {
-								$headers = $cell->getAttribute('headers');
-							}
-							foreach ($ids as $id) {
-								$headers = CommonFunctions::increaseInList($headers, $id);
+							$headersIds = $this->returnListIdsColumns($headerCells, $i);
+							$headers = $cell->getAttribute('headers');
+							foreach ($headersIds as $headersId) {
+								$headers = CommonFunctions::increaseInList($headers, $headersId);
 							}
 							$cell->setAttribute('headers', $headers);
 							$i++;
@@ -210,19 +265,19 @@ class AccessibleTableImpl implements AccessibleTable {
 				}
 			}
 		}
-		if (!empty($body)) {
-			$this->fixBody($body);
+		if ($body !== null) {
+			$this->fixBodyOrFooter($body);
 		}
-		if (!empty($footer)) {
-			$this->fixFooter($footer);
+		if ($footer !== null) {
+			$this->fixBodyOrFooter($footer);
 		}
 	}
-
+	
 	public function fixTables() {
-		$elements = $this->parser->find('table')->listResults();
-		foreach ($elements as $element) {
-			if (!$element->hasAttribute($this->dataIgnore)) {
-				$this->fixTable($element);
+		$tables = $this->parser->find('table')->listResults();
+		foreach ($tables as $table) {
+			if (!$table->hasAttribute($this->dataIgnore)) {
+				$this->fixTable($table);
 			}
 		}
 	}

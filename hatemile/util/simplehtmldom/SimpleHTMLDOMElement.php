@@ -17,15 +17,29 @@ limitations under the License.
 
 namespace hatemile\util\simplehtmldom;
 
-require_once __DIR__ . '/../HTMLDOMElement.php';
+require_once dirname(__FILE__) . '/../HTMLDOMElement.php';
 
 use hatemile\util\HTMLDOMElement;
 
+/**
+ * The SimpleHTMLDOMElement class is official implementation of HTMLDOMElement
+ * interface for the Simple HTML DOM library.
+ * @version 2014-07-23
+ */
 class SimpleHTMLDOMElement implements HTMLDOMElement {
+	
+	/**
+	 * The Simple HTML DOM native element encapsulated.
+	 * @var \simple_html_dom_node
+	 */
 	protected $element;
 	
-	public function __construct(\simple_html_dom_node $data) {
-		$this->element = $data;
+	/**
+	 * Initializes a new object that encapsulate the Simple HTML DOM Node.
+	 * @param \simple_html_dom_node $element The Simple HTML DOM Node.
+	 */
+	public function __construct(\simple_html_dom_node $element) {
+		$this->element = $element;
 	}
 	
 	public function getTagName() {
@@ -41,13 +55,16 @@ class SimpleHTMLDOMElement implements HTMLDOMElement {
 	}
 	
 	public function removeAttribute($name) {
-		$this->element->removeAttribute($name);
+		if ($this->hasAttribute($name)) {
+			$this->element->removeAttribute($name);
+			unset($this->element->attr[$name]);
+		}
 	}
 	
 	public function hasAttribute($name) {
 		return $this->element->hasAttribute($name);
 	}
-
+	
 	public function hasAttributes() {
 		$attributes = $this->element->getAllAttributes();
 		return !empty($attributes);
@@ -99,7 +116,7 @@ class SimpleHTMLDOMElement implements HTMLDOMElement {
 		$parent->children[$indexChildren] = $newElement->getData();
 		$parent->nodes[$indexNodes] = $newElement->getData();
 	}
-
+	
 	public function appendElement(HTMLDOMElement $element) {
 		$this->element->appendChild($element->getData());
 		return $element;
@@ -113,10 +130,9 @@ class SimpleHTMLDOMElement implements HTMLDOMElement {
 		}
 		return $elements;
 	}
-
+	
 	public function appendText($text) {
-		$textNode = str_get_html($text)->nodes;
-		$this->element->appendChild($textNode[0]);
+		$this->element->appendChild(str_get_html($text)->nodes[0]);
 	}
 	
 	public function hasChildren() {
@@ -150,24 +166,22 @@ class SimpleHTMLDOMElement implements HTMLDOMElement {
 	public function setData($data) {
 		$this->element = $data;
 	}
-
+	
 	public function cloneElement() {
 		return new SimpleHTMLDOMElement(str_get_html($this->getOuterHTML())->firstChild());
 	}
-
+	
 	public function getFirstElementChild() {
 		if (!$this->hasChildren()) {
 			return null;
 		}
-		$firstChild = $this->element->first_child();
-		return new SimpleHTMLDOMElement($firstChild);
+		return new SimpleHTMLDOMElement($this->element->first_child());
 	}
-
+	
 	public function getLastElementChild() {
 		if (!$this->hasChildren()) {
 			return null;
 		}
-		$lastChild = $this->element->last_child();
-		return new SimpleHTMLDOMElement($lastChild);
+		return new SimpleHTMLDOMElement($this->element->last_child());
 	}
 }

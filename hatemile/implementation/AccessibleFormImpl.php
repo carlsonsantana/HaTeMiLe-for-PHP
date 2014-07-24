@@ -17,11 +17,11 @@ limitations under the License.
 
 namespace hatemile\implementation;
 
-require_once __DIR__ . '/../AccessibleForm.php';
-require_once __DIR__ . '/../util/HTMLDOMElement.php';
-require_once __DIR__ . '/../util/HTMLDOMParser.php';
-require_once __DIR__ . '/../util/CommonFunctions.php';
-require_once __DIR__ . '/../util/Configure.php';
+require_once dirname(__FILE__) . '/../AccessibleForm.php';
+require_once dirname(__FILE__) . '/../util/HTMLDOMElement.php';
+require_once dirname(__FILE__) . '/../util/HTMLDOMParser.php';
+require_once dirname(__FILE__) . '/../util/CommonFunctions.php';
+require_once dirname(__FILE__) . '/../util/Configure.php';
 
 use hatemile\AccessibleForm;
 use hatemile\util\HTMLDOMElement;
@@ -29,167 +29,256 @@ use hatemile\util\HTMLDOMParser;
 use hatemile\util\CommonFunctions;
 use hatemile\util\Configure;
 
+/**
+ * The AccessibleFormImpl class is official implementation of AccessibleForm
+ * interface.
+ * @version 2014-07-23
+ */
 class AccessibleFormImpl implements AccessibleForm {
+	
+	/**
+	 * The HTML parser.
+	 * @var \hatemile\util\HTMLDOMParser
+	 */
 	protected $parser;
+	
+	/**
+	 * The prefix of generated id.
+	 * @var string
+	 */
 	protected $prefixId;
-	protected $classRequiredField;
-	protected $sufixRequiredField;
+	
+	/**
+	 * The name of attribute for the label of a required field.
+	 * @var string
+	 */
+	protected $dataLabelRequiredField;
+	
+	/**
+	 * The prefix of required field.
+	 * @var string
+	 */
+	protected $prefixRequiredField;
+	
+	/**
+	 * The suffix of required field.
+	 * @var string
+	 */
+	protected $suffixRequiredField;
+	
+	/**
+	 * The name of attribute for that the element not can be modified by
+	 * HaTeMiLe.
+	 * @var string
+	 */
 	protected $dataIgnore;
-
+	
+	/**
+	 * Initializes a new object that manipulate the accessibility of the forms
+	 * of parser.
+	 * @param \hatemile\util\HTMLDOMParser $parser The HTML parser.
+	 * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
+	 */
 	public function __construct(HTMLDOMParser $parser, Configure $configure) {
 		$this->parser = $parser;
 		$this->prefixId = $configure->getParameter('prefix-generated-ids');
-		$this->classRequiredField = $configure->getParameter('class-required-field');
-		$this->sufixRequiredField = $configure->getParameter('sufix-required-field');
-		$this->dataIgnore = $configure->getParameter('data-ignore');
+		$this->dataLabelRequiredField = 'data-' . $configure->getParameter('data-label-required-field');
+		$this->dataIgnore = 'data-' . $configure->getParameter('data-ignore');
+		$this->prefixRequiredField = $configure->getParameter('prefix-required-field');
+		$this->suffixRequiredField = $configure->getParameter('suffix-required-field');
 	}
-
-	public function fixRequiredField(HTMLDOMElement $element) {
-		if ($element->hasAttribute('required')) {
-			$element->setAttribute('aria-required', 'true');
+	
+	/**
+	 * Do the label or the aria-label to inform in label that the field is
+	 * required.
+	 * @param \hatemile\util\HTMLDOMElement $label The label.
+	 * @param \hatemile\util\HTMLDOMElement $requiredField The required field.
+	 */
+	protected function fixLabelRequiredField(HTMLDOMElement $label, HTMLDOMElement $requiredField) {
+		if (($requiredField->hasAttribute('required'))
+				|| (($requiredField->hasAttribute('aria-required'))
+				&& (strtolower($requiredField->getAttribute('aria-required')) === 'true'))) {
+			if (!$label->hasAttribute($this->dataLabelRequiredField)) {
+				$label->setAttribute($this->dataLabelRequiredField, 'true');
+			}
+			
+			if ($requiredField->hasAttribute('aria-label')) {
+				$contentLabel = $requiredField->getAttribute('aria-label');
+				if ((!empty($this->prefixRequiredField))
+						&& (strpos($contentLabel, $this->prefixRequiredField) === false)) {
+					$contentLabel = $this->prefixRequiredField . ' ' . $contentLabel;
+				}
+				if ((!empty($this->suffixRequiredField))
+						&& (strpos($contentLabel, $this->suffixRequiredField) === false)) {
+					$contentLabel .= ' ' . $this->suffixRequiredField;
+				}
+				$requiredField->setAttribute('aria-label', $contentLabel);
+			}
+		}
+	}
+	
+	/**
+	 * Fix the control to inform if it has autocomplete and the type.
+	 * @param \hatemile\util\HTMLDOMElement $control The form control.
+	 * @param boolean $active If the element has autocomplete.
+	 */
+	protected function fixControlAutoComplete(HTMLDOMElement $control, $active) {
+		if ($active) {
+			$control->setAttribute('aria-autocomplete', 'both');
+		} else if (!(($active === null) && ($control->hasAttribute('aria-autocomplete')))) {
+			if ($control->hasAttribute('list')) {
+				$list = $this->parser->find('datalist[id=' . $control->getAttribute('list') . ']')
+						->firstResult();
+				if ($list !== null) {
+					$control->setAttribute('aria-autocomplete', 'list');
+				}
+			}
+			if (($active === false) && ((!$control->hasAttribute('aria-autocomplete'))
+					|| (!(strtolower($control->getAttribute('aria-autocomplete')) === 'list')))) {
+				$control->setAttribute('aria-autocomplete', 'none');
+			}
+		}
+	}
+	
+	public function fixRequiredField(HTMLDOMElement $requiredField) {
+		if ($requiredField->hasAttribute('required')) {
+			$requiredField->setAttribute('aria-required', 'true');
+			
 			$labels = null;
-			if ($element->hasAttribute('id')) {
-				$labels = $this->parser->find('label[for=' . $element->getAttribute('id') . ']')->listResults();
+			if ($requiredField->hasAttribute('id')) {
+				$labels = $this->parser
+						->find('label[for=' . $requiredField->getAttribute('id') . ']')->listResults();
 			}
 			if (empty($labels)) {
-				$labels = $this->parser->find($element)->findAncestors('label')->listResults();
+				$labels = $this->parser->find($requiredField)->findAncestors('label')->listResults();
 			}
 			foreach ($labels as $label) {
-				$label->setAttribute('class', CommonFunctions::increaseInList($label->getAttribute('class'), $this->classRequiredField));
+				$this->fixLabelRequiredField($label, $requiredField);
 			}
 		}
 	}
-
+	
 	public function fixRequiredFields() {
-		$elements = $this->parser->find('[required]')->listResults();
-		foreach ($elements as $element) {
-			if (!$element->hasAttribute($this->dataIgnore)) {
-				$this->fixRequiredField($element);
-			}
-		}
-	}
-
-	public function fixDisabledField(HTMLDOMElement $element) {
-		if ($element->hasAttribute('disabled')) {
-			$element->setAttribute('aria-disabled', 'true');
-		}
-	}
-
-	public function fixDisabledFields() {
-		$elements = $this->parser->find('[disabled]')->listResults();
-		foreach ($elements as $element) {
-			if (!$element->hasAttribute($this->dataIgnore)) {
-				$this->fixDisabledField($element);
+		$requiredFields = $this->parser->find('[required]')->listResults();
+		foreach ($requiredFields as $requiredField) {
+			if (!$requiredField->hasAttribute($this->dataIgnore)) {
+				$this->fixRequiredField($requiredField);
 			}
 		}
 	}
 	
-	public function fixReadOnlyField(HTMLDOMElement $element) {
-		if ($element->hasAttribute('readonly')) {
-			$element->setAttribute('aria-readonly', 'true');
+	public function fixRangeField(HTMLDOMElement $rangeField) {
+		if ($rangeField->hasAttribute('min')) {
+			$rangeField->setAttribute('aria-valuemin', $rangeField->getAttribute('min'));
 		}
-	}
-
-	public function fixReadOnlyFields() {
-		$elements = $this->parser->find('[readonly]')->listResults();
-		foreach ($elements as $element) {
-			if (!$element->hasAttribute($this->dataIgnore)) {
-				$this->fixReadOnlyField($element);
-			}
+		if ($rangeField->hasAttribute('max')) {
+			$rangeField->setAttribute('aria-valuemax', $rangeField->getAttribute('max'));
 		}
 	}
 	
-	public function fixRangeField(HTMLDOMElement $element) {
-		if ($element->hasAttribute('min')) {
-			$element->setAttribute('aria-valuemin', \trim($element->getAttribute('min')));
-		}
-		if ($element->hasAttribute('max')) {
-			$element->setAttribute('aria-valuemax', \trim($element->getAttribute('max')));
-		}
-	}
-
 	public function fixRangeFields() {
-		$elements = $this->parser->find('[min],[max]')->listResults();
-		foreach ($elements as $element) {
-			if (!$element->hasAttribute($this->dataIgnore)) {
-				$this->fixRangeField($element);
+		$rangeFields = $this->parser->find('[min],[max]')->listResults();
+		foreach ($rangeFields as $rangeField) {
+			if (!$rangeField->hasAttribute($this->dataIgnore)) {
+				$this->fixRangeField($rangeField);
 			}
 		}
 	}
 	
-	public function fixTextField(HTMLDOMElement $element) {
-		if (($element->getTagName() == 'INPUT') && ($element->hasAttribute('type'))) {
-			$type = \trim(strtolower($element->getAttribute('type')));
-			if (($type == 'text') || ($type == 'search') || ($type == 'email')
-					|| ($type == 'url') || ($type == 'tel') || ($type == 'number')) {
-				$element->setAttribute('aria-multiline', 'false');
-			}
-		} else if ($element->getTagName() == 'TEXTAREA') {
-			$element->setAttribute('aria-multiline', 'true');
-		}
-	}
-
-	public function fixTextFields() {
-		$elements = $this->parser->find('input[type=text],input[type=search],input[type=email],input[type=url],input[type=tel],input[type=number],textarea')->listResults();
-		foreach ($elements as $element) {
-			if (!$element->hasAttribute($this->dataIgnore)) {
-				$this->fixTextField($element);
-			}
-		}
-	}
-	
-	public function fixSelectField(HTMLDOMElement $element) {
-		if ($element->getTagName() == 'SELECT') {
-			if ($element->hasAttribute('multiple')) {
-				$element->setAttribute('aria-multiselectable', 'true');
+	public function fixLabel(HTMLDOMElement $label) {
+		if ($label->getTagName() === 'LABEL') {
+			$field = null;
+			if ($label->hasAttribute('for')) {
+				$field = $this->parser->find('#' . $label->getAttribute('for'))->firstResult();
 			} else {
-				$element->setAttribute('aria-multiselectable', 'false');
-			}
-		}
-	}
-
-	public function fixSelectFields() {
-		$elements = $this->parser->find('select')->listResults();
-		foreach ($elements as $element) {
-			if (!$element->hasAttribute($this->dataIgnore)) {
-				$this->fixSelectField($element);
-			}
-		}
-	}
-
-	public function fixLabel(HTMLDOMElement $element) {
-		if ($element->getTagName() == 'LABEL') {
-			$input = null;
-			if ($element->hasAttribute('for')) {
-				$input = $this->parser->find('#' . $element->getAttribute('for'))->firstResult();
-			} else {
-				$input = $this->parser->find($element)->findDescendants('input,select,textarea')->firstResult();
-				if ($input != null) {
-					CommonFunctions::generateId($input, $this->prefixId);
-					$element->setAttribute('for', $input->getAttribute('id'));
+				$field = $this->parser->find($label)
+						->findDescendants('input,select,textarea')->firstResult();
+				
+				if ($field !== null) {
+					CommonFunctions::generateId($field, $this->prefixId);
+					$label->setAttribute('for', $field->getAttribute('id'));
 				}
 			}
-			if ($input != null) {
-				if (!$input->hasAttribute('aria-label')) {
-					$label = \trim(preg_replace('/[ \n\r\t]+/', ' ', $element->getTextContent()));
-					if ($input->hasAttribute('aria-required')) {
-						if ((\trim(strtolower($input->getAttribute('aria-required'))) == 'true') && (strpos($label, $this->sufixRequiredField) === false)) {
-							$label .= ' ' . $this->sufixRequiredField;
+			if ($field !== null) {
+				if (!$field->hasAttribute('aria-label')) {
+					$field->setAttribute('aria-label'
+							, \trim(preg_replace('/[ \n\r\t]+/', ' ', $label->getTextContent())));
+				}
+				
+				$this->fixLabelRequiredField($label, $field);
+				
+				CommonFunctions::generateId($label, $this->prefixId);
+				$field->setAttribute('aria-labelledby', CommonFunctions::increaseInList
+						($field->getAttribute('aria-labelledby') , $label->getAttribute('id')));
+			}
+		}
+	}
+	
+	public function fixLabels() {
+		$labels = $this->parser->find('label')->listResults();
+		foreach ($labels as $label) {
+			if (!$label->hasAttribute($this->dataIgnore)) {
+				$this->fixLabel($label);
+			}
+		}
+	}
+	
+	public function fixAutoComplete(HTMLDOMElement $element) {
+		if ($element->hasAttribute('autocomplete')) {
+			$active = null;
+			$value = $element->getAttribute('autocomplete');
+			if ($value === 'on') {
+				$active = true;
+			} else if ($value === 'off') {
+				$active = false;
+			}
+			if ($active !== null) {
+				if ($element->getTagName() === 'FORM') {
+					$controls = $this->parser->find($element)->findDescendants('input,textarea')
+							->listResults();
+					if ($element->hasAttribute('id')) {
+						$id = $element->getAttribute('id');
+						$controls = array_merge($controls,  $this->parser
+								->find('input[form=' . $id . '],textarea[form=' . $id . ']')
+								->listResults());
+					}
+					foreach ($controls as $control) {
+						$fix = true;
+						if (($control->getTagName() === 'INPUT') && ($control->hasAttribute("type"))) {
+							$type = strtolower($control->getAttribute('type'));
+							if (($type === 'button') || ($type === 'submit') || ($type === 'reset')
+									|| ($type === 'image') || ($type === 'file')
+									|| ($type === 'checkbox') || ($type === 'radio')
+									|| ($type === 'password') || ($type === 'hidden')) {
+								$fix = false;
+							}
+						}
+						if ($fix) {
+							$autoCompleteControlFormValue = $control->getAttribute('autocomplete');
+							if ($autoCompleteControlFormValue === 'on') {
+								$this->fixControlAutoComplete($control, true);
+							} else if ($autoCompleteControlFormValue === 'off') {
+								$this->fixControlAutoComplete($control, false);
+							} else {
+								$this->fixControlAutoComplete($control, $active);
+							}
 						}
 					}
-					$input->setAttribute('aria-label', $label);
+				} else {
+					$this->fixControlAutoComplete($element, $active);
 				}
-				CommonFunctions::generateId($element, $this->prefixId);
-				$input->setAttribute('aria-labelledby', CommonFunctions::increaseInList($input->getAttribute('aria-labelledby'), $element->getAttribute('id')));
 			}
 		}
+		if ((!$element->hasAttribute('aria-autocomplete')) && ($element->hasAttribute('list'))) {
+			$this->fixControlAutoComplete($element, null);
+		}
 	}
-
-	public function fixLabels() {
-		$elements = $this->parser->find('label')->listResults();
+	
+	public function fixAutoCompletes() {
+		$elements = $this->parser->find('[autocomplete],[list]')->listResults();
 		foreach ($elements as $element) {
 			if (!$element->hasAttribute($this->dataIgnore)) {
-				$this->fixLabel($element);
+				$this->fixAutoComplete($element);
 			}
 		}
 	}

@@ -17,18 +17,29 @@ limitations under the License.
 
 namespace hatemile;
 
-require_once __DIR__ . '/util/HTMLDOMElement.php';
+require_once dirname(__FILE__) . '/util/HTMLDOMElement.php';
 
 use hatemile\util\HTMLDOMElement;
 
+/**
+ * The AccessibleTable interface fix the problems of accessibility associated
+ * with the tables.
+ * @version 2014-07-23
+ */
 interface AccessibleTable {
-	public function fixHeader(HTMLDOMElement $element);
-
-	public function fixFooter(HTMLDOMElement $element);
-
-	public function fixBody(HTMLDOMElement $element);
-
-	public function fixTable(HTMLDOMElement $element);
-
+	
+	/**
+	 * Fix the table.
+	 * @param \hatemile\util\HTMLDOMElement $table The table.
+	 * @see http://www.w3.org/TR/WCAG20-TECHS/H43.html H43: Using id and headers attributes to associate data cells with header cells in data tables
+	 * @see http://www.w3.org/TR/WCAG20-TECHS/H63.html H63: Using the scope attribute to associate header cells and data cells in data tables
+	 */
+	public function fixTable(HTMLDOMElement $table);
+	
+	/**
+	 * Fix the tables.
+	 * @see http://www.w3.org/TR/WCAG20-TECHS/H43.html H43: Using id and headers attributes to associate data cells with header cells in data tables
+	 * @see http://www.w3.org/TR/WCAG20-TECHS/H63.html H63: Using the scope attribute to associate header cells and data cells in data tables
+	 */
 	public function fixTables();
 }

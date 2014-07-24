@@ -17,10 +17,19 @@ limitations under the License.
 
 namespace hatemile;
 
-require_once __DIR__ . '/AccessibleShortcut.php';
+require_once dirname(__FILE__) . '/AccessibleShortcut.php';
 
 use hatemile\AccessibleShortcut;
 
-interface ClienteSideAccessibleShortcut extends AccessibleShortcut {
+/**
+ * The ClientSideAccessibleShortcut interface fix the problems of accessibility
+ * associated with the shortcuts, with more options in by the client-side.
+ * @version 2014-07-23
+ */
+interface ClientSideAccessibleShortcut extends AccessibleShortcut {
+	
+	/**
+	 * Show the shortcuts for the user.
+	 */
 	public function showShortcuts();
 }

@@ -17,13 +17,34 @@ limitations under the License.
 
 namespace hatemile\util;
 
-require_once __DIR__ . '/HTMLDOMElement.php';
+require_once dirname(__FILE__) . '/HTMLDOMElement.php';
 
 use hatemile\util\HTMLDOMElement;
 
+/**
+ * The CommonFuncionts class contains the used methods by HaTeMiLe classes.
+ * @version 2014-07-23
+ */
 class CommonFunctions {
+	
+	/**
+	 * Count the number of ids created.
+	 * @var integer
+	 */
 	protected static $count = 0;
+	
+	/**
+	 * The private constructor prevents that the class not can be initialized.
+	 */
+	private function __construct() {
+		
+	}
 
+	/**
+	 * Generate a id for a element.
+	 * @param \hatemile\util\HTMLDOMElement $element The element.
+	 * @param string $prefix The prefix of id.
+	 */
 	public static function generateId(HTMLDOMElement $element, $prefix) {
 		if (!$element->hasAttribute('id')) {
 			$element->setAttribute('id', $prefix . CommonFunctions::$count);
@@ -31,7 +52,16 @@ class CommonFunctions {
 		}
 	}
 	
-	public static function setListAttributes(HTMLDOMElement $element1, HTMLDOMElement $element2, $attributes) {
+	/**
+	 * Copy a list of attributes of a element for other element.
+	 * @param \hatemile\util\HTMLDOMElement $element1 The element that have
+	 * attributes copied.
+	 * @param \hatemile\util\HTMLDOMElement $element2 The element that copy
+	 * the attributes.
+	 * @param string[] $attributes The list of attributes that will be copied.
+	 */
+	public static function setListAttributes(HTMLDOMElement $element1, HTMLDOMElement $element2
+			, $attributes) {
 		foreach ($attributes as $attribute) {
 			if ($element1->hasAttribute($attribute)) {
 				$element2->setAttribute($attribute, $element1->getAttribute($attribute));
@@ -39,11 +69,18 @@ class CommonFunctions {
 		}
 	}
 	
+	/**
+	 * Increase a item in a HTML list.
+	 * @param string $list The HTML list.
+	 * @param string $stringToIncrease The value of item.
+	 * @return string The HTML list with the item added, if the item not was
+	 * contained in list.
+	 */
 	public static function increaseInList($list, $stringToIncrease) {
 		if ((!empty($list)) && (!empty($stringToIncrease))) {
 			$elements = preg_split("/[ \n\t\r]+/", $list);
 			foreach ($elements as $element) {
-				if ($element == $stringToIncrease) {
+				if ($element === $stringToIncrease) {
 					return $list;
 				}
 			}

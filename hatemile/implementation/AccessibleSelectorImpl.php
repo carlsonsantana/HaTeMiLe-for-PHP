@@ -17,25 +17,52 @@ limitations under the License.
 
 namespace hatemile\implementation;
 
-require_once __DIR__ . '/../AccessibleSelector.php';
-require_once __DIR__ . '/../util/HTMLDOMParser.php';
-require_once __DIR__ . '/../util/Configure.php';
+require_once dirname(__FILE__) . '/../AccessibleSelector.php';
+require_once dirname(__FILE__) . '/../util/HTMLDOMParser.php';
+require_once dirname(__FILE__) . '/../util/Configure.php';
 
 use hatemile\AccessibleSelector;
 use hatemile\util\HTMLDOMParser;
 use hatemile\util\Configure;
 
+/**
+ * The AccessibleSelectorImpl class is official implementation of
+ * AccessibleSelector interface.
+ * @version 2014-07-23
+ */
 class AccessibleSelectorImpl implements AccessibleSelector {
+	
+	/**
+	 * The HTML parser.
+	 * @var \hatemile\util\HTMLDOMParser
+	 */
 	protected $parser;
+	
+	/**
+	 * The changes that will be done in selectors.
+	 * @var \hatemile\util\SelectorChange
+	 */
 	protected $changes;
+	
+	/**
+	 * The name of attribute for that the element not can be modified by
+	 * HaTeMiLe.
+	 * @var string
+	 */
 	protected $dataIgnore;
 	
+	/**
+	 * Initializes a new object that manipulate the accessibility through of the
+	 * selectors of the configuration file.
+	 * @param \hatemile\util\HTMLDOMParser $parser The HTML parser.
+	 * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
+	 */
 	public function __construct(HTMLDOMParser $parser, Configure $configure) {
 		$this->parser = $parser;
 		$this->changes = $configure->getSelectorChanges();
-		$this->dataIgnore = $configure->getParameter('data-ignore');
+		$this->dataIgnore = 'data-' . $configure->getParameter('data-ignore');
 	}
-
+	
 	public function fixSelectors() {
 		foreach ($this->changes as $change) {
 			$elements = $this->parser->find($change->getSelector())->listResults();
@@ -46,5 +73,4 @@ class AccessibleSelectorImpl implements AccessibleSelector {
 			}
 		}
 	}
-
 }

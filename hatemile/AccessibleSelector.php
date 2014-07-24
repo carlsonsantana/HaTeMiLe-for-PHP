@@ -17,6 +17,14 @@ limitations under the License.
 
 namespace hatemile;
 
+/**
+ * The AccessibleSelector interface do changes in selectors.
+ * @version 2014-07-23
+ */
 interface AccessibleSelector {
+	
+	/**
+	 * Fix changes in selectors.
+	 */
 	public function fixSelectors();
 }

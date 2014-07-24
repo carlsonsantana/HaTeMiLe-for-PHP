@@ -17,19 +17,37 @@ limitations under the License.
 
 namespace hatemile\util;
 
-require_once __DIR__ . '/SelectorChange.php';
+require_once dirname(__FILE__) . '/SelectorChange.php';
 
+/**
+ * The Configure class contains the configuration of HaTeMiLe.
+ * @version 2014-07-23
+ */
 class Configure {
+	
+	/**
+	 * The parameters of configuration of HaTeMiLe.
+	 * @var string[]
+	 */
 	protected $parameters;
+	
+	/**
+	 * The changes that will be done in selectors.
+	 * @var \hatemile\util\SelectorChange[]
+	 */
 	protected $selectorChanges;
-
+	
+	/**
+	 * Initializes a new object that contains the configuration of HaTeMiLe.
+	 * @param string $fileName The full path of file.
+	 */
 	public function __construct($fileName = null) {
 		$this->parameters = array();
 		$this->selectorChanges = array();
-		if ($fileName == null) {
-			$fileName = __DIR__ . '/../hatemile-configure.xml';
+		if ($fileName === null) {
+			$fileName = dirname(__FILE__) . '/../../hatemile-configure.xml';
 		}
-
+		
 		$file = new \DOMDocument();
 		$file->load($fileName);
 		$document = $file->documentElement;
@@ -39,43 +57,66 @@ class Configure {
 		for ($i = 0, $length = $childNodes->length; $i < $length; $i++) {
 			$child = $childNodes->item($i);
 			if ($child instanceof \DOMElement) {
-				if (strtoupper($child->tagName) == 'PARAMETERS') {
+				if (strtoupper($child->tagName) === 'PARAMETERS') {
 					$nodeParameters = $child->childNodes;
-				} else if (strtoupper($child->tagName) == 'SELECTOR-CHANGES') {
+				} else if (strtoupper($child->tagName) === 'SELECTOR-CHANGES') {
 					$nodeSelectorChanges = $child->childNodes;
 				}
 			}
 		}
-
-		if ($nodeParameters != null) {
+		
+		if ($nodeParameters !== null) {
 			for ($i = 0, $length = $nodeParameters->length; $i < $length; $i++) {
 				$parameter = $nodeParameters->item($i);
 				if ($parameter instanceof \DOMElement) {
-					if ((strtoupper($parameter->tagName) == 'PARAMETER') && ($parameter->hasAttribute('name'))) {
+					if ((strtoupper($parameter->tagName) === 'PARAMETER')
+							&& ($parameter->hasAttribute('name'))) {
 						$this->parameters[$parameter->getAttribute('name')] = $parameter->textContent;
 					}
 				}
 			}
 		}
-
-		if ($nodeSelectorChanges != null) {
+		
+		if ($nodeSelectorChanges !== null) {
 			for ($i = 0, $length = $nodeSelectorChanges->length; $i < $length; $i++) {
 				$selector = $nodeSelectorChanges->item($i);
 				if ($selector instanceof \DOMElement) {
-					if ((strtoupper($selector->tagName) == 'SELECTOR-CHANGE') && ($selector->hasAttribute('selector')) && ($selector->hasAttribute('attribute')) && ($selector->hasAttribute('value-attribute'))) {
-						array_push($this->selectorChanges, new SelectorChange($selector->getAttribute('selector'), $selector->getAttribute('attribute'), $selector->getAttribute('value-attribute')));
+					if ((strtoupper($selector->tagName) === 'SELECTOR-CHANGE')
+							&& ($selector->hasAttribute('selector'))
+							&& ($selector->hasAttribute('attribute'))
+							&& ($selector->hasAttribute('value-attribute'))) {
+						array_push($this->selectorChanges
+								, new SelectorChange($selector->getAttribute('selector')
+										, $selector->getAttribute('attribute')
+										, $selector->getAttribute('value-attribute')));
 					}
 				}
 			}
 		}
 	}
-
+	
+	/**
+	 * Returns the parameters of configuration.
+	 * @return string[] The parameters of configuration.
+	 */
+	public function getParameters() {
+		return array_merge($this->parameters);
+	}
+	
+	/**
+	 * Returns the value of a parameter of configuration.
+	 * @param string $parameter The parameter.
+	 * @return string The value of the parameter.
+	 */
 	public function getParameter($parameter) {
 		return $this->parameters[$parameter];
 	}
-
+	
+	/**
+	 * Returns the changes that will be done in selectors.
+	 * @return \hatemile\util\SelectorChange[] The changes that will be done in selectors.
+	 */
 	public function getSelectorChanges() {
-		return $this->selectorChanges;
+		return array_merge($this->selectorChanges);
 	}
-
 }

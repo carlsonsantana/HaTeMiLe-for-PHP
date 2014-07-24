@@ -17,11 +17,11 @@ limitations under the License.
 
 namespace hatemile\implementation;
 
-require_once __DIR__ . '/../util/HTMLDOMElement.php';
-require_once __DIR__ . '/../util/HTMLDOMParser.php';
-require_once __DIR__ . '/../util/Configure.php';
-require_once __DIR__ . '/../AccessibleEvent.php';
-require_once __DIR__ . '/../util/CommonFunctions.php';
+require_once dirname(__FILE__) . '/../util/HTMLDOMElement.php';
+require_once dirname(__FILE__) . '/../util/HTMLDOMParser.php';
+require_once dirname(__FILE__) . '/../util/Configure.php';
+require_once dirname(__FILE__) . '/../AccessibleEvent.php';
+require_once dirname(__FILE__) . '/../util/CommonFunctions.php';
 
 use hatemile\util\HTMLDOMElement;
 use hatemile\util\HTMLDOMParser;
@@ -29,122 +29,171 @@ use hatemile\util\Configure;
 use hatemile\AccessibleEvent;
 use hatemile\util\CommonFunctions;
 
+/**
+ * The AccessibleEventImpl class is official implementation of AccessibleEvent
+ * interface.
+ * @version 2014-07-23
+ */
 class AccessibleEventImpl implements AccessibleEvent {
+	
+	/**
+	 * The HTML parser.
+	 * @var \hatemile\util\HTMLDOMParser
+	 */
 	protected $parser;
+	
+	/**
+	 * The id of script element that has the functions that put events in the
+	 * elements.
+	 * @var string
+	 */
 	protected $idScriptEvent;
+	
+	/**
+	 * The id of script element that has the list of elements that will have its
+	 * events modified.
+	 * @var string
+	 */
+	protected $idListIdsScriptOnActive;
+	
+	/**
+	 * The id of script element that modify the events of elements.
+	 * @var string
+	 */
+	protected $idFunctionScriptFixOnActive;
+	
+	/**
+	 * The prefix of generated id.
+	 * @var string
+	 */
 	protected $prefixId;
-	protected $idListIdsScriptOnClick;
-	protected $idFunctionScriptFixOnClick;
-	protected $dataFocused;
-	protected $dataPressed;
+	
+	/**
+	 * The name of attribute for that the element not can be modified by
+	 * HaTeMiLe.
+	 * @var string
+	 */
 	protected $dataIgnore;
+	
+	/**
+	 * The state that indicates if the main script was added in parser.
+	 * @var boolean
+	 */
 	protected $mainScriptAdded;
+	
+	/**
+	 * The state that indicates if the other scripts was added in parser.
+	 * @var boolean
+	 */
 	protected $otherScriptsAdded;
+	
+	/**
+	 * The script element that contains the list of elements that will have its
+	 * events modified.
+	 * @var \hatemile\util\HTMLDOMElement
+	 */
 	protected $scriptList;
-
+	
+	/**
+	 * Initializes a new object that manipulate the accessibility of the
+	 * Javascript events of elements of parser.
+	 * @param \hatemile\util\HTMLDOMParser $parser The HTML parser.
+	 * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
+	 */
 	public function __construct(HTMLDOMParser $parser, Configure $configure) {
 		$this->parser = $parser;
 		$this->prefixId = $configure->getParameter('prefix-generated-ids');
 		$this->idScriptEvent = $configure->getParameter('id-script-event');
-		$this->idListIdsScriptOnClick = $configure->getParameter('id-list-ids-script-onclick');
-		$this->idFunctionScriptFixOnClick = $configure->getParameter('id-function-script-fix-onclick');
-		$this->dataFocused = $configure->getParameter('data-focused');
-		$this->dataPressed = $configure->getParameter('data-pressed');
-		$this->dataIgnore = $configure->getParameter('data-ignore');
+		$this->idListIdsScriptOnActive = $configure->getParameter('id-list-ids-script-onactive');
+		$this->idFunctionScriptFixOnActive = $configure->getParameter('id-function-script-fix-onactive');
+		$this->dataIgnore = 'data-' . $configure->getParameter('data-ignore');
 		$this->mainScriptAdded = false;
 		$this->otherScriptsAdded = false;
 	}
 	
+	/**
+	 * Generate the main script in parser.
+	 */
 	protected function generateMainScript() {
-		if ($this->parser->find('#' . $this->idScriptEvent)->firstResult() == null) {
+		$local = $this->parser->find('head')->firstResult();
+		if ($local === null) {
+			$local = $this->parser->find('body')->firstResult();
+		}
+		if (($local !== null)
+				&& ($this->parser->find('#' . $this->idScriptEvent)->firstResult() === null)) {
 			$script = $this->parser->createElement('script');
 			$script->setAttribute('id', $this->idScriptEvent);
 			$script->setAttribute('type', 'text/javascript');
-
-			$javascript = "\nfunction onFocusEvent(element) {\n"
-					. "	element.setAttribute('" . $this->dataFocused . "', 'true');\n"
-					. "	if (element.onmouseover != undefined) {\n"
-					. "		element.onmouseover();\n"
-					. "	}\n"
-					. "}\n"
-					. "function onBlurEvent(element) {\n"
-					. "	if (element.hasAttribute('" . $this->dataFocused . "')) {\n"
-					. "		if ((element.getAttribute('" . $this->dataFocused . "').toLowerCase() == 'true') && (element.onmouseout != undefined)) {\n"
-					. "			element.onmouseout();\n"
-					. "		}\n"
-					. "		element.setAttribute('" . $this->dataFocused . "', 'false');\n"
-					. "	}\n"
-					. "}\n"
-					. "function onKeyPressEvent(element, event) {\n"
-					. "	element.setAttribute('" . $this->dataPressed . "', event.keyCode);\n"
-					. "}\n"
-					. "function onKeyPressUp(element, event) {\n"
-					. "	var key = event.keyCode;\n"
-					. "	var enter1 = '\\n'.charCodeAt(0);\n"
-					. "	var enter2 = '\\r'.charCodeAt(0);\n"
-					. "	if ((key == enter1) || (key == enter2)) {\n"
-					. "		if (element.hasAttribute('" . $this->dataPressed . "')) {\n"
-					. "			if (key == parseInt(element.getAttribute('" . $this->dataPressed . "'))) {\n"
-					. "				if (element.onclick != undefined) {\n"
-					. "					element.click();\n"
-					. "				}\n"
-					. "				element.removeAttribute('" . $this->dataPressed . "');\n"
-					. "			}\n"
-					. "		}\n"
-					. "	}\n"
-					. "}\n";
+			$javascript = 'function onFocusEvent(e){if(e.onmouseover!=undefined){try{e.onmouseover();}catch(x){}}}function onBlurEvent(e){if(e.onmouseout!=undefined){try{e.onmouseout();}catch(x){}}}function isEnter(k){var n="\\n".charCodeAt(0);var r="\\r".charCodeAt(0);return ((k==n)||(k==r));}function onKeyDownEvent(l,v){if(isEnter(v.keyCode)&&(l.onmousedown!=undefined)){try{l.onmousedown();}catch(x){}}}function onKeyPressEvent(l,v){if(isEnter(v.keyCode)){if(l.onclick!=undefined){try{l.click();}catch(x){}}else if(l.ondblclick!=undefined){try{l.ondblclick();}catch(x){}}}}function onKeyUpEvent(l,v){if(isEnter(v.keyCode)&&(l.onmouseup!=undefined)){try{l.onmouseup();}catch(x){}}}';
 			$script->appendText($javascript);
-
-			$local = $this->parser->find('head')->firstResult();
-			if ($local == null) {
-				$local = $this->parser->find('body')->firstResult();
-			}
 			$local->appendElement($script);
 		}
 		$this->mainScriptAdded = true;
 	}
 	
+	/**
+	 * Generate the other scripts in parser.
+	 */
 	protected function generateOtherScripts() {
-		$this->scriptList = $this->parser->find('#' . $this->idListIdsScriptOnClick)->firstResult();
-		if ($this->scriptList == null) {
-			$this->scriptList = $this->parser->createElement('script');
-			$this->scriptList->setAttribute('id', $this->idListIdsScriptOnClick);
-			$this->scriptList->setAttribute('type', 'text/javascript');
-			$this->scriptList->appendText("\nidsElementsWithOnClick = [];\n");
-			$this->parser->find('body')->firstResult()->appendElement($this->scriptList);
-		}
-		if ($this->parser->find('#' . $this->idFunctionScriptFixOnClick)->firstResult() == null) {
-			$scriptFunction = $this->parser->createElement('script');
-			$scriptFunction->setAttribute('id', $this->idFunctionScriptFixOnClick);
-			$scriptFunction->setAttribute('type', 'text/javascript');
-
-			$javascript = "\n for (var i = 0, length = idsElementsWithOnClick.length; i < length; i++) {\n"
-					. "	var element = document.getElementById(idsElementsWithOnClick[i]);\n"
-					. "	element.onkeypress = function(event) {\n"
-					. "		onKeyPressEvent(element, event);\n"
-					. "	};\n"
-					. "	element.onkeyup = function(event) {\n"
-					. "		onKeyPressUp(element, event);\n"
-					. "	};\n"
-					. "}\n";
-			$scriptFunction->appendText($javascript);
-			$this->parser->find('body')->firstResult()->appendElement($scriptFunction);
+		$local = $this->parser->find('body')->firstResult();
+		if ($local !== null) {
+			$this->scriptList = $this->parser->find('#' . $this->idListIdsScriptOnActive)->firstResult();
+			if ($this->scriptList === null) {
+				$this->scriptList = $this->parser->createElement('script');
+				$this->scriptList->setAttribute('id', $this->idListIdsScriptOnActive);
+				$this->scriptList->setAttribute('type', 'text/javascript');
+				$this->scriptList->appendText('var s=[];');
+				$local->appendElement($this->scriptList);
+			}
+			if ($this->parser->find('#' . $this->idFunctionScriptFixOnActive)->firstResult() === null) {
+				$scriptFunction = $this->parser->createElement('script');
+				$scriptFunction->setAttribute('id', $this->idFunctionScriptFixOnActive);
+				$scriptFunction->setAttribute('type', 'text/javascript');
+				$javascript = 'var e;for(var i=0,l=s.length;i<l;i++){e=document.getElementById(s[i]);if(e.onkeypress==undefined){e.onkeypress=function(v){onKeyPressEvent(e,v);};}if(e.onkeyup==undefined){e.onkeyup=function(v){onKeyUpEvent(e,v);};}if(e.onkeydown==undefined){e.onkeydown=function(v){onKeyDownEvent(e,v);};}}';
+				$scriptFunction->appendText($javascript);
+				$local->appendElement($scriptFunction);
+			}
 		}
 		$this->otherScriptsAdded = true;
 	}
 	
-	protected function addElementIdWithOnClick($id) {
-		$this->scriptList->appendText("idsElementsWithOnClick.push('" . $id . "');\n");
+	/**
+	 * Add the id of element in list of elements that will have its events
+	 * modified.
+	 * @param \hatemile\util\HTMLDOMElement $element The element with id.
+	 */
+	protected function addEventInElement($element) {
+		if (!$this->otherScriptsAdded) {
+			$this->generateOtherScripts();
+		}
+		
+		if ($this->scriptList !== null) {
+			CommonFunctions::generateId($element, $this->prefixId);
+			$this->scriptList->appendText("s.push('" . $element->getAttribute('id') . "');");
+		} else {
+			if (!$element->hasAttribute('onkeypress')) {
+				$element->setAttribute('onkeypress', 'try{onKeyPressEvent(this,event);}catch(x){}');
+			}
+			if (!$element->hasAttribute('onkeyup')) {
+				$element->setAttribute('onkeyup', 'try{onKeyUpEvent(this,event);}catch(x){}');
+			}
+			if (!$element->hasAttribute('onkeydown')) {
+				$element->setAttribute('onkeydown', 'try{onKeyDownEvent(this,event);}catch(x){}');
+			}
+		}
 	}
 	
 	public function fixOnHover(HTMLDOMElement $element) {
+		$tag = $element->getTagName();
+		if (!(($tag === 'INPUT') || ($tag === 'BUTTON') || ($tag === 'A') || ($tag === 'SELECT')
+				|| ($tag === 'TEXTAREA') || ($element->hasAttribute('tabindex')))) {
+			$element->setAttribute('tabindex', '0');
+		}
+		
 		if (!$this->mainScriptAdded) {
 			$this->generateMainScript();
 		}
-		$tag = $element->getTagName();
-		if (!(($tag == 'INPUT') || ($tag == 'BUTTON') || ($tag == 'A') || ($tag == 'SELECT') || ($tag == 'TEXTAREA') || ($element->hasAttribute('tabindex')))) {
-			$element->setAttribute('tabindex', '0');
-		}
+		
 		if (!$element->hasAttribute('onfocus')) {
 			$element->setAttribute('onfocus', 'onFocusEvent(this);');
 		}
@@ -152,7 +201,7 @@ class AccessibleEventImpl implements AccessibleEvent {
 			$element->setAttribute('onblur', 'onBlurEvent(this);');
 		}
 	}
-
+	
 	public function fixOnHovers() {
 		$elements = $this->parser->find('[onmouseover],[onmouseout]')->listResults();
 		foreach ($elements as $element) {
@@ -161,31 +210,29 @@ class AccessibleEventImpl implements AccessibleEvent {
 			}
 		}
 	}
-
-	public function fixOnClick(HTMLDOMElement $element) {
+	
+	public function fixOnActive(HTMLDOMElement $element) {
 		$tag = $element->getTagName();
-		if (!(($tag == 'INPUT') || ($tag == 'BUTTON') || ($tag == 'A'))) {
+		if (!(($tag === 'INPUT') || ($tag === 'BUTTON') || ($tag === 'A'))) {
+			if (!(($element->hasAttribute('tabindex')) || ($tag === 'SELECT')
+					|| ($tag === 'TEXTAREA'))) {
+				$element->setAttribute('tabindex', '0');
+			}
+			
 			if (!$this->mainScriptAdded) {
 				$this->generateMainScript();
 			}
-			if (!$this->otherScriptsAdded) {
-				$this->generateOtherScripts();
-			}
-			if (!(($element->hasAttribute('tabindex')) || ($tag == 'SELECT') || ($tag == 'TEXTAREA'))) {
-				$element->setAttribute('tabindex', '0');
-			}
-			CommonFunctions::generateId($element, $this->prefixId);
-			if ((!$element->hasAttribute('onkeypress')) && (!$element->hasAttribute('onkeyup')) && (!$element->hasAttribute('onkeydown'))) {
-				$this->addElementIdWithOnClick($element->getAttribute('id'));
-			}
+			
+			$this->addEventInElement($element);
 		}
 	}
-
-	public function fixOnClicks() {
-		$elements = $this->parser->find('[onclick]')->listResults();
+	
+	public function fixOnActives() {
+		$elements = $this->parser->find('[onclick],[onmousedown],[onmouseup],[ondblclick]')
+				->listResults();
 		foreach ($elements as $element) {
 			if (!$element->hasAttribute($this->dataIgnore)) {
-				$this->fixOnClick($element);
+				$this->fixOnActive($element);
 			}
 		}
 	}

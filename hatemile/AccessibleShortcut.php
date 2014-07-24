@@ -17,14 +17,31 @@ limitations under the License.
 
 namespace hatemile;
 
-require_once __DIR__ . '/util/HTMLDOMElement.php';
+require_once dirname(__FILE__) . '/util/HTMLDOMElement.php';
 
 use hatemile\util\HTMLDOMElement;
 
+/**
+ * The AccessibleShortcut interface fix the problems of accessibility associated
+ * with the shortcuts.
+ * @version 2014-07-23
+ */
 interface AccessibleShortcut {
+	
+	/**
+	 * Returns the browser shortcut prefix.
+	 * @return string The browser shortcut prefix.
+	 */
 	public function getPrefix();
-
+	
+	/**
+	 * Fix the element with shortcuts.
+	 * @param \hatemile\util\HTMLDOMElement $element The element with shortcuts. 
+	 */
 	public function fixShortcut(HTMLDOMElement $element);
-
+	
+	/**
+	 * Fix the elements with shortcuts.
+	 */
 	public function fixShortcuts();
 }
