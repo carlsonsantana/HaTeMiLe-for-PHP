@@ -30,7 +30,7 @@ use hatemile\AccessibleShortcut;
 /**
  * The AccessibleShortcutImpl class is official implementation of
  * AccessibleShortcut interface.
- * @version 2014-07-23
+ * @version 2014-08-03
  */
 class AccessibleShortcutImpl implements AccessibleShortcut {
 	
@@ -144,7 +144,7 @@ class AccessibleShortcutImpl implements AccessibleShortcut {
 			$safari = strpos($userAgent, 'applewebkit') !== false;
 			$windows = strpos($userAgent, 'windows') !== false;
 			$chrome = strpos($userAgent, 'chrome') !== false;
-			$firefox = preg_match($userAgent, "/firefox\/[2-9]|minefield\/3/");
+			$firefox = preg_match('/firefox\/[2-9]|minefield\/3/', $userAgent);
 			$ie = (strpos($userAgent, 'msie') !== false) || (strpos($userAgent, 'trident') !== false);
 			
 			if ($opera) {
