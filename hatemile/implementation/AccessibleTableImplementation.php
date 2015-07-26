@@ -1,7 +1,5 @@
 <?php
 /*
-Copyright 2014 Carlson Santana Cruz
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -23,18 +21,17 @@ require_once dirname(__FILE__) . '/../util/Configure.php';
 require_once dirname(__FILE__) . '/../util/CommonFunctions.php';
 require_once dirname(__FILE__) . '/../AccessibleTable.php';
 
-use hatemile\util\HTMLDOMElement;
-use hatemile\util\HTMLDOMParser;
-use hatemile\util\Configure;
-use hatemile\util\CommonFunctions;
-use hatemile\AccessibleTable;
+use \hatemile\util\HTMLDOMElement;
+use \hatemile\util\HTMLDOMParser;
+use \hatemile\util\Configure;
+use \hatemile\util\CommonFunctions;
+use \hatemile\AccessibleTable;
 
 /**
- * The AccessibleTableImpl class is official implementation of AccessibleTable
- * interface.
- * @version 2014-07-23
+ * The AccessibleTableImplementation class is official implementation of
+ * AccessibleTable interface.
  */
-class AccessibleTableImpl implements AccessibleTable {
+class AccessibleTableImplementation implements AccessibleTable {
 	
 	/**
 	 * The HTML parser.
@@ -49,8 +46,7 @@ class AccessibleTableImpl implements AccessibleTable {
 	protected $prefixId;
 	
 	/**
-	 * The name of attribute for that the element not can be modified by
-	 * HaTeMiLe.
+	 * The name of attribute for not modify the elements.
 	 * @var string
 	 */
 	protected $dataIgnore;
@@ -64,7 +60,7 @@ class AccessibleTableImpl implements AccessibleTable {
 	public function __construct(HTMLDOMParser $parser, Configure $configure) {
 		$this->parser = $parser;
 		$this->prefixId = $configure->getParameter('prefix-generated-ids');
-		$this->dataIgnore = 'data-' . $configure->getParameter('data-ignore');
+		$this->dataIgnore = 'data-ignoreaccessibilityfix';
 	}
 	
 	/**
@@ -97,7 +93,7 @@ class AccessibleTableImpl implements AccessibleTable {
 		if (!empty($rows)) {
 			for ($i = 0, $lengthRows = sizeof($rows); $i < $lengthRows; $i++) {
 				$columnIndex = 0;
-				if (empty($table[$i])) {
+				if (sizeof($table) <= $i) {
 					$table[$i] = array();
 				}
 				$cells = array_merge($copy[$i]);
@@ -235,7 +231,7 @@ class AccessibleTableImpl implements AccessibleTable {
 		}
 	}
 	
-	public function fixTable(HTMLDOMElement $table) {
+	public function fixAssociationCellsTable(HTMLDOMElement $table) {
 		$header = $this->parser->find($table)->findChildren('thead')->firstResult();
 		$body = $this->parser->find($table)->findChildren('tbody')->firstResult();
 		$footer = $this->parser->find($table)->findChildren('tfoot')->firstResult();
@@ -273,11 +269,11 @@ class AccessibleTableImpl implements AccessibleTable {
 		}
 	}
 	
-	public function fixTables() {
+	public function fixAssociationCellsTables() {
 		$tables = $this->parser->find('table')->listResults();
 		foreach ($tables as $table) {
 			if (!$table->hasAttribute($this->dataIgnore)) {
-				$this->fixTable($table);
+				$this->fixAssociationCellsTable($table);
 			}
 		}
 	}

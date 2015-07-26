@@ -1,7 +1,5 @@
 <?php
 /*
-Copyright 2014 Carlson Santana Cruz
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -19,11 +17,10 @@ namespace hatemile\util;
 
 require_once dirname(__FILE__) . '/HTMLDOMElement.php';
 
-use hatemile\util\HTMLDOMElement;
+use \hatemile\util\HTMLDOMElement;
 
 /**
  * The CommonFuncionts class contains the used methods by HaTeMiLe classes.
- * @version 2014-07-23
  */
 class CommonFunctions {
 	
@@ -53,6 +50,13 @@ class CommonFunctions {
 	}
 	
 	/**
+	 * Reset the count number of ids.
+	 */
+	public static function resetCount() {
+		CommonFunctions::$count = 0;
+	}
+	
+	/**
 	 * Copy a list of attributes of a element for other element.
 	 * @param \hatemile\util\HTMLDOMElement $element1 The element that have
 	 * attributes copied.
@@ -70,25 +74,40 @@ class CommonFunctions {
 	}
 	
 	/**
-	 * Increase a item in a HTML list.
-	 * @param string $list The HTML list.
+	 * Increase a item in a list.
+	 * @param string $list The list.
 	 * @param string $stringToIncrease The value of item.
-	 * @return string The HTML list with the item added, if the item not was
-	 * contained in list.
+	 * @return string True if the list contains the item or false is not contains.
 	 */
 	public static function increaseInList($list, $stringToIncrease) {
 		if ((!empty($list)) && (!empty($stringToIncrease))) {
-			$elements = preg_split("/[ \n\t\r]+/", $list);
-			foreach ($elements as $element) {
-				if ($element === $stringToIncrease) {
-					return $list;
-				}
+			if (CommonFunctions::inList($list, $stringToIncrease)) {
+				return $list;
+			} else {
+				return $list . ' ' . $stringToIncrease;
 			}
-			return $list . ' ' . $stringToIncrease;
 		} else if (empty($list)) {
 			return $stringToIncrease;
 		} else {
 			return $list;
 		}
+	}
+	
+	/**
+	 * Verify if the list contains the item.
+	 * @param string $list The list.
+	 * @param string $stringToSearch The value of item.
+	 * @return boolean True if the list contains the item or false is not contains.
+	 */
+	public static function inList($list, $stringToSearch) {
+		if ((!empty($list)) && (!empty($stringToSearch))) {
+			$elements = preg_split("/[ \n\t\r]+/", $list);
+			foreach ($elements as $element) {
+				if ($element === $stringToSearch) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

@@ -1,7 +1,5 @@
 <?php
 /*
-Copyright 2014 Carlson Santana Cruz
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -22,15 +20,14 @@ require_once dirname(__FILE__) . '/../CommonFunctions.php';
 require_once dirname(__FILE__) . '/../Configure.php';
 require_once dirname(__FILE__) . '/SimpleHTMLDOMElement.php';
 
-use hatemile\util\HTMLDOMParser;
-use hatemile\util\CommonFunctions;
-use hatemile\util\simplehtmldom\SimpleHTMLDOMElement;
-use hatemile\util\Configure;
+use \hatemile\util\HTMLDOMParser;
+use \hatemile\util\CommonFunctions;
+use \hatemile\util\simplehtmldom\SimpleHTMLDOMElement;
+use \hatemile\util\Configure;
 
 /**
  * The class SimpleHTMLDOMParser is official implementation of HTMLDOMParser
  * interface for the Simple HTML DOM library.
- * @version 2014-07-23
  */
 class SimpleHTMLDOMParser implements HTMLDOMParser {
 	
@@ -125,7 +122,7 @@ class SimpleHTMLDOMParser implements HTMLDOMParser {
 		$sel = $this->getSelectorOfElement($selector);
 		$selectorChildren = array();
 		foreach ($this->results as $result) {
-			$selChildren = $this->getSelectorOfElement(new SimpleHTMLDOMElement($result));
+			$selChildren = $this->getSelectorOfElement(new SimpleHTMLDOMElement($result, $this));
 			array_push($selectorChildren, $selChildren);
 		}
 		$parents = $this->document->find($sel['selector']);
@@ -154,26 +151,27 @@ class SimpleHTMLDOMParser implements HTMLDOMParser {
 		if (empty($this->results)) {
 			return null;
 		}
-		return new SimpleHTMLDOMElement($this->results[0]);
+		return new SimpleHTMLDOMElement($this->results[0], $this);
 	}
 	
 	public function lastResult() {
 		if (empty($this->results)) {
 			return null;
 		}
-		return new SimpleHTMLDOMElement($this->results[sizeof($this->results) - 1]);
+		return new SimpleHTMLDOMElement($this->results[sizeof($this->results) - 1], $this);
 	}
 	
 	public function listResults() {
 		$array = array();
 		foreach ($this->results as $item) {
-			array_push($array, new SimpleHTMLDOMElement($item));
+			array_push($array, new SimpleHTMLDOMElement($item, $this));
 		}
 		return $array;
 	}
 	
 	public function createElement($tag) {
-		return new SimpleHTMLDOMElement(str_get_html('<' . $tag . '></' . $tag . '>')->firstChild());
+		return new SimpleHTMLDOMElement(str_get_html('<' . $tag . '></' . $tag . '>')
+				->firstChild(), $this);
 	}
 	
 	public function getHTML() {

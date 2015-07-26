@@ -16,9 +16,9 @@ limitations under the License.
 namespace hatemile\util;
 
 /**
- * The SelectorChange class store the selector that be attribute change.
+ * The Skipper class store the selector that will be add a skipper.
  */
-class SelectorChange {
+class Skipper {
 	
 	/**
 	 * The selector.
@@ -27,27 +27,31 @@ class SelectorChange {
 	protected $selector;
 	
 	/**
-	 * The attribute that will change.
+	 * The default text of skipper.
 	 * @var string
 	 */
-	protected $attribute;
+	protected $defaultText;
 	
 	/**
-	 * The value of the attribute.
+	 * The shortcuts of skipper.
 	 * @var string
 	 */
-	protected $valueForAttribute;
+	protected $shortcuts;
 	
 	/**
 	 * Inicializes a new object with the values pre-defineds.
 	 * @param string $selector The selector.
-	 * @param string $attribute The attribute.
-	 * @param string $valueForAttribute The value of the attribute.
+	 * @param string $defaultText The default text of skipper.
+	 * @param string $shortcuts The shortcuts of skipper.
 	 */
-	public function __construct($selector, $attribute, $valueForAttribute) {
+	public function __construct($selector, $defaultText, $shortcuts) {
 		$this->selector = $selector;
-		$this->attribute = $attribute;
-		$this->valueForAttribute = $valueForAttribute;
+		$this->defaultText = $defaultText;
+		if (!empty($shortcuts)) {
+			$this->shortcuts = preg_split("/[ \n\t\r]+/", $shortcuts);
+		} else {
+			$this->shortcuts = array();
+		}
 	}
 	
 	/**
@@ -59,18 +63,18 @@ class SelectorChange {
 	}
 	
 	/**
-	 * Returns the attribute.
-	 * @return string The attribute.
+	 * Returns the default text of skipper.
+	 * @return string The default text of skipper.
 	 */
-	public function getAttribute() {
-		return $this->attribute;
+	public function getDefaultText() {
+		return $this->defaultText;
 	}
 	
 	/**
-	 * Returns the value of the attribute.
-	 * @return string The value of the attribute.
+	 * Returns the shortcuts of skipper.
+	 * @return string The shortcuts of skipper.
 	 */
-	public function getValueForAttribute() {
-		return $this->valueForAttribute;
+	public function getShortcuts() {
+		return array_merge($this->shortcuts);
 	}
 }

@@ -1,7 +1,5 @@
 <?php
 /*
-Copyright 2014 Carlson Santana Cruz
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -18,13 +16,14 @@ limitations under the License.
 namespace hatemile\util\simplehtmldom;
 
 require_once dirname(__FILE__) . '/../HTMLDOMElement.php';
+require_once dirname(__FILE__) . '/SimpleHTMLDOMParser.php';
 
-use hatemile\util\HTMLDOMElement;
+use \hatemile\util\HTMLDOMElement;
+use \hatemile\util\simplehtmldom\SimpleHTMLDOMParser;
 
 /**
  * The SimpleHTMLDOMElement class is official implementation of HTMLDOMElement
  * interface for the Simple HTML DOM library.
- * @version 2014-07-23
  */
 class SimpleHTMLDOMElement implements HTMLDOMElement {
 	
@@ -34,12 +33,15 @@ class SimpleHTMLDOMElement implements HTMLDOMElement {
 	 */
 	protected $element;
 	
+	protected $parser;
+
 	/**
 	 * Initializes a new object that encapsulate the Simple HTML DOM Node.
 	 * @param \simple_html_dom_node $element The Simple HTML DOM Node.
 	 */
-	public function __construct(\simple_html_dom_node $element) {
+	public function __construct(\simple_html_dom_node $element, SimpleHTMLDOMParser $parser) {
 		$this->element = $element;
+		$this->parser = $parser;
 	}
 	
 	public function getTagName() {
@@ -126,7 +128,7 @@ class SimpleHTMLDOMElement implements HTMLDOMElement {
 		$children = $this->element->children();
 		$elements = array();
 		foreach ($children as $child) {
-			array_push($elements, new SimpleHTMLDOMElement($child));
+			array_push($elements, new SimpleHTMLDOMElement($child, $this->parser));
 		}
 		return $elements;
 	}
@@ -144,7 +146,7 @@ class SimpleHTMLDOMElement implements HTMLDOMElement {
 		if (empty($this->element->parent)) {
 			return null;
 		}
-		return new SimpleHTMLDOMElement($this->element->parent);
+		return new SimpleHTMLDOMElement($this->element->parent, $this->parser);
 	}
 	
 	public function getInnerHTML() {
@@ -168,20 +170,20 @@ class SimpleHTMLDOMElement implements HTMLDOMElement {
 	}
 	
 	public function cloneElement() {
-		return new SimpleHTMLDOMElement(str_get_html($this->getOuterHTML())->firstChild());
+		return new SimpleHTMLDOMElement(str_get_html($this->getOuterHTML())->firstChild(), $this->parser);
 	}
 	
 	public function getFirstElementChild() {
 		if (!$this->hasChildren()) {
 			return null;
 		}
-		return new SimpleHTMLDOMElement($this->element->first_child());
+		return new SimpleHTMLDOMElement($this->element->first_child(), $this->parser);
 	}
 	
 	public function getLastElementChild() {
 		if (!$this->hasChildren()) {
 			return null;
 		}
-		return new SimpleHTMLDOMElement($this->element->last_child());
+		return new SimpleHTMLDOMElement($this->element->last_child(), $this->parser);
 	}
 }

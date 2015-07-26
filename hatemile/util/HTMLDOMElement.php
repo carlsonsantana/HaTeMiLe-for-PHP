@@ -1,7 +1,5 @@
 <?php
 /*
-Copyright 2014 Carlson Santana Cruz
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -20,7 +18,6 @@ namespace hatemile\util;
 /**
  * The HTMLDOMElement interface contains the methods for access of the HTML
  * element.
- * @version 2014-07-23
  */
 interface HTMLDOMElement {
 	
@@ -166,12 +163,6 @@ interface HTMLDOMElement {
 	public function setData($data);
 	
 	/**
-	 * Clone this element.
-	 * @return \hatemile\util\HTMLDOMElement The clone.
-	 */
-	public function cloneElement();
-	
-	/**
 	 * Returns the first element child of this element.
 	 * @return \hatemile\util\HTMLDOMElement The first element child of this
 	 * element.
@@ -184,4 +175,10 @@ interface HTMLDOMElement {
 	 * element.
 	 */
 	public function getLastElementChild();
+	
+	/**
+	 * Clone this element.
+	 * @return \hatemile\util\HTMLDOMElement The clone.
+	 */
+	public function cloneElement();
 }

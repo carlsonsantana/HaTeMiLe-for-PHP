@@ -1,7 +1,5 @@
 <?php
 /*
-Copyright 2014 Carlson Santana Cruz
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -18,10 +16,10 @@ limitations under the License.
 namespace hatemile\util;
 
 require_once dirname(__FILE__) . '/SelectorChange.php';
+require_once dirname(__FILE__) . '/Skipper.php';
 
 /**
  * The Configure class contains the configuration of HaTeMiLe.
- * @version 2014-07-23
  */
 class Configure {
 	
@@ -38,12 +36,20 @@ class Configure {
 	protected $selectorChanges;
 	
 	/**
+	 * The skippers.
+	 * @var \hatemile\util\Skipper
+	 */
+	protected $skippers;
+
+
+	/**
 	 * Initializes a new object that contains the configuration of HaTeMiLe.
 	 * @param string $fileName The full path of file.
 	 */
 	public function __construct($fileName = null) {
 		$this->parameters = array();
 		$this->selectorChanges = array();
+		$this->skippers = array();
 		if ($fileName === null) {
 			$fileName = dirname(__FILE__) . '/../../hatemile-configure.xml';
 		}
@@ -54,6 +60,7 @@ class Configure {
 		$childNodes = $document->childNodes;
 		$nodeParameters = null;
 		$nodeSelectorChanges = null;
+		$nodeSkippers = null;
 		for ($i = 0, $length = $childNodes->length; $i < $length; $i++) {
 			$child = $childNodes->item($i);
 			if ($child instanceof \DOMElement) {
@@ -61,6 +68,8 @@ class Configure {
 					$nodeParameters = $child->childNodes;
 				} else if (strtoupper($child->tagName) === 'SELECTOR-CHANGES') {
 					$nodeSelectorChanges = $child->childNodes;
+				} else if (strtoupper($child->tagName) === 'SKIPPERS') {
+					$nodeSkippers = $child->childNodes;
 				}
 			}
 		}
@@ -93,6 +102,22 @@ class Configure {
 				}
 			}
 		}
+		
+		if ($nodeSkippers !== null) {
+			for ($i = 0, $length = $nodeSkippers->length; $i < $length; $i++) {
+				$skipper = $nodeSkippers->item($i);
+				if ($skipper instanceof \DOMElement) {
+					if ((strtoupper($skipper->tagName) === 'SKIPPER')
+							&& ($skipper->hasAttribute('selector'))
+							&& ($skipper->hasAttribute('default-text'))
+							&& ($skipper->hasAttribute('shortcut'))) {
+						array_push($this->skippers, new Skipper($skipper->getAttribute('selector')
+								, $skipper->getAttribute('default-text')
+								, $skipper->getAttribute('shortcut')));
+					}
+				}
+			}
+		}
 	}
 	
 	/**
@@ -118,5 +143,9 @@ class Configure {
 	 */
 	public function getSelectorChanges() {
 		return array_merge($this->selectorChanges);
+	}
+	
+	public function getSkippers() {
+		return array_merge($this->skippers);
 	}
 }

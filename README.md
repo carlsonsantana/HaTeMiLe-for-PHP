@@ -5,18 +5,18 @@ HaTeMiLe is a libary that can convert a HTML code in a HTML code more accessible
 ## How to Use
 1.  Instanciate a new object with HTMLDOMParser interface, setting the HTML code;
 2.  Instanciate a new Configuration object;
-3.  Instanciate a new object with AccessibleForm, AccessibleImage, AccessibleShortcut, AccessibleTable, AccessibleEvent or AccessibleSelector interface and call yours methods;
+3.  Instanciate a new object with AccessibleForm, AccessibleImage, AccessibleNavigation, AccessibleTable, AccessibleEvent or AccessibleSelector interface and call yours methods;
 4.  Get the HTML code of object with HTMLDOMParser interface.
 
 ## Example
 	<?php
 	ob_start();
-	require_once './hatemile/implementation/AccessibleEventImpl.php';
-	require_once './hatemile/implementation/AccessibleFormImpl.php';
-	require_once './hatemile/implementation/AccessibleImageImpl.php';
-	require_once './hatemile/implementation/AccessibleSelectorImpl.php';
-	require_once './hatemile/implementation/AccessibleShortcutImpl.php';
-	require_once './hatemile/implementation/AccessibleTableImpl.php';
+	require_once './hatemile/implementation/AccessibleEventImplementation.php';
+	require_once './hatemile/implementation/AccessibleFormImplementation.php';
+	require_once './hatemile/implementation/AccessibleImageImplementation.php';
+	require_once './hatemile/implementation/AccessibleNavigationImplementation.php';
+	require_once './hatemile/implementation/AccessibleSelectorImplementation.php';
+	require_once './hatemile/implementation/AccessibleTableImplementation.php';
 	require_once './hatemile/util/Configure.php';
 	require_once './simplehtmldom_1_5/simple_html_dom.php';
 	require_once './hatemile/util/simplehtmldom/SimpleHTMLDOMParser.php';
@@ -37,7 +37,7 @@ HaTeMiLe is a libary that can convert a HTML code in a HTML code more accessible
 				<input type="button" onclick="alert('Alert Input')" value="Alert" />
 				<span onclick="alert('Alert Span')" style="background: red;">Alert</span>
 				<i onclick="alert('Alert I')">Alert</i>
-				<div style="height: 300px; width: 300px; border: 1px solid black"  onclick="alert('Alert Div')">
+				<div style="height: 300px; width: 300px; border: 1px solid black" onclick="alert('Alert Div')">
 					Alert
 				</div>
 				<span onclick="alert('Alert span')" onkeypress="console.log('Console SPAN')" style="background: blueviolet;">Console</span>
@@ -47,10 +47,10 @@ HaTeMiLe is a libary that can convert a HTML code in a HTML code more accessible
 				<input type="button" onmouseover="console.log('Over Input')" value="Console" onmouseout="console.log('Out Input')" />
 				<span onmouseover="console.log('Over Span')" style="background: red;" onmouseout="console.log('Out Span')">Console</span>
 				<i onmouseover="console.log('Over I')" onmouseout="console.log('Out I')">Console</i>
-				<div style="height: 300px; width: 300px; border: 1px solid black"  onmouseout="console.log('Out Div')" onmouseover="console.log('Console Div')">
+				<div style="height: 300px; width: 300px; border: 1px solid black" ondrop="event.preventDefault();event.target.appendChild(document.getElementById(event.dataTransfer.getData('text')));" ondragover="event.preventDefault();">
 					Console
 				</div>
-				<span onmouseover="console.log('Over span')" onmouseout="console.log('Out Span')" onfocus="alert('Alert SPAN')" style="background: blueviolet;">Alert</span>
+				<span id="draggable-item" ondragstart="event.dataTransfer.setData('text', event.target.id);" draggable="true">Drag-and-Drop</span>
 			</div>
 			<!-- Forms -->
 			<form autocomplete="off" id="form1">
@@ -91,43 +91,14 @@ HaTeMiLe is a libary that can convert a HTML code in a HTML code more accessible
 			<!-- Images -->
 			<div>
 				<h2>Test Images</h2>
-				<img src="http://4.bp.blogspot.com/-JOqxgp-ZWe0/U3BtyEQlEiI/AAAAAAAAOfg/Doq6Q2MwIKA/s1600/google-logo-874x288.png" alt="Google Logo" longdesc="http://www.google.com/" usemap="#laram" />
-				<img src="https://fbcdn-dragon-a.akamaihd.net/hphotos-ak-xap1/t39.2178-6/851562_329175193877061_87544187_n.jpg" alt="Facebook Logo" usemap="#laram" />
-				<img src="http://4.bp.blogspot.com/-JOqxgp-ZWe0/U3BtyEQlEiI/AAAAAAAAOfg/Doq6Q2MwIKA/s1600/google-logo-874x288.png" alt="Google Logo" usemap="#laram2" />
-				<img src="https://fbcdn-dragon-a.akamaihd.net/hphotos-ak-xap1/t39.2178-6/851562_329175193877061_87544187_n.jpg" alt="Facebook Logo" usemap="#laram2" />
-				<img src="https://fbcdn-dragon-a.akamaihd.net/hphotos-ak-xap1/t39.2178-6/851562_329175193877061_87544187_n.jpg" alt="Facebook Logo" usemap="#laram3" />
-				<img src="http://4.bp.blogspot.com/-JOqxgp-ZWe0/U3BtyEQlEiI/AAAAAAAAOfg/Doq6Q2MwIKA/s1600/google-logo-874x288.png" alt="Google Logo" longdesc="http://www.google.com/" usemap="#laram6" />
-				<img src="http://4.bp.blogspot.com/-JOqxgp-ZWe0/U3BtyEQlEiI/AAAAAAAAOfg/Doq6Q2MwIKA/s1600/google-logo-874x288.png" alt="Google Logo" longdesc="http://www.google.com/" usemap="#laram7" />
-				<map id="laram" name="laram">
-					<area shape="rect" href="http://www.google.com/" alt="Google" target="_blank" coords="260,280,395,360" />
-					<area shape="rect" href="http://www.facebook.com/" alt="Facebook" coords="222,113,395,148" />
-				</map>
-				<map id="laram2" name="laram2">
-					<area shape="rect" href="http://www.google.com/" target="_blank" coords="260,280,395,360" />
-					<area shape="rect" href="http://www.facebook.com/" coords="222,113,395,148" />
-				</map>
-				<map id="laram4" name="laram4">
-					<area shape="rect" href="http://www.google.com/" alt="Google" target="_blank" coords="260,280,395,360" />
-					<area shape="rect" href="http://www.facebook.com/" alt="Facebook" coords="222,113,395,148" />
-				</map>
-				<map id="laram5" name="laram5">
-					<area shape="rect" href="http://www.google.com/" target="_blank" coords="260,280,395,360" />
-					<area shape="rect" href="http://www.facebook.com/" coords="222,113,395,148" />
-				</map>
-				<map id="laram6">
-					<area shape="rect" href="http://www.google.com/" alt="Google" target="_blank" coords="260,280,395,360" />
-					<area shape="rect" href="http://www.facebook.com/" alt="Facebook" coords="222,113,395,148" />
-				</map>
-				<map name="laram7">
-					<area shape="rect" href="http://www.google.com/" alt="Google" target="_blank" coords="260,280,395,360" />
-					<area shape="rect" href="http://www.facebook.com/" alt="Facebook" coords="222,113,395,148" />
-				</map>
+				<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Handicapped_Accessible_sign.svg/2000px-Handicapped_Accessible_sign.svg.png" alt="Acessibility" longdesc="https://www.wikimedia.org/" />
+				<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/2000px-HTML5_logo_and_wordmark.svg.png" alt="HTML5" longdesc="http://www.w3.org/html/" />
 			</div>
 			<!-- Shortcuts -->
 			<form action="http://www.webplatform.org/">
 				<h2>Test Shortcuts</h2>
-				<a href="http://www.google.com.br/" title="Go to Google" accesskey="q">Google</a><br />
-				<a href="http://www.facebook.com/" accesskey="w">Go to Facebook</a><br />
+				<a href="http://www.w3.org/html/" title="Go to HTML5" accesskey="q">HTML5</a><br />
+				<a href="https://www.wikimedia.org/" accesskey="w">Go to Wikimidia</a><br />
 				<label id="label1">Field1</label>
 				<input type="text" value="" aria-labelledby="label1" accesskey="e" /><br />
 				<input type="text" value="" aria-label="Field 2" accesskey="r" /><br />
@@ -206,28 +177,30 @@ HaTeMiLe is a libary that can convert a HTML code in a HTML code more accessible
 	$configure = new hatemile\util\Configure();
 	$parser = new hatemile\util\simplehtmldom\SimpleHTMLDOMParser($content, $configure);
 
-	$accessibleEvent = new hatemile\implementation\AccessibleEventImpl($parser, $configure);
-	$accessibleForm = new hatemile\implementation\AccessibleFormImpl($parser, $configure);
-	$accessibleImage = new hatemile\implementation\AccessibleImageImpl($parser, $configure);
-	$accessibleSelector = new hatemile\implementation\AccessibleSelectorImpl($parser, $configure);
-	$accessibleShortcut = new hatemile\implementation\AccessibleShortcutImpl($parser, $configure, $_SERVER['HTTP_USER_AGENT']);
-	$accessibleTable = new hatemile\implementation\AccessibleTableImpl($parser, $configure);
+	$accessibleEvent = new hatemile\implementation\AccessibleEventImplementation($parser, $configure);
+	$accessibleForm = new hatemile\implementation\AccessibleFormImplementation($parser, $configure);
+	$accessibleImage = new hatemile\implementation\AccessibleImageImplementation($parser, $configure);
+	$accessibleSelector = new hatemile\implementation\AccessibleSelectorImplementation($parser, $configure);
+	$accessibleNavigation = new hatemile\implementation\AccessibleNavigationImplementation($parser, $configure, $_SERVER['HTTP_USER_AGENT']);
+	$accessibleTable = new hatemile\implementation\AccessibleTableImplementation($parser, $configure);
 
-	$accessibleEvent->fixOnActives();
-	$accessibleEvent->fixOnHovers();
+	$accessibleEvent->fixDragsandDrops();
+	$accessibleEvent->fixActives();
+	$accessibleEvent->fixHovers();
 
-	$accessibleForm->fixAutoCompletes();
+	$accessibleForm->fixAutoCompleteFields();
+	$accessibleForm->fixRequiredFields();
 	$accessibleForm->fixLabels();
 	$accessibleForm->fixRangeFields();
-	$accessibleForm->fixRequiredFields();
 
 	$accessibleImage->fixLongDescriptions();
-	$accessibleImage->fixMaps();
 
 	$accessibleSelector->fixSelectors();
 
-	$accessibleShortcut->fixShortcuts();
+	$accessibleNavigation->fixShortcuts();
+	$accessibleNavigation->fixSkippers();
+	$accessibleNavigation->fixHeadings();
 
-	$accessibleTable->fixTables();
+	$accessibleTable->fixAssociationCellsTables();
 
 	echo $parser->getHTML();
