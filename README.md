@@ -18,8 +18,8 @@ HaTeMiLe is a libary that can convert a HTML code in a HTML code more accessible
 	require_once './hatemile/implementation/AccessibleSelectorImplementation.php';
 	require_once './hatemile/implementation/AccessibleTableImplementation.php';
 	require_once './hatemile/util/Configure.php';
-	require_once './simplehtmldom_1_5/simple_html_dom.php';
-	require_once './hatemile/util/simplehtmldom/SimpleHTMLDOMParser.php';
+	require_once './phpQuery/phpQuery/phpQuery.php';
+	require_once './hatemile/util/phpquery/phpQueryHTMLDOMParser.php';
 	?>
 	<!DOCTYPE html>
 	<html>
@@ -175,7 +175,7 @@ HaTeMiLe is a libary that can convert a HTML code in a HTML code more accessible
 	<?php
 	$content = ob_get_clean();
 	$configure = new hatemile\util\Configure();
-	$parser = new hatemile\util\simplehtmldom\SimpleHTMLDOMParser($content, $configure);
+	$parser = new hatemile\util\phpquery\phpQueryHTMLDOMParser($content);
 
 	$accessibleEvent = new hatemile\implementation\AccessibleEventImplementation($parser, $configure);
 	$accessibleForm = new hatemile\implementation\AccessibleFormImplementation($parser, $configure);
