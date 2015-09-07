@@ -478,7 +478,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 		foreach ($elements as $element) {
 			$shortcuts = strtolower($element->getAttribute('accesskey'));
 			if (CommonFunctions::inList($shortcuts, $shortcut)) {
-				for ($i = 0, $length = strlen(alphaNumbers); $i < $length; $i++) {
+				for ($i = 0, $length = strlen($alphaNumbers); $i < $length; $i++) {
 					$key = substr($alphaNumbers, 0, 1);
 					$found = true;
 					foreach ($elements as $elementWithShortcuts) {
@@ -510,7 +510,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 			foreach ($this->skippers as $skipper) {
 				$compareElements = $this->parser->find($skipper->getSelector())->listResults();
 				foreach ($compareElements as $compareElement) {
-					if ($compareElement->getData() == $element->getData()) {
+					if ($compareElement->getData() === $element->getData()) {
 						$this->fixSkipper($element, $skipper);
 						break;
 					}
