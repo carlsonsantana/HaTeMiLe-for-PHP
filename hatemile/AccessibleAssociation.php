@@ -20,19 +20,30 @@ require_once dirname(__FILE__) . '/util/html/HTMLDOMElement.php';
 use \hatemile\util\html\HTMLDOMElement;
 
 /**
- * The AccessibleTable interface fixes accessibility problems associated
- * with tables.
+ * The AccessibleAssociation interface improve accessibility, associating
+ * elements.
  */
-interface AccessibleTable {
+interface AccessibleAssociation {
 	
 	/**
-	 * Associate data cells with header cells of table.
+	 * Associate all data cells with header cells of table.
 	 * @param \hatemile\util\html\HTMLDOMElement $table The table.
 	 */
 	public function fixAssociationCellsTable(HTMLDOMElement $table);
 	
 	/**
-	 * Associate data cells with header cells of tables.
+	 * Associate all data cells with header cells of all tables of page.
 	 */
 	public function fixAssociationCellsTables();
+        
+        /**
+	 * Associate label with field.
+	 * @param \hatemile\util\html\HTMLDOMElement $label The label.
+	 */
+	public function fixLabel(HTMLDOMElement $label);
+	
+	/**
+	 * Associate labels with fields.
+	 */
+	public function fixLabels();
 }

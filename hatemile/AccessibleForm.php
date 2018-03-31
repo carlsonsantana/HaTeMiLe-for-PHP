@@ -58,15 +58,4 @@ interface AccessibleForm {
 	 * Display that the fields have autocomplete.
 	 */
 	public function fixAutoCompleteFields();
-	
-	/**
-	 * Associate label with field.
-	 * @param \hatemile\util\html\HTMLDOMElement $label The label.
-	 */
-	public function fixLabel(HTMLDOMElement $label);
-	
-	/**
-	 * Associate labels with fields.
-	 */
-	public function fixLabels();
 }

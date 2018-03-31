@@ -19,19 +19,19 @@ require_once dirname(__FILE__) . '/../util/html/HTMLDOMElement.php';
 require_once dirname(__FILE__) . '/../util/html/HTMLDOMParser.php';
 require_once dirname(__FILE__) . '/../util/Configure.php';
 require_once dirname(__FILE__) . '/../util/CommonFunctions.php';
-require_once dirname(__FILE__) . '/../AccessibleTable.php';
+require_once dirname(__FILE__) . '/../AccessibleAssociation.php';
 
 use \hatemile\util\html\HTMLDOMElement;
 use \hatemile\util\html\HTMLDOMParser;
 use \hatemile\util\Configure;
 use \hatemile\util\CommonFunctions;
-use \hatemile\AccessibleTable;
+use \hatemile\AccessibleAssociation;
 
 /**
- * The AccessibleTableImplementation class is official implementation of
- * AccessibleTable interface.
+ * The AccessibleAssociationImplementation class is official implementation of
+ * AccessibleAssociation.
  */
-class AccessibleTableImplementation implements AccessibleTable {
+class AccessibleAssociationImplementation implements AccessibleAssociation {
 	
 	/**
 	 * The HTML parser.
@@ -274,6 +274,41 @@ class AccessibleTableImplementation implements AccessibleTable {
 		foreach ($tables as $table) {
 			if (!$table->hasAttribute($this->dataIgnore)) {
 				$this->fixAssociationCellsTable($table);
+			}
+		}
+	}
+        
+        public function fixLabel(HTMLDOMElement $label) {
+		if ($label->getTagName() === 'LABEL') {
+			if ($label->hasAttribute('for')) {
+				$field = $this->parser->find('#' . $label->getAttribute('for'))->firstResult();
+			} else {
+				$field = $this->parser->find($label)
+						->findDescendants('input,select,textarea')->firstResult();
+				
+				if ($field !== null) {
+					CommonFunctions::generateId($field, $this->prefixId);
+					$label->setAttribute('for', $field->getAttribute('id'));
+				}
+			}
+			if ($field !== null) {
+				if (!$field->hasAttribute('aria-label')) {
+					$field->setAttribute('aria-label'
+							, \trim(preg_replace('/[ \n\r\t]+/', ' ', $label->getTextContent())));
+				}
+				
+				CommonFunctions::generateId($label, $this->prefixId);
+				$field->setAttribute('aria-labelledby', CommonFunctions::increaseInList
+						($field->getAttribute('aria-labelledby') , $label->getAttribute('id')));
+			}
+		}
+	}
+	
+	public function fixLabels() {
+		$labels = $this->parser->find('label')->listResults();
+		foreach ($labels as $label) {
+			if (!$label->hasAttribute($this->dataIgnore)) {
+				$this->fixLabel($label);
 			}
 		}
 	}

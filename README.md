@@ -16,7 +16,7 @@ HaTeMiLe is a libary that can convert a HTML code in a HTML code more accessible
 	require_once './hatemile/implementation/AccessibleImageImplementation.php';
 	require_once './hatemile/implementation/AccessibleNavigationImplementation.php';
 	require_once './hatemile/implementation/AccessibleSelectorImplementation.php';
-	require_once './hatemile/implementation/AccessibleTableImplementation.php';
+	require_once './hatemile/implementation/AccessibleAssociationImplementation.php';
 	require_once './hatemile/util/Configure.php';
 	require_once './phpQuery/phpQuery/phpQuery.php';
 	require_once './hatemile/util/html/phpquery/phpQueryHTMLDOMParser.php';
@@ -182,7 +182,7 @@ HaTeMiLe is a libary that can convert a HTML code in a HTML code more accessible
 	$accessibleImage = new hatemile\implementation\AccessibleImageImplementation($parser, $configure);
 	$accessibleSelector = new hatemile\implementation\AccessibleSelectorImplementation($parser, $configure);
 	$accessibleNavigation = new hatemile\implementation\AccessibleNavigationImplementation($parser, $configure, $_SERVER['HTTP_USER_AGENT']);
-	$accessibleTable = new hatemile\implementation\AccessibleTableImplementation($parser, $configure);
+	$accessibleAssociation = new hatemile\implementation\AccessibleAssociationImplementation($parser, $configure);
 
 	$accessibleEvent->fixDragsandDrops();
 	$accessibleEvent->fixActives();
@@ -190,7 +190,6 @@ HaTeMiLe is a libary that can convert a HTML code in a HTML code more accessible
 
 	$accessibleForm->fixAutoCompleteFields();
 	$accessibleForm->fixRequiredFields();
-	$accessibleForm->fixLabels();
 	$accessibleForm->fixRangeFields();
 
 	$accessibleImage->fixLongDescriptions();
@@ -201,6 +200,7 @@ HaTeMiLe is a libary that can convert a HTML code in a HTML code more accessible
 	$accessibleNavigation->fixSkippers();
 	$accessibleNavigation->fixHeadings();
 
-	$accessibleTable->fixAssociationCellsTables();
+	$accessibleAssociation->fixAssociationCellsTables();
+	$accessibleAssociation->fixLabels();
 
 	echo $parser->getHTML();
