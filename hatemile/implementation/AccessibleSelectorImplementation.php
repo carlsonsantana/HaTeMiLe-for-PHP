@@ -16,11 +16,11 @@ limitations under the License.
 namespace hatemile\implementation;
 
 require_once dirname(__FILE__) . '/../AccessibleSelector.php';
-require_once dirname(__FILE__) . '/../util/HTMLDOMParser.php';
+require_once dirname(__FILE__) . '/../util/html/HTMLDOMParser.php';
 require_once dirname(__FILE__) . '/../util/Configure.php';
 
 use \hatemile\AccessibleSelector;
-use \hatemile\util\HTMLDOMParser;
+use \hatemile\util\html\HTMLDOMParser;
 use \hatemile\util\Configure;
 
 /**
@@ -31,7 +31,7 @@ class AccessibleSelectorImplementation implements AccessibleSelector {
 	
 	/**
 	 * The HTML parser.
-	 * @var \hatemile\util\HTMLDOMParser
+	 * @var \hatemile\util\html\HTMLDOMParser
 	 */
 	protected $parser;
 	
@@ -50,7 +50,7 @@ class AccessibleSelectorImplementation implements AccessibleSelector {
 	/**
 	 * Initializes a new object that manipulate the accessibility through of the
 	 * selectors of the configuration file.
-	 * @param \hatemile\util\HTMLDOMParser $parser The HTML parser.
+	 * @param \hatemile\util\html\HTMLDOMParser $parser The HTML parser.
 	 * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
 	 */
 	public function __construct(HTMLDOMParser $parser, Configure $configure) {

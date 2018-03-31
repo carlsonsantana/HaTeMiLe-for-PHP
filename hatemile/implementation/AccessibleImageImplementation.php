@@ -16,14 +16,14 @@ limitations under the License.
 namespace hatemile\implementation;
 
 require_once dirname(__FILE__) . '/../AccessibleImage.php';
-require_once dirname(__FILE__) . '/../util/HTMLDOMElement.php';
-require_once dirname(__FILE__) . '/../util/HTMLDOMParser.php';
+require_once dirname(__FILE__) . '/../util/html/HTMLDOMElement.php';
+require_once dirname(__FILE__) . '/../util/html/HTMLDOMParser.php';
 require_once dirname(__FILE__) . '/../util/Configure.php';
 require_once dirname(__FILE__) . '/../util/CommonFunctions.php';
 
 use \hatemile\AccessibleImage;
-use \hatemile\util\HTMLDOMElement;
-use \hatemile\util\HTMLDOMParser;
+use \hatemile\util\html\HTMLDOMElement;
+use \hatemile\util\html\HTMLDOMParser;
 use \hatemile\util\Configure;
 use \hatemile\util\CommonFunctions;
 
@@ -35,7 +35,7 @@ class AccessibleImageImplementation implements AccessibleImage {
 	
 	/**
 	 * The HTML parser.
-	 * @var \hatemile\util\HTMLDOMParser
+	 * @var \hatemile\util\html\HTMLDOMParser
 	 */
 	protected $parser;
 	
@@ -79,7 +79,7 @@ class AccessibleImageImplementation implements AccessibleImage {
 	/**
 	 * Initializes a new object that manipulate the accessibility of the images
 	 * of parser.
-	 * @param \hatemile\util\HTMLDOMParser $parser The HTML parser.
+	 * @param \hatemile\util\html\HTMLDOMParser $parser The HTML parser.
 	 * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
 	 */
 	public function __construct(HTMLDOMParser $parser, Configure $configure) {

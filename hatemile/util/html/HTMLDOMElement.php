@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-namespace hatemile\util;
+namespace hatemile\util\html;
 
 /**
  * The HTMLDOMElement interface contains the methods for access of the HTML
@@ -71,45 +71,45 @@ interface HTMLDOMElement {
 	
 	/**
 	 * Insert a element before this element.
-	 * @param \hatemile\util\HTMLDOMElement $newElement The element that be
+	 * @param \hatemile\util\html\HTMLDOMElement $newElement The element that be
 	 * inserted.
-	 * @return \hatemile\util\HTMLDOMElement The element inserted.
+	 * @return \hatemile\util\html\HTMLDOMElement The element inserted.
 	 */
 	public function insertBefore(HTMLDOMElement $newElement);
 	
 	/**
 	 * Insert a element after this element.
-	 * @param \hatemile\util\HTMLDOMElement $newElement The element that be
+	 * @param \hatemile\util\html\HTMLDOMElement $newElement The element that be
 	 * inserted.
-	 * @return \hatemile\util\HTMLDOMElement The element inserted.
+	 * @return \hatemile\util\html\HTMLDOMElement The element inserted.
 	 */
 	public function insertAfter(HTMLDOMElement $newElement);
 	
 	/**
 	 * Remove this element of the parser.
-	 * @return \hatemile\util\HTMLDOMElement The removed element.
+	 * @return \hatemile\util\html\HTMLDOMElement The removed element.
 	 */
 	public function removeElement();
 	
 	/**
 	 * Replace this element for other element.
-	 * @param \hatemile\util\HTMLDOMElement $newElement The element that replace
+	 * @param \hatemile\util\html\HTMLDOMElement $newElement The element that replace
 	 * this element.
-	 * @return \hatemile\util\HTMLDOMElement The element replaced.
+	 * @return \hatemile\util\html\HTMLDOMElement The element replaced.
 	 */
 	public function replaceElement(HTMLDOMElement $newElement);
 	
 	/**
 	 * Append a element child.
-	 * @param \hatemile\util\HTMLDOMElement $element The element that be
+	 * @param \hatemile\util\html\HTMLDOMElement $element The element that be
 	 * inserted.
-	 * @return \hatemile\util\HTMLDOMElement The element inserted.
+	 * @return \hatemile\util\html\HTMLDOMElement The element inserted.
 	 */
 	public function appendElement(HTMLDOMElement $element);
 	
 	/**
 	 * Returns the children of this element.
-	 * @return \hatemile\util\HTMLDOMElement[] The children of this element.
+	 * @return \hatemile\util\html\HTMLDOMElement[] The children of this element.
 	 */
 	public function getChildren();
 	
@@ -128,7 +128,7 @@ interface HTMLDOMElement {
 	
 	/**
 	 * Returns the parent element of this element.
-	 * @return \hatemile\util\HTMLDOMElement The parent element of this element.
+	 * @return \hatemile\util\html\HTMLDOMElement The parent element of this element.
 	 */
 	public function getParentElement();
 	
@@ -164,21 +164,21 @@ interface HTMLDOMElement {
 	
 	/**
 	 * Returns the first element child of this element.
-	 * @return \hatemile\util\HTMLDOMElement The first element child of this
+	 * @return \hatemile\util\html\HTMLDOMElement The first element child of this
 	 * element.
 	 */
 	public function getFirstElementChild();
 	
 	/**
 	 * Returns the last element child of this element.
-	 * @return \hatemile\util\HTMLDOMElement The last element child of this
+	 * @return \hatemile\util\html\HTMLDOMElement The last element child of this
 	 * element.
 	 */
 	public function getLastElementChild();
 	
 	/**
 	 * Clone this element.
-	 * @return \hatemile\util\HTMLDOMElement The clone.
+	 * @return \hatemile\util\html\HTMLDOMElement The clone.
 	 */
 	public function cloneElement();
 }

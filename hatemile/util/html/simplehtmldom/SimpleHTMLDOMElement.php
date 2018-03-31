@@ -13,13 +13,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-namespace hatemile\util\simplehtmldom;
+namespace hatemile\util\html\simplehtmldom;
 
 require_once dirname(__FILE__) . '/../HTMLDOMElement.php';
 require_once dirname(__FILE__) . '/SimpleHTMLDOMParser.php';
 
-use \hatemile\util\HTMLDOMElement;
-use \hatemile\util\simplehtmldom\SimpleHTMLDOMParser;
+use \hatemile\util\html\HTMLDOMElement;
+use \hatemile\util\html\simplehtmldom\SimpleHTMLDOMParser;
 
 /**
  * The SimpleHTMLDOMElement class is official implementation of HTMLDOMElement

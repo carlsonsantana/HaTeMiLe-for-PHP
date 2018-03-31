@@ -15,14 +15,14 @@ limitations under the License.
 
 namespace hatemile\implementation;
 
-require_once dirname(__FILE__) . '/../util/HTMLDOMElement.php';
-require_once dirname(__FILE__) . '/../util/HTMLDOMParser.php';
+require_once dirname(__FILE__) . '/../util/html/HTMLDOMElement.php';
+require_once dirname(__FILE__) . '/../util/html/HTMLDOMParser.php';
 require_once dirname(__FILE__) . '/../util/Configure.php';
 require_once dirname(__FILE__) . '/../util/CommonFunctions.php';
 require_once dirname(__FILE__) . '/../AccessibleTable.php';
 
-use \hatemile\util\HTMLDOMElement;
-use \hatemile\util\HTMLDOMParser;
+use \hatemile\util\html\HTMLDOMElement;
+use \hatemile\util\html\HTMLDOMParser;
 use \hatemile\util\Configure;
 use \hatemile\util\CommonFunctions;
 use \hatemile\AccessibleTable;
@@ -35,7 +35,7 @@ class AccessibleTableImplementation implements AccessibleTable {
 	
 	/**
 	 * The HTML parser.
-	 * @var \hatemile\util\HTMLDOMParser
+	 * @var \hatemile\util\html\HTMLDOMParser
 	 */
 	protected $parser;
 	
@@ -54,7 +54,7 @@ class AccessibleTableImplementation implements AccessibleTable {
 	/**
 	 * Initializes a new object that manipulate the accessibility of the tables
 	 * of parser.
-	 * @param \hatemile\util\HTMLDOMParser $parser The HTML parser.
+	 * @param \hatemile\util\html\HTMLDOMParser $parser The HTML parser.
 	 * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
 	 */
 	public function __construct(HTMLDOMParser $parser, Configure $configure) {
@@ -65,9 +65,9 @@ class AccessibleTableImplementation implements AccessibleTable {
 	
 	/**
 	 * Returns a list that represents the table.
-	 * @param \hatemile\util\HTMLDOMElement $part The table header, table
+	 * @param \hatemile\util\html\HTMLDOMElement $part The table header, table
 	 * footer or table body.
-	 * @return \hatemile\util\HTMLDOMElement[][] The list that represents
+	 * @return \hatemile\util\html\HTMLDOMElement[][] The list that represents
 	 * the table.
 	 */
 	protected function generatePart(HTMLDOMElement $part) {
@@ -82,9 +82,9 @@ class AccessibleTableImplementation implements AccessibleTable {
 	
 	/**
 	 * Returns a list that represents the table with the rowspans.
-	 * @param \hatemile\util\HTMLDOMElement[][] $rows The list that represents
+	 * @param \hatemile\util\html\HTMLDOMElement[][] $rows The list that represents
 	 * the table without the rowspans.
-	 * @return \hatemile\util\HTMLDOMElement[][] The list that represents the
+	 * @return \hatemile\util\html\HTMLDOMElement[][] The list that represents the
 	 * table with the rowspans.
 	 */
 	protected function generateRowspan($rows) {
@@ -125,9 +125,9 @@ class AccessibleTableImplementation implements AccessibleTable {
 	
 	/**
 	 * Returns a list that represents the line of table with the colspans.
-	 * @param \hatemile\util\HTMLDOMElement[] $row The list that represents the
+	 * @param \hatemile\util\html\HTMLDOMElement[] $row The list that represents the
 	 * line of table without the colspans.
-	 * @return \hatemile\util\HTMLDOMElement[] The list that represents the line
+	 * @return \hatemile\util\html\HTMLDOMElement[] The list that represents the line
 	 * of table with the colspans.
 	 */
 	protected function generateColspan($row) {
@@ -147,7 +147,7 @@ class AccessibleTableImplementation implements AccessibleTable {
 	
 	/**
 	 * Validate the list that represents the table header.
-	 * @param \hatemile\util\HTMLDOMElement[][] $header The list that
+	 * @param \hatemile\util\html\HTMLDOMElement[][] $header The list that
 	 * represents the table header.
 	 * @return boolean True if the table header is valid or false if the table
 	 * header is not valid.
@@ -171,7 +171,7 @@ class AccessibleTableImplementation implements AccessibleTable {
 	
 	/**
 	 * Returns a list with ids of rows of same column.
-	 * @param \hatemile\util\HTMLDOMElement[][] $header The list that represents
+	 * @param \hatemile\util\html\HTMLDOMElement[][] $header The list that represents
 	 * the table header.
 	 * @param integer $index The index of columns.
 	 * @return string[] The list with ids of rows of same column.
@@ -188,7 +188,7 @@ class AccessibleTableImplementation implements AccessibleTable {
 	
 	/**
 	 * Fix the table body or table footer.
-	 * @param \hatemile\util\HTMLDOMElement $element The table body or table
+	 * @param \hatemile\util\html\HTMLDOMElement $element The table body or table
 	 * footer.
 	 */
 	protected function fixBodyOrFooter(HTMLDOMElement $element) {
@@ -219,7 +219,7 @@ class AccessibleTableImplementation implements AccessibleTable {
 	
 	/**
 	 * Fix the table header.
-	 * @param \hatemile\util\HTMLDOMElement $tableHeader The table header.
+	 * @param \hatemile\util\html\HTMLDOMElement $tableHeader The table header.
 	 */
 	protected function fixHeader(HTMLDOMElement $tableHeader) {
 		$cells = $this->parser->find($tableHeader)->findChildren('tr')->findChildren('th')

@@ -15,18 +15,18 @@ limitations under the License.
 
 namespace hatemile\implementation;
 
-require_once dirname(__FILE__) . '/../util/HTMLDOMParser.php';
+require_once dirname(__FILE__) . '/../util/html/HTMLDOMParser.php';
 require_once dirname(__FILE__) . '/../util/Configure.php';
 require_once dirname(__FILE__) . '/../util/CommonFunctions.php';
 require_once dirname(__FILE__) . '/../util/Skipper.php';
-require_once dirname(__FILE__) . '/../util/HTMLDOMElement.php';
+require_once dirname(__FILE__) . '/../util/html/HTMLDOMElement.php';
 require_once dirname(__FILE__) . '/../AccessibleNavigation.php';
 
-use \hatemile\util\HTMLDOMParser;
+use \hatemile\util\html\HTMLDOMParser;
 use \hatemile\util\Configure;
 use \hatemile\util\CommonFunctions;
 use \hatemile\util\Skipper;
-use \hatemile\util\HTMLDOMElement;
+use \hatemile\util\html\HTMLDOMElement;
 use \hatemile\AccessibleNavigation;
 
 /**
@@ -37,7 +37,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 	
 	/**
 	 * The HTML parser.
-	 * @var \hatemile\util\HTMLDOMParser
+	 * @var \hatemile\util\html\HTMLDOMParser
 	 */
 	protected $parser;
 	
@@ -127,7 +127,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 	
 	/**
 	 * The list element of skippers.
-	 * @var \hatemile\util\HTMLDOMElement
+	 * @var \hatemile\util\html\HTMLDOMElement
 	 */
 	protected $listSkippers;
 	
@@ -175,7 +175,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 	
 	/**
 	 * The list element of shortcuts.
-	 * @var \hatemile\util\HTMLDOMElement
+	 * @var \hatemile\util\html\HTMLDOMElement
 	 */
 	protected $listShortcuts;
 	
@@ -188,7 +188,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 	/**
 	 * Initializes a new object that manipulate the accessibility of the
 	 * navigation of parser.
-	 * @param \hatemile\util\HTMLDOMParser $parser The HTML parser.
+	 * @param \hatemile\util\html\HTMLDOMParser $parser The HTML parser.
 	 * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
 	 * @param string $userAgent The user agent of the user.
 	 */
@@ -252,7 +252,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 	
 	/**
 	 * Returns the description of element.
-	 * @param \hatemile\util\HTMLDOMElement $element The element with
+	 * @param \hatemile\util\html\HTMLDOMElement $element The element with
 	 * description.
 	 * @return string The description of element.
 	 */
@@ -294,7 +294,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 	
 	/**
 	 * Generate the list of shortcuts of page.
-	 * @return \hatemile\util\HTMLDOMElement The list of shortcuts of page.
+	 * @return \hatemile\util\html\HTMLDOMElement The list of shortcuts of page.
 	 */
 	protected function generateListShortcuts() {
 		$container = $this->parser->find('#' . $this->idContainerShortcuts)->firstResult();
@@ -331,7 +331,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 	
 	/**
 	 * Generate the list of skippers of page.
-	 * @return \hatemile\util\HTMLDOMElement The list of skippers of page.
+	 * @return \hatemile\util\html\HTMLDOMElement The list of skippers of page.
 	 */
 	protected function generateListSkippers() {
 		$container = $this->parser->find('#' . $this->idContainerSkippers)->firstResult();
@@ -357,7 +357,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 	
 	/**
 	 * Generate the list of heading links of page.
-	 * @return \hatemile\util\HTMLDOMElement The list of heading links of page.
+	 * @return \hatemile\util\html\HTMLDOMElement The list of heading links of page.
 	 */
 	protected function generateListHeading() {
 		$container = $this->parser->find('#' . $this->idContainerHeading)->firstResult();
@@ -392,7 +392,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 	
 	/**
 	 * Returns the level of heading.
-	 * @param \hatemile\util\HTMLDOMElement $element The heading.
+	 * @param \hatemile\util\html\HTMLDOMElement $element The heading.
 	 * @return integer The level of heading.
 	 */
 	protected function getHeadingLevel(HTMLDOMElement $element) {
@@ -442,11 +442,11 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 	
 	/**
 	 * Generate an anchor for the element.
-	 * @param \hatemile\util\HTMLDOMElement $element The element.
+	 * @param \hatemile\util\html\HTMLDOMElement $element The element.
 	 * @param string $dataAttribute The name of attribute that links the element with
 	 * the anchor.
 	 * @param string $anchorClass The HTML class of anchor.
-	 * @return \hatemile\util\HTMLDOMElement The anchor.
+	 * @return \hatemile\util\html\HTMLDOMElement The anchor.
 	 */
 	protected function generateAnchorFor(HTMLDOMElement $element, $dataAttribute, $anchorClass) {
 		CommonFunctions::generateId($element, $this->prefixId);
@@ -503,7 +503,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 	/**
 	 * Call fixSkipper method for element, if the page has the container of
 	 * skippers.
-	 * @param \hatemile\util\HTMLDOMElement $element The element.
+	 * @param \hatemile\util\html\HTMLDOMElement $element The element.
 	 */
 	protected function executeFixSkipper(HTMLDOMElement $element) {
 		if ($this->listSkippers !== null) {
@@ -522,7 +522,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 	/**
 	 * Call fixShortcut method for element, if the page has the container of
 	 * shortcuts.
-	 * @param \hatemile\util\HTMLDOMElement $element The element.
+	 * @param \hatemile\util\html\HTMLDOMElement $element The element.
 	 */
 	protected function executeFixShortcut(HTMLDOMElement $element) {
 		if ($this->listShortcuts !== null) {

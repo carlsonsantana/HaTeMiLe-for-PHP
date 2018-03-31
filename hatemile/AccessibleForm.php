@@ -15,9 +15,9 @@ limitations under the License.
 
 namespace hatemile;
 
-require_once dirname(__FILE__) . '/util/HTMLDOMElement.php';
+require_once dirname(__FILE__) . '/util/html/HTMLDOMElement.php';
 
-use \hatemile\util\HTMLDOMElement;
+use \hatemile\util\html\HTMLDOMElement;
 
 /**
  * The AccessibleForm interface fixes accessibility problems associated
@@ -27,7 +27,7 @@ interface AccessibleForm {
 	
 	/**
 	 * Display that the field is required.
-	 * @param \hatemile\util\HTMLDOMElement $requiredField The required field.
+	 * @param \hatemile\util\html\HTMLDOMElement $requiredField The required field.
 	 */
 	public function fixRequiredField(HTMLDOMElement $requiredField);
 	
@@ -38,7 +38,7 @@ interface AccessibleForm {
 	
 	/**
 	 * Display that the field have range.
-	 * @param \hatemile\util\HTMLDOMElement $rangeField The range field.
+	 * @param \hatemile\util\html\HTMLDOMElement $rangeField The range field.
 	 */
 	public function fixRangeField(HTMLDOMElement $rangeField);
 	
@@ -49,7 +49,7 @@ interface AccessibleForm {
 	
 	/**
 	 * Display that the field have autocomplete.
-	 * @param \hatemile\util\HTMLDOMElement $autoCompleteField The field with
+	 * @param \hatemile\util\html\HTMLDOMElement $autoCompleteField The field with
 	 * autocomplete.
 	 */
 	public function fixAutoCompleteField(HTMLDOMElement $autoCompleteField);
@@ -61,7 +61,7 @@ interface AccessibleForm {
 	
 	/**
 	 * Associate label with field.
-	 * @param \hatemile\util\HTMLDOMElement $label The label.
+	 * @param \hatemile\util\html\HTMLDOMElement $label The label.
 	 */
 	public function fixLabel(HTMLDOMElement $label);
 	

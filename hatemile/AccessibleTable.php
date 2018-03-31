@@ -15,9 +15,9 @@ limitations under the License.
 
 namespace hatemile;
 
-require_once dirname(__FILE__) . '/util/HTMLDOMElement.php';
+require_once dirname(__FILE__) . '/util/html/HTMLDOMElement.php';
 
-use \hatemile\util\HTMLDOMElement;
+use \hatemile\util\html\HTMLDOMElement;
 
 /**
  * The AccessibleTable interface fixes accessibility problems associated
@@ -27,7 +27,7 @@ interface AccessibleTable {
 	
 	/**
 	 * Associate data cells with header cells of table.
-	 * @param \hatemile\util\HTMLDOMElement $table The table.
+	 * @param \hatemile\util\html\HTMLDOMElement $table The table.
 	 */
 	public function fixAssociationCellsTable(HTMLDOMElement $table);
 	

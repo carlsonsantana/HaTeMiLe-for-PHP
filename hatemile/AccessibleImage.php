@@ -15,9 +15,9 @@ limitations under the License.
 
 namespace hatemile;
 
-require_once dirname(__FILE__) . '/util/HTMLDOMElement.php';
+require_once dirname(__FILE__) . '/util/html/HTMLDOMElement.php';
 
-use \hatemile\util\HTMLDOMElement;
+use \hatemile\util\html\HTMLDOMElement;
 
 /**
  * The AccessibleImage interface fixes accessibility problems associated
@@ -27,7 +27,7 @@ interface AccessibleImage {
 	
 	/**
 	 * Provide an alternative way to access the long description of element.
-	 * @param \hatemile\util\HTMLDOMElement $element The element with long
+	 * @param \hatemile\util\html\HTMLDOMElement $element The element with long
 	 * description.
 	 */
 	public function fixLongDescription(HTMLDOMElement $element);

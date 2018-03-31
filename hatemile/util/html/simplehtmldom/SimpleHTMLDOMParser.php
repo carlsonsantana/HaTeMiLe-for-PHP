@@ -13,16 +13,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-namespace hatemile\util\simplehtmldom;
+namespace hatemile\util\html\simplehtmldom;
 
 require_once dirname(__FILE__) . '/../HTMLDOMParser.php';
-require_once dirname(__FILE__) . '/../CommonFunctions.php';
-require_once dirname(__FILE__) . '/../Configure.php';
+require_once dirname(__FILE__) . '/../../CommonFunctions.php';
+require_once dirname(__FILE__) . '/../../Configure.php';
 require_once dirname(__FILE__) . '/SimpleHTMLDOMElement.php';
 
-use \hatemile\util\HTMLDOMParser;
+use \hatemile\util\html\HTMLDOMParser;
 use \hatemile\util\CommonFunctions;
-use \hatemile\util\simplehtmldom\SimpleHTMLDOMElement;
+use \hatemile\util\html\simplehtmldom\SimpleHTMLDOMElement;
 use \hatemile\util\Configure;
 
 /**

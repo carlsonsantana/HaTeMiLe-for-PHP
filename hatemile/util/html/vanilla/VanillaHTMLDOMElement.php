@@ -13,11 +13,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-namespace hatemile\util\vanilla;
+namespace hatemile\util\html\vanilla;
 
 require_once dirname(__FILE__) . '/../HTMLDOMElement.php';
 
-use \hatemile\util\HTMLDOMElement;
+use \hatemile\util\html\HTMLDOMElement;
 
 /**
  * The VanillaHTMLDOMElement class is official implementation of HTMLDOMElement

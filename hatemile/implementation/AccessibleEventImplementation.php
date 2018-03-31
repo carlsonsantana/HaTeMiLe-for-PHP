@@ -15,14 +15,14 @@ limitations under the License.
 
 namespace hatemile\implementation;
 
-require_once dirname(__FILE__) . '/../util/HTMLDOMElement.php';
-require_once dirname(__FILE__) . '/../util/HTMLDOMParser.php';
+require_once dirname(__FILE__) . '/../util/html/HTMLDOMElement.php';
+require_once dirname(__FILE__) . '/../util/html/HTMLDOMParser.php';
 require_once dirname(__FILE__) . '/../util/Configure.php';
 require_once dirname(__FILE__) . '/../AccessibleEvent.php';
 require_once dirname(__FILE__) . '/../util/CommonFunctions.php';
 
-use \hatemile\util\HTMLDOMElement;
-use \hatemile\util\HTMLDOMParser;
+use \hatemile\util\html\HTMLDOMElement;
+use \hatemile\util\html\HTMLDOMParser;
 use \hatemile\util\Configure;
 use \hatemile\AccessibleEvent;
 use \hatemile\util\CommonFunctions;
@@ -35,7 +35,7 @@ class AccessibleEventImplementation implements AccessibleEvent {
 	
 	/**
 	 * The HTML parser.
-	 * @var \hatemile\util\HTMLDOMParser
+	 * @var \hatemile\util\html\HTMLDOMParser
 	 */
 	protected $parser;
 	
@@ -80,14 +80,14 @@ class AccessibleEventImplementation implements AccessibleEvent {
 	/**
 	 * The script element that contains the list of elements that has
 	 * inaccessible events.
-	 * @var \hatemile\util\HTMLDOMElement
+	 * @var \hatemile\util\html\HTMLDOMElement
 	 */
 	protected $scriptList;
 	
 	/**
 	 * Initializes a new object that manipulate the accessibility of the
 	 * Javascript events of elements of parser.
-	 * @param \hatemile\util\HTMLDOMParser $parser The HTML parser.
+	 * @param \hatemile\util\html\HTMLDOMParser $parser The HTML parser.
 	 * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
 	 */
 	public function __construct(HTMLDOMParser $parser, Configure $configure) {
@@ -103,7 +103,7 @@ class AccessibleEventImplementation implements AccessibleEvent {
 	
 	/**
 	 * Provide keyboard access for element, if it not has.
-	 * @param \hatemile\util\HTMLDOMElement $element The element.
+	 * @param \hatemile\util\html\HTMLDOMElement $element The element.
 	 */
 	protected function keyboardAccess(HTMLDOMElement $element) {
 		if (!$element->hasAttribute('tabindex')) {
@@ -166,7 +166,7 @@ class AccessibleEventImplementation implements AccessibleEvent {
 	
 	/**
 	 * Add a type of event in element.
-	 * @param \hatemile\util\HTMLDOMElement $element The element.
+	 * @param \hatemile\util\html\HTMLDOMElement $element The element.
 	 * @param string $event The type of event.
 	 */
 	protected function addEventInElement($element, $event) {

@@ -15,9 +15,9 @@ limitations under the License.
 
 namespace hatemile;
 
-require_once dirname(__FILE__) . '/util/HTMLDOMElement.php';
+require_once dirname(__FILE__) . '/util/html/HTMLDOMElement.php';
 
-use \hatemile\util\HTMLDOMElement;
+use \hatemile\util\html\HTMLDOMElement;
 
 /**
  * The AccessibleEvent interface fixes accessibility problems associated
@@ -27,14 +27,14 @@ interface AccessibleEvent {
 	
 	/**
 	 * Provide a solution for the element that has drop events.
-	 * @param \hatemile\util\HTMLDOMElement $element The element with drop
+	 * @param \hatemile\util\html\HTMLDOMElement $element The element with drop
 	 * event.
 	 */
 	public function fixDrop(HTMLDOMElement $element);
 	
 	/**
 	 * Provide a solution for the element that has drag events.
-	 * @param \hatemile\util\HTMLDOMElement $element The element with drag
+	 * @param \hatemile\util\html\HTMLDOMElement $element The element with drag
 	 * event.
 	 */
 	public function fixDrag(HTMLDOMElement $element);
@@ -46,7 +46,7 @@ interface AccessibleEvent {
 	
 	/**
 	 * Provide a solution for the element that has inaccessible hover events.
-	 * @param \hatemile\util\HTMLDOMElement $element The element with hover
+	 * @param \hatemile\util\html\HTMLDOMElement $element The element with hover
 	 * event.
 	 */
 	public function fixHover(HTMLDOMElement $element);
@@ -58,7 +58,7 @@ interface AccessibleEvent {
 	
 	/**
 	 * Provide a solution for the element that has inaccessible active events.
-	 * @param \hatemile\util\HTMLDOMElement $element The element with active
+	 * @param \hatemile\util\html\HTMLDOMElement $element The element with active
 	 * event.
 	 */
 	public function fixActive(HTMLDOMElement $element);

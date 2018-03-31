@@ -16,14 +16,14 @@ limitations under the License.
 namespace hatemile\implementation;
 
 require_once dirname(__FILE__) . '/../AccessibleForm.php';
-require_once dirname(__FILE__) . '/../util/HTMLDOMElement.php';
-require_once dirname(__FILE__) . '/../util/HTMLDOMParser.php';
+require_once dirname(__FILE__) . '/../util/html/HTMLDOMElement.php';
+require_once dirname(__FILE__) . '/../util/html/HTMLDOMParser.php';
 require_once dirname(__FILE__) . '/../util/CommonFunctions.php';
 require_once dirname(__FILE__) . '/../util/Configure.php';
 
 use \hatemile\AccessibleForm;
-use \hatemile\util\HTMLDOMElement;
-use \hatemile\util\HTMLDOMParser;
+use \hatemile\util\html\HTMLDOMElement;
+use \hatemile\util\html\HTMLDOMParser;
 use \hatemile\util\CommonFunctions;
 use \hatemile\util\Configure;
 
@@ -35,7 +35,7 @@ class AccessibleFormImplementation implements AccessibleForm {
 	
 	/**
 	 * The HTML parser.
-	 * @var \hatemile\util\HTMLDOMParser
+	 * @var \hatemile\util\html\HTMLDOMParser
 	 */
 	protected $parser;
 	
@@ -183,7 +183,7 @@ class AccessibleFormImplementation implements AccessibleForm {
 	/**
 	 * Initializes a new object that manipulate the accessibility of the forms
 	 * of parser.
-	 * @param \hatemile\util\HTMLDOMParser $parser The HTML parser.
+	 * @param \hatemile\util\html\HTMLDOMParser $parser The HTML parser.
 	 * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
 	 */
 	public function __construct(HTMLDOMParser $parser, Configure $configure) {
@@ -214,8 +214,8 @@ class AccessibleFormImplementation implements AccessibleForm {
 	
 	/**
 	 * Display in label the information of field.
-	 * @param \hatemile\util\HTMLDOMElement $label The label.
-	 * @param \hatemile\util\HTMLDOMElement $field The field.
+	 * @param \hatemile\util\html\HTMLDOMElement $label The label.
+	 * @param \hatemile\util\html\HTMLDOMElement $field The field.
 	 * @param string $prefix The prefix.
 	 * @param string $suffix The suffix.
 	 * @param string $dataPrefix The name of prefix attribute.
@@ -242,8 +242,8 @@ class AccessibleFormImplementation implements AccessibleForm {
 	
 	/**
 	 * Display in label the information if the field is required.
-	 * @param \hatemile\util\HTMLDOMElement $label The label.
-	 * @param \hatemile\util\HTMLDOMElement $requiredField The required field.
+	 * @param \hatemile\util\html\HTMLDOMElement $label The label.
+	 * @param \hatemile\util\html\HTMLDOMElement $requiredField The required field.
 	 */
 	protected function fixLabelRequiredField(HTMLDOMElement $label, HTMLDOMElement $requiredField) {
 		if ((($requiredField->hasAttribute('required'))
@@ -260,8 +260,8 @@ class AccessibleFormImplementation implements AccessibleForm {
 	
 	/**
 	 * Display in label the information of range of field.
-	 * @param \hatemile\util\HTMLDOMElement $label The label.
-	 * @param \hatemile\util\HTMLDOMElement $rangeField The range field.
+	 * @param \hatemile\util\html\HTMLDOMElement $label The label.
+	 * @param \hatemile\util\html\HTMLDOMElement $rangeField The range field.
 	 */
 	protected function fixLabelRangeField(HTMLDOMElement $label, HTMLDOMElement $rangeField) {
 		if ($rangeField->hasAttribute('aria-label')) {
@@ -296,8 +296,8 @@ class AccessibleFormImplementation implements AccessibleForm {
 	
 	/**
 	 * Display in label the information if the field has autocomplete.
-	 * @param \hatemile\util\HTMLDOMElement $label The label.
-	 * @param \hatemile\util\HTMLDOMElement $autoCompleteField The autocomplete field.
+	 * @param \hatemile\util\html\HTMLDOMElement $label The label.
+	 * @param \hatemile\util\html\HTMLDOMElement $autoCompleteField The autocomplete field.
 	 */
 	protected function fixLabelAutoCompleteField(HTMLDOMElement $label
 			, HTMLDOMElement $autoCompleteField) {
@@ -345,7 +345,7 @@ class AccessibleFormImplementation implements AccessibleForm {
 	
 	/**
 	 * Returns the appropriate value for attribute aria-autocomplete of field.
-	 * @param \hatemile\util\HTMLDOMElement $field The field.
+	 * @param \hatemile\util\html\HTMLDOMElement $field The field.
 	 * @return string The ARIA value of field.
 	 */
 	protected function getARIAAutoComplete(HTMLDOMElement $field) {
@@ -385,8 +385,8 @@ class AccessibleFormImplementation implements AccessibleForm {
 	
 	/**
 	 * Returns the labels of field.
-	 * @param \hatemile\util\HTMLDOMElement $field The field.
-	 * @return \hatemile\util\HTMLDOMElement[] The labels of field.
+	 * @param \hatemile\util\html\HTMLDOMElement $field The field.
+	 * @return \hatemile\util\html\HTMLDOMElement[] The labels of field.
 	 */
 	protected function getLabels(HTMLDOMElement $field) {
 		$labels = null;

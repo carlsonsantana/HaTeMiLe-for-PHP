@@ -15,9 +15,9 @@ limitations under the License.
 
 namespace hatemile\util;
 
-require_once dirname(__FILE__) . '/HTMLDOMElement.php';
+require_once dirname(__FILE__) . '/html/HTMLDOMElement.php';
 
-use \hatemile\util\HTMLDOMElement;
+use \hatemile\util\html\HTMLDOMElement;
 
 /**
  * The CommonFuncionts class contains the used methods by HaTeMiLe classes.
@@ -39,7 +39,7 @@ class CommonFunctions {
 
 	/**
 	 * Generate a id for a element.
-	 * @param \hatemile\util\HTMLDOMElement $element The element.
+	 * @param \hatemile\util\html\HTMLDOMElement $element The element.
 	 * @param string $prefix The prefix of id.
 	 */
 	public static function generateId(HTMLDOMElement $element, $prefix) {
@@ -58,9 +58,9 @@ class CommonFunctions {
 	
 	/**
 	 * Copy a list of attributes of a element for other element.
-	 * @param \hatemile\util\HTMLDOMElement $element1 The element that have
+	 * @param \hatemile\util\html\HTMLDOMElement $element1 The element that have
 	 * attributes copied.
-	 * @param \hatemile\util\HTMLDOMElement $element2 The element that copy
+	 * @param \hatemile\util\html\HTMLDOMElement $element2 The element that copy
 	 * the attributes.
 	 * @param string[] $attributes The list of attributes that will be copied.
 	 */

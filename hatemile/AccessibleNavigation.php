@@ -15,10 +15,10 @@ limitations under the License.
 
 namespace hatemile;
 
-require_once dirname(__FILE__) . '/util/HTMLDOMElement.php';
+require_once dirname(__FILE__) . '/util/html/HTMLDOMElement.php';
 require_once dirname(__FILE__) . '/util/Skipper.php';
 
-use \hatemile\util\HTMLDOMElement;
+use \hatemile\util\html\HTMLDOMElement;
 use \hatemile\util\Skipper;
 
 /**
@@ -29,7 +29,7 @@ interface AccessibleNavigation {
 	
 	/**
 	 * Display the shortcuts of element.
-	 * @param \hatemile\util\HTMLDOMElement $element The element with shortcuts.
+	 * @param \hatemile\util\html\HTMLDOMElement $element The element with shortcuts.
 	 */
 	public function fixShortcut(HTMLDOMElement $element);
 	
@@ -40,7 +40,7 @@ interface AccessibleNavigation {
 	
 	/**
 	 * Provide content skipper for element.
-	 * @param \hatemile\util\HTMLDOMElement $element The element.
+	 * @param \hatemile\util\html\HTMLDOMElement $element The element.
 	 * @param \hatemile\util\Skipper $skipper The skipper.
 	 */
 	public function fixSkipper(HTMLDOMElement $element, Skipper $skipper);
@@ -52,7 +52,7 @@ interface AccessibleNavigation {
 	
 	/**
 	 * Provide a navigation by heading.
-	 * @param \hatemile\util\HTMLDOMElement $element The heading element.
+	 * @param \hatemile\util\html\HTMLDOMElement $element The heading element.
 	 */
 	public function fixHeading(HTMLDOMElement $element);
 	
