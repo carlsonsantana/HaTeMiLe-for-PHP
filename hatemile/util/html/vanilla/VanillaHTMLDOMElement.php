@@ -78,14 +78,16 @@ class VanillaHTMLDOMElement implements HTMLDOMElement {
 		$children = $this->getParentElement()->getData()->childNodes;
 		$found = false;
 		$added = false;
-		for ($i = 0, $length = sizeof($children); $i < $length; $i++) {
-			$child = new VanillaHTMLDOMElement($children[$i]);
-			if ($found) {
-				$child->getParentElement()->getData()->insertBefore($newElement->getData(), $child);
-				$added = true;
-				break;
-			} else if ($child->getData() === $this->element) {
-				$found = true;
+		foreach ($children as $child) {
+			if ($child instanceof \DOMElement) {
+				$child = new VanillaHTMLDOMElement($child);
+				if ($found) {
+					$child->getParentElement()->getData()->insertBefore($newElement->getData(), $child->getData());
+					$added = true;
+					break;
+				} else if ($child->getData() === $this->element) {
+					$found = true;
+				}
 			}
 		}
 		if (!$added) {

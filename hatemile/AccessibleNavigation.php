@@ -60,4 +60,16 @@ interface AccessibleNavigation {
 	 * Provide a navigation by headings.
 	 */
 	public function fixHeadings();
+        
+        /**
+	 * Provide an alternative way to access the long description of element.
+	 * @param \hatemile\util\html\HTMLDOMElement $element The element with long
+	 * description.
+	 */
+	public function fixLongDescription(HTMLDOMElement $element);
+	
+	/**
+	 * Provide an alternative way to access the longs descriptions of elements.
+	 */
+	public function fixLongDescriptions();
 }

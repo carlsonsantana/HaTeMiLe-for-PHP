@@ -106,6 +106,18 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 	 * @var string
 	 */
 	protected $textHeading;
+        
+        /**
+	 * The prefix of content of long description.
+	 * @var string
+	 */
+	protected $prefixLongDescriptionLink;
+	
+	/**
+	 * The suffix of content of long description.
+	 * @var string
+	 */
+	protected $suffixLongDescriptionLink;
 	
 	/**
 	 * The prefix of generated ids.
@@ -148,12 +160,31 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 	 * @var string
 	 */
 	protected $classHeadingAnchor;
+        
+        /**
+	 * The HTML class of element for show the long description of image.
+	 * @var string
+	 */
+	protected $classLongDescriptionLink;
 	
 	/**
 	 * The name of attribute that links the anchor of heading link with heading.
 	 * @var string
 	 */
 	protected $dataHeadingAnchorFor;
+        
+        /**
+	 * The name of attribute that indicates the level of heading of link.
+	 * @var string
+	 */
+	protected $dataHeadingLevel;
+        
+        /**
+	 * The name of attribute that link the anchor of long description with the
+	 * image.
+	 * @var string
+	 */
+	protected $dataLongDescriptionForImage;
 	
 	/**
 	 * The state that indicates if the sintatic heading of parser be validated.
@@ -166,12 +197,6 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 	 * @var boolean
 	 */
 	protected $validHeading;
-	
-	/**
-	 * The name of attribute that indicates the level of heading of link.
-	 * @var string
-	 */
-	protected $dataHeadingLevel;
 	
 	/**
 	 * The list element of shortcuts.
@@ -201,15 +226,19 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 		$this->idTextHeading = 'text-heading';
 		$this->classSkipperAnchor = 'skipper-anchor';
 		$this->classHeadingAnchor = 'heading-anchor';
+                $this->classLongDescriptionLink = 'longdescription-link';
 		$this->dataAccessKey = 'data-shortcutdescriptionfor';
 		$this->dataIgnore = 'data-ignoreaccessibilityfix';
 		$this->dataAnchorFor = 'data-anchorfor';
 		$this->dataHeadingAnchorFor = 'data-headinganchorfor';
 		$this->dataHeadingLevel = 'data-headinglevel';
+		$this->dataLongDescriptionForImage = 'data-longdescriptionfor';
 		$this->prefixId = $configure->getParameter('prefix-generated-ids');
 		$this->textShortcuts = $configure->getParameter('text-shortcuts');
 		$this->textHeading = $configure->getParameter('text-heading');
 		$this->standartPrefix = $configure->getParameter('text-standart-shortcut-prefix');
+                $this->prefixLongDescriptionLink = $configure->getParameter('prefix-longdescription');
+		$this->suffixLongDescriptionLink = $configure->getParameter('suffix-longdescription');
 		$this->skippers = $configure->getSkippers();
 		$this->listShortcutsAdded = false;
 		$this->listSkippersAdded = false;
@@ -667,6 +696,38 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 		foreach ($elements as $element) {
 			if (!$element->hasAttribute($this->dataIgnore)) {
 				$this->fixHeading($element);
+			}
+		}
+	}
+        
+        public function fixLongDescription(HTMLDOMElement $element) {
+		if ($element->hasAttribute('longdesc')) {
+			CommonFunctions::generateId($element, $this->prefixId);
+			$id = $element->getAttribute('id');
+			if ($this->parser->find('[' . $this->dataLongDescriptionForImage . '="' . $id . '"]')
+					->firstResult() === null) {
+				if ($element->hasAttribute('alt')) {
+					$text = $this->prefixLongDescriptionLink . ' ' . $element->getAttribute('alt')
+							. ' ' . $this->suffixLongDescriptionLink;
+				} else {
+					$text = $this->prefixLongDescriptionLink . ' ' . $this->suffixLongDescriptionLink;
+				}
+				$anchor = $this->parser->createElement('a');
+				$anchor->setAttribute('href', $element->getAttribute('longdesc'));
+				$anchor->setAttribute('target', '_blank');
+				$anchor->setAttribute($this->dataLongDescriptionForImage, $id);
+				$anchor->setAttribute('class', $this->classLongDescriptionLink);
+				$anchor->appendText(\trim($text));
+				$element->insertAfter($anchor);
+			}
+		}
+	}
+	
+	public function fixLongDescriptions() {
+		$elements = $this->parser->find('[longdesc]')->listResults();
+		foreach ($elements as $element) {
+			if (!$element->hasAttribute($this->dataIgnore)) {
+				$this->fixLongDescription($element);
 			}
 		}
 	}
