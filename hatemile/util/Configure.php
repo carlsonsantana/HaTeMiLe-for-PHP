@@ -15,7 +15,6 @@ limitations under the License.
 
 namespace hatemile\util;
 
-require_once dirname(__FILE__) . '/SelectorChange.php';
 require_once dirname(__FILE__) . '/Skipper.php';
 
 /**
@@ -30,12 +29,6 @@ class Configure {
 	protected $parameters;
 	
 	/**
-	 * The changes that will be done in selectors.
-	 * @var \hatemile\util\SelectorChange[]
-	 */
-	protected $selectorChanges;
-	
-	/**
 	 * The skippers.
 	 * @var \hatemile\util\Skipper
 	 */
@@ -48,7 +41,6 @@ class Configure {
 	 */
 	public function __construct($fileName = null) {
 		$this->parameters = array();
-		$this->selectorChanges = array();
 		$this->skippers = array();
 		if ($fileName === null) {
 			$fileName = dirname(__FILE__) . '/../../hatemile-configure.xml';
@@ -59,15 +51,12 @@ class Configure {
 		$document = $file->documentElement;
 		$childNodes = $document->childNodes;
 		$nodeParameters = null;
-		$nodeSelectorChanges = null;
 		$nodeSkippers = null;
 		for ($i = 0, $length = $childNodes->length; $i < $length; $i++) {
 			$child = $childNodes->item($i);
 			if ($child instanceof \DOMElement) {
 				if (strtoupper($child->tagName) === 'PARAMETERS') {
 					$nodeParameters = $child->childNodes;
-				} else if (strtoupper($child->tagName) === 'SELECTOR-CHANGES') {
-					$nodeSelectorChanges = $child->childNodes;
 				} else if (strtoupper($child->tagName) === 'SKIPPERS') {
 					$nodeSkippers = $child->childNodes;
 				}
@@ -81,23 +70,6 @@ class Configure {
 					if ((strtoupper($parameter->tagName) === 'PARAMETER')
 							&& ($parameter->hasAttribute('name'))) {
 						$this->parameters[$parameter->getAttribute('name')] = $parameter->textContent;
-					}
-				}
-			}
-		}
-		
-		if ($nodeSelectorChanges !== null) {
-			for ($i = 0, $length = $nodeSelectorChanges->length; $i < $length; $i++) {
-				$selector = $nodeSelectorChanges->item($i);
-				if ($selector instanceof \DOMElement) {
-					if ((strtoupper($selector->tagName) === 'SELECTOR-CHANGE')
-							&& ($selector->hasAttribute('selector'))
-							&& ($selector->hasAttribute('attribute'))
-							&& ($selector->hasAttribute('value-attribute'))) {
-						array_push($this->selectorChanges
-								, new SelectorChange($selector->getAttribute('selector')
-										, $selector->getAttribute('attribute')
-										, $selector->getAttribute('value-attribute')));
 					}
 				}
 			}
@@ -135,14 +107,6 @@ class Configure {
 	 */
 	public function getParameter($parameter) {
 		return $this->parameters[$parameter];
-	}
-	
-	/**
-	 * Returns the changes that will be done in selectors.
-	 * @return \hatemile\util\SelectorChange[] The changes that will be done in selectors.
-	 */
-	public function getSelectorChanges() {
-		return array_merge($this->selectorChanges);
 	}
 	
 	public function getSkippers() {

@@ -5,7 +5,7 @@ HaTeMiLe is a libary that can convert a HTML code in a HTML code more accessible
 ## How to Use
 1.  Instanciate a new object with HTMLDOMParser interface, setting the HTML code;
 2.  Instanciate a new Configuration object;
-3.  Instanciate a new object with AccessibleForm, AccessibleImage, AccessibleNavigation, AccessibleTable, AccessibleEvent or AccessibleSelector interface and call yours methods;
+3.  Instanciate a new object with AccessibleForm, AccessibleNavigation, AccessibleTable or AccessibleEvent interface and call yours methods;
 4.  Get the HTML code of object with HTMLDOMParser interface.
 
 ## Example
@@ -13,9 +13,7 @@ HaTeMiLe is a libary that can convert a HTML code in a HTML code more accessible
 	ob_start();
 	require_once './hatemile/implementation/AccessibleEventImplementation.php';
 	require_once './hatemile/implementation/AccessibleFormImplementation.php';
-	require_once './hatemile/implementation/AccessibleImageImplementation.php';
 	require_once './hatemile/implementation/AccessibleNavigationImplementation.php';
-	require_once './hatemile/implementation/AccessibleSelectorImplementation.php';
 	require_once './hatemile/implementation/AccessibleAssociationImplementation.php';
 	require_once './hatemile/util/Configure.php';
 	require_once './phpQuery/phpQuery/phpQuery.php';
@@ -179,8 +177,6 @@ HaTeMiLe is a libary that can convert a HTML code in a HTML code more accessible
 
 	$accessibleEvent = new hatemile\implementation\AccessibleEventImplementation($parser, $configure);
 	$accessibleForm = new hatemile\implementation\AccessibleFormImplementation($parser, $configure);
-	$accessibleImage = new hatemile\implementation\AccessibleImageImplementation($parser, $configure);
-	$accessibleSelector = new hatemile\implementation\AccessibleSelectorImplementation($parser, $configure);
 	$accessibleNavigation = new hatemile\implementation\AccessibleNavigationImplementation($parser, $configure, $_SERVER['HTTP_USER_AGENT']);
 	$accessibleAssociation = new hatemile\implementation\AccessibleAssociationImplementation($parser, $configure);
 
@@ -192,13 +188,10 @@ HaTeMiLe is a libary that can convert a HTML code in a HTML code more accessible
 	$accessibleForm->fixRequiredFields();
 	$accessibleForm->fixRangeFields();
 
-	$accessibleImage->fixLongDescriptions();
-
-	$accessibleSelector->fixSelectors();
-
 	$accessibleNavigation->fixShortcuts();
 	$accessibleNavigation->fixSkippers();
 	$accessibleNavigation->fixHeadings();
+	$accessibleNavigation->fixLongDescriptions();
 
 	$accessibleAssociation->fixAssociationCellsTables();
 	$accessibleAssociation->fixLabels();
