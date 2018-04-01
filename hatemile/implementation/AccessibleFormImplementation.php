@@ -96,23 +96,6 @@ class AccessibleFormImplementation implements AccessibleForm {
 		return null;
 	}
 	
-	/**
-	 * Returns the labels of field.
-	 * @param \hatemile\util\html\HTMLDOMElement $field The field.
-	 * @return \hatemile\util\html\HTMLDOMElement[] The labels of field.
-	 */
-	protected function getLabels(HTMLDOMElement $field) {
-		$labels = null;
-		if ($field->hasAttribute('id')) {
-			$labels = $this->parser->find('label[for="' . $field->getAttribute('id') . '"]')
-					->listResults();
-		}
-		if (empty($labels)) {
-			$labels = $this->parser->find($field)->findAncestors('label')->listResults();
-		}
-		return $labels;
-	}
-	
 	public function fixRequiredField(HTMLDOMElement $requiredField) {
 		if ($requiredField->hasAttribute('required')) {
 			$requiredField->setAttribute('aria-required', 'true');
