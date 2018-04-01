@@ -65,12 +65,6 @@ class AccessibleEventImplementation implements AccessibleEvent {
 	protected $prefixId;
 	
 	/**
-	 * The name of attribute for not modify the elements.
-	 * @var string
-	 */
-	protected $dataIgnore;
-	
-	/**
 	 * The state that indicates if the scripts used by solutions was added in
 	 * parser.
 	 * @var boolean
@@ -96,7 +90,6 @@ class AccessibleEventImplementation implements AccessibleEvent {
 		$this->idScriptEventListener = 'script-eventlistener';
 		$this->idListIdsScript = 'list-ids-script';
 		$this->idFunctionScriptFix = 'id-function-script-fix';
-		$this->dataIgnore = 'data-ignoreaccessibilityfix';
 		$this->mainScriptAdded = false;
 		$this->scriptList = null;
 	}
@@ -199,7 +192,7 @@ class AccessibleEventImplementation implements AccessibleEvent {
 		$draggableElements = $this->parser
 				->find('[ondrag],[ondragstart],[ondragend]')->listResults();
 		foreach ($draggableElements as $draggableElement) {
-			if (!$draggableElement->hasAttribute($this->dataIgnore)) {
+			if (CommonFunctions::isValidElement($draggableElement)) {
 				$this->fixDrag($draggableElement);
 			}
 		}
@@ -207,7 +200,7 @@ class AccessibleEventImplementation implements AccessibleEvent {
 				->find('[ondrop],[ondragenter],[ondragleave],[ondragover]')
 				->listResults();
 		foreach ($droppableElements as $droppableElement) {
-			if (!$droppableElement->hasAttribute($this->dataIgnore)) {
+			if (CommonFunctions::isValidElement($droppableElement)) {
 				$this->fixDrop($droppableElement);
 			}
 		}
@@ -223,7 +216,7 @@ class AccessibleEventImplementation implements AccessibleEvent {
 		$elements = $this->parser->find('[onmouseover],[onmouseout]')
 				->listResults();
 		foreach ($elements as $element) {
-			if (!$element->hasAttribute($this->dataIgnore)) {
+			if (CommonFunctions::isValidElement($element)) {
 				$this->fixHover($element);
 			}
 		}
@@ -240,7 +233,7 @@ class AccessibleEventImplementation implements AccessibleEvent {
 				->find('[onclick],[onmousedown],[onmouseup],[ondblclick]')
 				->listResults();
 		foreach ($elements as $element) {
-			if (!$element->hasAttribute($this->dataIgnore)) {
+			if (CommonFunctions::isValidElement($element)) {
 				$this->fixActive($element);
 			}
 		}

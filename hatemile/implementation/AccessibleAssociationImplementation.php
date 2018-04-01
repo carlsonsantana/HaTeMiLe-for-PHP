@@ -46,12 +46,6 @@ class AccessibleAssociationImplementation implements AccessibleAssociation {
 	protected $prefixId;
 	
 	/**
-	 * The name of attribute for not modify the elements.
-	 * @var string
-	 */
-	protected $dataIgnore;
-	
-	/**
 	 * Initializes a new object that manipulate the accessibility of the tables
 	 * of parser.
 	 * @param \hatemile\util\html\HTMLDOMParser $parser The HTML parser.
@@ -60,7 +54,6 @@ class AccessibleAssociationImplementation implements AccessibleAssociation {
 	public function __construct(HTMLDOMParser $parser, Configure $configure) {
 		$this->parser = $parser;
 		$this->prefixId = $configure->getParameter('prefix-generated-ids');
-		$this->dataIgnore = 'data-ignoreaccessibilityfix';
 	}
 	
 	/**
@@ -272,7 +265,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation {
 	public function fixAssociationCellsTables() {
 		$tables = $this->parser->find('table')->listResults();
 		foreach ($tables as $table) {
-			if (!$table->hasAttribute($this->dataIgnore)) {
+			if (CommonFunctions::isValidElement($table)) {
 				$this->fixAssociationCellsTable($table);
 			}
 		}
@@ -307,7 +300,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation {
 	public function fixLabels() {
 		$labels = $this->parser->find('label')->listResults();
 		foreach ($labels as $label) {
-			if (!$label->hasAttribute($this->dataIgnore)) {
+			if (CommonFunctions::isValidElement($label)) {
 				$this->fixLabel($label);
 			}
 		}

@@ -66,12 +66,6 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 	protected $dataAccessKey;
 	
 	/**
-	 * The name of attribute for not modify the elements.
-	 * @var string
-	 */
-	protected $dataIgnore;
-	
-	/**
 	 * The browser shortcut prefix.
 	 * @var string
 	 */
@@ -228,7 +222,6 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 		$this->classHeadingAnchor = 'heading-anchor';
                 $this->classLongDescriptionLink = 'longdescription-link';
 		$this->dataAccessKey = 'data-shortcutdescriptionfor';
-		$this->dataIgnore = 'data-ignoreaccessibilityfix';
 		$this->dataAnchorFor = 'data-anchorfor';
 		$this->dataHeadingAnchorFor = 'data-headinganchorfor';
 		$this->dataHeadingLevel = 'data-headinglevel';
@@ -589,7 +582,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 	public function fixShortcuts() {
 		$elements = $this->parser->find('[accesskey]')->listResults();
 		foreach ($elements as $element) {
-			if (!$element->hasAttribute($this->dataIgnore)) {
+			if (CommonFunctions::isValidElement($element)) {
 				$this->fixShortcut($element);
 			}
 		}
@@ -635,7 +628,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 			}
 			$shortcuts = $skipper->getShortcuts();
 			foreach ($elements as $element) {
-				if (!$element->hasAttribute($this->dataIgnore)) {
+				if (CommonFunctions::isValidElement($element)) {
 					if ($count) {
 						$defaultText = $skipper->getDefaultText() . ' ' . ((string) ($index++));
 					} else {
@@ -694,7 +687,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 	public function fixHeadings() {
 		$elements = $this->parser->find('h1,h2,h3,h4,h5,h6')->listResults();
 		foreach ($elements as $element) {
-			if (!$element->hasAttribute($this->dataIgnore)) {
+			if (CommonFunctions::isValidElement($element)) {
 				$this->fixHeading($element);
 			}
 		}
@@ -726,7 +719,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
 	public function fixLongDescriptions() {
 		$elements = $this->parser->find('[longdesc]')->listResults();
 		foreach ($elements as $element) {
-			if (!$element->hasAttribute($this->dataIgnore)) {
+			if (CommonFunctions::isValidElement($element)) {
 				$this->fixLongDescription($element);
 			}
 		}

@@ -25,6 +25,12 @@ use \hatemile\util\html\HTMLDOMElement;
 class CommonFunctions {
 	
 	/**
+	 * The name of attribute for not modify the elements.
+	 * @var string
+	 */
+	const DATA_IGNORE = 'data-ignoreaccessibilityfix';
+	
+	/**
 	 * Count the number of ids created.
 	 * @var integer
 	 */
@@ -109,5 +115,29 @@ class CommonFunctions {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Check that the element can be manipulated by HaTeMiLe.
+	 * @param \hatemile\util\html\HTMLDOMElement $element The element
+	 * @return boolean True if element can be manipulated or false if element cannot be
+	 * manipulated.
+	 */
+	public static function isValidElement(HTMLDOMElement $element) {
+		if ($element->hasAttribute(CommonFunctions::DATA_IGNORE)) {
+			return false;
+		} else {
+			$parentElement = $element->getParentElement();
+			if ($parentElement != null) {
+				$tagName = $parentElement->getTagName();
+				if (($tagName !== 'BODY') && ($tagName !== 'HTML')) {
+					return CommonFunctions::isValidElement($parentElement);
+				} else {
+					return true;
+				}
+			} else {
+				return true;
+			}
+		}
 	}
 }

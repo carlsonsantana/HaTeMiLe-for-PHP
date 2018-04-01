@@ -25,6 +25,7 @@ use \hatemile\AccessibleForm;
 use \hatemile\util\html\HTMLDOMElement;
 use \hatemile\util\html\HTMLDOMParser;
 use \hatemile\util\Configure;
+use \hatemile\util\CommonFunctions;
 
 /**
  * The AccessibleFormImplementation class is official implementation of
@@ -45,12 +46,6 @@ class AccessibleFormImplementation implements AccessibleForm {
 	protected $prefixId;
 	
 	/**
-	 * The name of attribute for not modify the elements.
-	 * @var string
-	 */
-	protected $dataIgnore;
-	
-	/**
 	 * Initializes a new object that manipulate the accessibility of the forms
 	 * of parser.
 	 * @param \hatemile\util\html\HTMLDOMParser $parser The HTML parser.
@@ -58,7 +53,6 @@ class AccessibleFormImplementation implements AccessibleForm {
 	 */
 	public function __construct(HTMLDOMParser $parser, Configure $configure) {
 		$this->parser = $parser;
-		$this->dataIgnore = 'data-ignoreaccessibilityfix';
 		$this->prefixId = $configure->getParameter('prefix-generated-ids');
 	}
 	
@@ -128,7 +122,7 @@ class AccessibleFormImplementation implements AccessibleForm {
 	public function fixRequiredFields() {
 		$requiredFields = $this->parser->find('[required]')->listResults();
 		foreach ($requiredFields as $requiredField) {
-			if (!$requiredField->hasAttribute($this->dataIgnore)) {
+			if (CommonFunctions::isValidElement($requiredField)) {
 				$this->fixRequiredField($requiredField);
 			}
 		}
@@ -146,7 +140,7 @@ class AccessibleFormImplementation implements AccessibleForm {
 	public function fixRangeFields() {
 		$rangeFields = $this->parser->find('[min],[max]')->listResults();
 		foreach ($rangeFields as $rangeField) {
-			if (!$rangeField->hasAttribute($this->dataIgnore)) {
+			if (CommonFunctions::isValidElement($rangeField)) {
 				$this->fixRangeField($rangeField);
 			}
 		}
@@ -163,7 +157,7 @@ class AccessibleFormImplementation implements AccessibleForm {
 		$elements = $this->parser
 				->find('input[autocomplete],textarea[autocomplete],form[autocomplete] input,form[autocomplete] textarea,[list],[form]')->listResults();
 		foreach ($elements as $element) {
-			if (!$element->hasAttribute($this->dataIgnore)) {
+			if (CommonFunctions::isValidElement($element)) {
 				$this->fixAutoCompleteField($element);
 			}
 		}
