@@ -153,10 +153,6 @@ class SimpleHTMLDOMElement implements HTMLDOMElement {
 		return $this->element->innertext();
 	}
 	
-	public function setInnerHTML($html) {
-		$this->element->setAttribute('innertext', $html);
-	}
-	
 	public function getOuterHTML() {
 		return $this->element->outertext();
 	}

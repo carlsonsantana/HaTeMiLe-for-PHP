@@ -139,12 +139,6 @@ interface HTMLDOMElement {
 	public function getInnerHTML();
 	
 	/**
-	 * Modify the inner HTML code of this element.
-	 * @param string $html The HTML code.
-	 */
-	public function setInnerHTML($html);
-	
-	/**
 	 * Returns the HTML code of this element.
 	 * @return string The HTML code of this element.
 	 */

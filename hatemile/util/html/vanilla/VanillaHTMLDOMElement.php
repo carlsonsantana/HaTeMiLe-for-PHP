@@ -152,22 +152,6 @@ class VanillaHTMLDOMElement implements HTMLDOMElement {
 		return $innerHTML;
 	}
 	
-	public function setInnerHTML($html) {
-		$originalChildren = $this->element->childNodes;
-		foreach ($originalChildren as $child) {
-			$this->element->removeChild($child);
-		}
-		
-		$DOMInnerHTML = new \DOMDocument();
-		$DOMInnerHTML->loadHTML('<!DOCTYPE html><html>' . $html . '</html>');
-		$children = $DOMInnerHTML->getElementsByTagName('html')->item(0)->childNodes;
-		
-		foreach ($children as $child) {
-			$this->element->ownerDocument->importNode($child, true);
-			$this->element->appendChild($child);
-		}
-	}
-	
 	public function getOuterHTML() {
 		return $this->element->ownerDocument->saveXML($this->element);
 	}
