@@ -96,7 +96,7 @@ class VanillaHTMLDOMElement implements HTMLDOMElement
                     $child->getParentElement()->getData()->insertBefore($newElement->getData(), $child->getData());
                     $added = true;
                     break;
-                } else if ($child->getData() === $this->element) {
+                } elseif ($child->getData() === $this->element) {
                     $found = true;
                 }
             }

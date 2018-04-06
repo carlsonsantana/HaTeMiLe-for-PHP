@@ -59,7 +59,7 @@ class Configure
             if ($child instanceof \DOMElement) {
                 if (strtoupper($child->tagName) === 'PARAMETERS') {
                     $nodeParameters = $child->childNodes;
-                } else if (strtoupper($child->tagName) === 'SKIPPERS') {
+                } elseif (strtoupper($child->tagName) === 'SKIPPERS') {
                     $nodeSkippers = $child->childNodes;
                 }
             }

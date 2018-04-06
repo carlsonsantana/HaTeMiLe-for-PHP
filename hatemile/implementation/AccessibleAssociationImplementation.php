@@ -159,9 +159,9 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
         foreach ($header as $elements) {
             if (empty($elements)) {
                 return false;
-            } else if ($length === -1) {
+            } elseif ($length === -1) {
                 $length = sizeof($elements);
-            } else if (sizeof($elements) !== $length) {
+            } elseif (sizeof($elements) !== $length) {
                 return false;
             }
         }

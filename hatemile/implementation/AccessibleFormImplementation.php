@@ -89,10 +89,10 @@ class AccessibleFormImplementation implements AccessibleForm
             }
             if ('on' === $value) {
                 return 'both';
-            } else if (($field->hasAttribute('list')) && ($this->parser
+            } elseif (($field->hasAttribute('list')) && ($this->parser
                     ->find('datalist[id="' . $field->getAttribute('list') . '"]')->firstResult() !== null)) {
                 return 'list';
-            } else if ('off' === $value) {
+            } elseif ('off' === $value) {
                 return 'none';
             }
         }

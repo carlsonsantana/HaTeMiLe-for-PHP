@@ -106,7 +106,7 @@ class AccessibleEventImplementation implements AccessibleEvent
             $tag = $element->getTagName();
             if (($tag === 'A') && (!$element->hasAttribute('href'))) {
                 $element->setAttribute('tabindex', '0');
-            } else if (($tag !== 'A') && ($tag !== 'INPUT')
+            } elseif (($tag !== 'A') && ($tag !== 'INPUT')
                     && ($tag !== 'BUTTON') && ($tag !== 'SELECT')
                     && ($tag !== 'TEXTAREA')) {
                 $element->setAttribute('tabindex', '0');

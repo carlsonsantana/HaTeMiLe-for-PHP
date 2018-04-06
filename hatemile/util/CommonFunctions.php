@@ -98,7 +98,7 @@ class CommonFunctions
             } else {
                 return $list . ' ' . $stringToIncrease;
             }
-        } else if (empty($list)) {
+        } elseif (empty($list)) {
             return $stringToIncrease;
         } else {
             return $list;

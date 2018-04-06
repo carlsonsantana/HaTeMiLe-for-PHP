@@ -256,15 +256,15 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
             
             if ($opera) {
                 $this->prefix = 'SHIFT + ESC';
-            } else if ($chrome && $mac && !$spoofer) {
+            } elseif ($chrome && $mac && !$spoofer) {
                 $this->prefix = 'CTRL + OPTION';
-            } else if ($safari && !$windows && !$spoofer) {
+            } elseif ($safari && !$windows && !$spoofer) {
                 $this->prefix = 'CTRL + ALT';
-            } else if (!$windows && ($safari || $mac || $konqueror)) {
+            } elseif (!$windows && ($safari || $mac || $konqueror)) {
                 $this->prefix = 'CTRL';
-            } else if ($firefox) {
+            } elseif ($firefox) {
                 $this->prefix = 'ALT + SHIFT';
-            } else if ($chrome || $ie) {
+            } elseif ($chrome || $ie) {
                 $this->prefix = 'ALT';
             } else {
                 $this->prefix = $this->standartPrefix;
@@ -284,13 +284,13 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
     {
         if ($element->hasAttribute('title')) {
             $description = $element->getAttribute('title');
-        } else if ($element->hasAttribute('aria-label')) {
+        } elseif ($element->hasAttribute('aria-label')) {
             $description = $element->getAttribute('aria-label');
-        } else if ($element->hasAttribute('alt')) {
+        } elseif ($element->hasAttribute('alt')) {
             $description = $element->getAttribute('alt');
-        } else if ($element->hasAttribute('label')) {
+        } elseif ($element->hasAttribute('label')) {
             $description = $element->getAttribute('label');
-        } else if (($element->hasAttribute('aria-labelledby'))
+        } elseif (($element->hasAttribute('aria-labelledby'))
                 || ($element->hasAttribute('aria-describedby'))) {
             if ($element->hasAttribute('aria-labelledby')) {
                 $descriptionIds = preg_split("/[ \n\t\r]+/", $element->getAttribute('aria-labelledby'));
@@ -304,7 +304,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
                     break;
                 }
             }
-        } else if (($element->getTagName() === 'INPUT') && ($element->hasAttribute('type'))) {
+        } elseif (($element->getTagName() === 'INPUT') && ($element->hasAttribute('type'))) {
             $type = strtolower($element->getAttribute('type'));
             if ((($type === 'button') || ($type === 'submit') || ($type === 'reset'))
                     && ($element->hasAttribute('value'))) {
@@ -428,15 +428,15 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
         $tag = $element->getTagName();
         if ($tag === 'H1') {
             return 1;
-        } else if ($tag === 'H2') {
+        } elseif ($tag === 'H2') {
             return 2;
-        } else if ($tag === 'H3') {
+        } elseif ($tag === 'H3') {
             return 3;
-        } else if ($tag === 'H4') {
+        } elseif ($tag === 'H4') {
             return 4;
-        } else if ($tag === 'H5') {
+        } elseif ($tag === 'H5') {
             return 5;
-        } else if ($tag === 'H6') {
+        } elseif ($tag === 'H6') {
             return 6;
         } else {
             return -1;

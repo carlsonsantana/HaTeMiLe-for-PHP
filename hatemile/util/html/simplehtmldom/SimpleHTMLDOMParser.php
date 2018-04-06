@@ -61,7 +61,7 @@ class SimpleHTMLDOMParser implements HTMLDOMParser
     {
         if (is_string($codeOrParser)) {
             $this->document = str_get_html($codeOrParser, true, true, DEFAULT_TARGET_CHARSET, false);
-        } else if ($codeOrParser instanceof \simple_html_dom) {
+        } elseif ($codeOrParser instanceof \simple_html_dom) {
             $this->document = $codeOrParser;
         }
         $this->prefixId = $configure->getParameter('prefix-generated-ids');

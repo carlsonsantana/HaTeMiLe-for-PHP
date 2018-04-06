@@ -52,7 +52,7 @@ class phpQueryHTMLDOMParser implements HTMLDOMParser
     {
         if (is_string($codeOrParser)) {
             $this->document = \phpQuery::newDocumentHTML($codeOrParser);
-        } else if ($codeOrParser instanceof \phpQueryObject) {
+        } elseif ($codeOrParser instanceof \phpQueryObject) {
             $this->document = $codeOrParser;
         }
     }
