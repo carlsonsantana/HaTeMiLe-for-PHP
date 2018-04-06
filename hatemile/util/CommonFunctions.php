@@ -42,7 +42,6 @@ class CommonFunctions
      */
     private function __construct()
     {
-        
     }
 
     /**

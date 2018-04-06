@@ -660,7 +660,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
                     }
                 }
             }
-        }    
+        }
     }
 
     public function fixHeading(HTMLDOMElement $element)
