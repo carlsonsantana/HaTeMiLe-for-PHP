@@ -28,19 +28,19 @@ use \hatemile\util\html\vanilla\VanillaHTMLDOMElement;
  */
 class phpQueryHTMLDOMParser implements HTMLDOMParser
 {
-    
+
     /**
      * The root element of the parser.
      * @var \phpQueryObject
      */
     protected $document;
-    
+
     /**
      * The found elements.
      * @var \phpQueryObject
      */
     protected $results;
-    
+
     /**
      * Initializes a new object that encapsulate the parser of phpQuery
      * library.
@@ -56,7 +56,7 @@ class phpQueryHTMLDOMParser implements HTMLDOMParser
             $this->document = $codeOrParser;
         }
     }
-    
+
     public function find($selector)
     {
         if ($selector instanceof VanillaHTMLDOMElement) {
@@ -66,7 +66,7 @@ class phpQueryHTMLDOMParser implements HTMLDOMParser
         }
         return $this;
     }
-    
+
     public function findChildren($selector)
     {
         if ($selector instanceof VanillaHTMLDOMElement) {
@@ -74,10 +74,10 @@ class phpQueryHTMLDOMParser implements HTMLDOMParser
         } else {
             $this->results = $this->results->children($selector);
         }
-        
+
         return $this;
     }
-    
+
     public function findDescendants($selector)
     {
         if ($selector instanceof VanillaHTMLDOMElement) {
@@ -85,10 +85,10 @@ class phpQueryHTMLDOMParser implements HTMLDOMParser
         } else {
             $this->results = $this->results->find($selector);
         }
-        
+
         return $this;
     }
-    
+
     public function findAncestors($selector)
     {
         if ($selector instanceof VanillaHTMLDOMElement) {
@@ -96,10 +96,10 @@ class phpQueryHTMLDOMParser implements HTMLDOMParser
         } else {
             $this->results = $this->results->parents($selector);
         }
-        
+
         return $this;
     }
-    
+
     public function firstResult()
     {
         if (empty($this->results->elements)) {
@@ -107,7 +107,7 @@ class phpQueryHTMLDOMParser implements HTMLDOMParser
         }
         return new VanillaHTMLDOMElement($this->results->elements[0], $this);
     }
-    
+
     public function lastResult()
     {
         if (empty($this->results->elements)) {
@@ -115,7 +115,7 @@ class phpQueryHTMLDOMParser implements HTMLDOMParser
         }
         return new VanillaHTMLDOMElement($this->results->elements[sizeof($this->results->elements) - 1], $this);
     }
-    
+
     public function listResults()
     {
         $array = array();
@@ -124,22 +124,22 @@ class phpQueryHTMLDOMParser implements HTMLDOMParser
         }
         return $array;
     }
-    
+
     public function createElement($tag)
     {
         return new VanillaHTMLDOMElement($this->document->document->createElement($tag), $this);
     }
-    
+
     public function getHTML()
     {
         return $this->document->htmlOuter();
     }
-    
+
     public function getParser()
     {
         return $this->document;
     }
-    
+
     public function clearParser()
     {
         pq('*')->remove();

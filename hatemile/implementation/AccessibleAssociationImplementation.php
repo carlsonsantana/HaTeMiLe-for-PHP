@@ -33,19 +33,19 @@ use \hatemile\AccessibleAssociation;
  */
 class AccessibleAssociationImplementation implements AccessibleAssociation
 {
-    
+
     /**
      * The HTML parser.
      * @var \hatemile\util\html\HTMLDOMParser
      */
     protected $parser;
-    
+
     /**
      * The prefix of generated id.
      * @var string
      */
     protected $prefixId;
-    
+
     /**
      * Initializes a new object that manipulate the accessibility of the tables
      * of parser.
@@ -57,7 +57,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
         $this->parser = $parser;
         $this->prefixId = $configure->getParameter('prefix-generated-ids');
     }
-    
+
     /**
      * Returns a list that represents the table.
      * @param \hatemile\util\html\HTMLDOMElement $part The table header, table
@@ -75,7 +75,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
         }
         return $this->generateRowspan($table);
     }
-    
+
     /**
      * Returns a list that represents the table with the rowspans.
      * @param \hatemile\util\html\HTMLDOMElement[][] $rows The list that represents
@@ -119,7 +119,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
         }
         return $table;
     }
-    
+
     /**
      * Returns a list that represents the line of table with the colspans.
      * @param \hatemile\util\html\HTMLDOMElement[] $row The list that represents the
@@ -142,7 +142,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
         }
         return $copy;
     }
-    
+
     /**
      * Validate the list that represents the table header.
      * @param \hatemile\util\html\HTMLDOMElement[][] $header The list that
@@ -167,7 +167,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
         }
         return true;
     }
-    
+
     /**
      * Returns a list with ids of rows of same column.
      * @param \hatemile\util\html\HTMLDOMElement[][] $header The list that represents
@@ -185,7 +185,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
         }
         return $ids;
     }
-    
+
     /**
      * Fix the table body or table footer.
      * @param \hatemile\util\html\HTMLDOMElement $element The table body or table
@@ -200,7 +200,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
                 if ($cell->getTagName() === 'TH') {
                     CommonFunctions::generateId($cell, $this->prefixId);
                     array_push($headersIds, $cell->getAttribute('id'));
-                    
+
                     $cell->setAttribute('scope', 'row');
                 }
             }
@@ -217,7 +217,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
             }
         }
     }
-    
+
     /**
      * Fix the table header.
      * @param \hatemile\util\html\HTMLDOMElement $tableHeader The table header.
@@ -228,11 +228,11 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
                 ->listResults();
         foreach ($cells as $cell) {
             CommonFunctions::generateId($cell, $this->prefixId);
-            
+
             $cell->setAttribute('scope', 'col');
         }
     }
-    
+
     public function fixAssociationCellsTable(HTMLDOMElement $table)
     {
         $header = $this->parser->find($table)->findChildren('thead')->firstResult();
@@ -240,7 +240,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
         $footer = $this->parser->find($table)->findChildren('tfoot')->firstResult();
         if ($header !== null) {
             $this->fixHeader($header);
-            
+
             $headerCells = $this->generatePart($header);
             if (($body !== null) && ($this->validateHeader($headerCells))) {
                 $lengthHeader = sizeof($headerCells[0]);
@@ -271,7 +271,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
             $this->fixBodyOrFooter($footer);
         }
     }
-    
+
     public function fixAssociationCellsTables()
     {
         $tables = $this->parser->find('table')->listResults();
@@ -281,7 +281,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
             }
         }
     }
-    
+
     public function fixLabel(HTMLDOMElement $label)
     {
         if ($label->getTagName() === 'LABEL') {
@@ -290,7 +290,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
             } else {
                 $field = $this->parser->find($label)
                         ->findDescendants('input,select,textarea')->firstResult();
-                
+
                 if ($field !== null) {
                     CommonFunctions::generateId($field, $this->prefixId);
                     $label->setAttribute('for', $field->getAttribute('id'));
@@ -301,14 +301,14 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
                     $field->setAttribute('aria-label'
                             , \trim(preg_replace('/[ \n\r\t]+/', ' ', $label->getTextContent())));
                 }
-                
+
                 CommonFunctions::generateId($label, $this->prefixId);
                 $field->setAttribute('aria-labelledby', CommonFunctions::increaseInList
                         ($field->getAttribute('aria-labelledby') , $label->getAttribute('id')));
             }
         }
     }
-    
+
     public function fixLabels()
     {
         $labels = $this->parser->find('label')->listResults();

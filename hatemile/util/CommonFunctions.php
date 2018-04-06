@@ -24,19 +24,19 @@ use \hatemile\util\html\HTMLDOMElement;
  */
 class CommonFunctions
 {
-    
+
     /**
      * The name of attribute for not modify the elements.
      * @var string
      */
     const DATA_IGNORE = 'data-ignoreaccessibilityfix';
-    
+
     /**
      * Count the number of ids created.
      * @var integer
      */
     protected static $count = 0;
-    
+
     /**
      * The private constructor prevents that the class not can be initialized.
      */
@@ -56,7 +56,7 @@ class CommonFunctions
             CommonFunctions::$count++;
         }
     }
-    
+
     /**
      * Reset the count number of ids.
      */
@@ -64,7 +64,7 @@ class CommonFunctions
     {
         CommonFunctions::$count = 0;
     }
-    
+
     /**
      * Copy a list of attributes of a element for other element.
      * @param \hatemile\util\html\HTMLDOMElement $element1 The element that have
@@ -82,7 +82,7 @@ class CommonFunctions
             }
         }
     }
-    
+
     /**
      * Increase a item in a list.
      * @param string $list The list.
@@ -103,7 +103,7 @@ class CommonFunctions
             return $list;
         }
     }
-    
+
     /**
      * Verify if the list contains the item.
      * @param string $list The list.
@@ -122,7 +122,7 @@ class CommonFunctions
         }
         return false;
     }
-    
+
     /**
      * Check that the element can be manipulated by HaTeMiLe.
      * @param \hatemile\util\html\HTMLDOMElement $element The element

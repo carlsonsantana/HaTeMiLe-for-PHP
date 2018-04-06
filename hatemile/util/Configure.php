@@ -22,13 +22,13 @@ require_once dirname(__FILE__) . '/Skipper.php';
  */
 class Configure
 {
-    
+
     /**
      * The parameters of configuration of HaTeMiLe.
      * @var string[]
      */
     protected $parameters;
-    
+
     /**
      * The skippers.
      * @var \hatemile\util\Skipper
@@ -47,7 +47,7 @@ class Configure
         if ($fileName === null) {
             $fileName = dirname(__FILE__) . '/../../hatemile-configure.xml';
         }
-        
+
         $file = new \DOMDocument();
         $file->load($fileName);
         $document = $file->documentElement;
@@ -64,7 +64,7 @@ class Configure
                 }
             }
         }
-        
+
         if ($nodeParameters !== null) {
             for ($i = 0, $length = $nodeParameters->length; $i < $length; $i++) {
                 $parameter = $nodeParameters->item($i);
@@ -76,7 +76,7 @@ class Configure
                 }
             }
         }
-        
+
         if ($nodeSkippers !== null) {
             for ($i = 0, $length = $nodeSkippers->length; $i < $length; $i++) {
                 $skipper = $nodeSkippers->item($i);
@@ -93,7 +93,7 @@ class Configure
             }
         }
     }
-    
+
     /**
      * Returns the parameters of configuration.
      * @return string[] The parameters of configuration.
@@ -102,7 +102,7 @@ class Configure
     {
         return array_merge($this->parameters);
     }
-    
+
     /**
      * Returns the value of a parameter of configuration.
      * @param string $parameter The parameter.
@@ -112,7 +112,7 @@ class Configure
     {
         return $this->parameters[$parameter];
     }
-    
+
     public function getSkippers()
     {
         return array_merge($this->skippers);

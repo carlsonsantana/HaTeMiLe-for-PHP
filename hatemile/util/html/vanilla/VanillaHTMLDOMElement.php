@@ -25,7 +25,7 @@ use \hatemile\util\html\HTMLDOMElement;
  */
 class VanillaHTMLDOMElement implements HTMLDOMElement
 {
-    
+
     /**
      * The DOMElement native element encapsulated.
      * @var \DOMElement
@@ -40,50 +40,50 @@ class VanillaHTMLDOMElement implements HTMLDOMElement
     {
         $this->element = $element;
     }
-    
+
     public function getTagName()
     {
         return strtoupper($this->element->tagName);
     }
-    
+
     public function getAttribute($name)
     {
         return $this->element->getAttribute($name);
     }
-    
+
     public function setAttribute($name, $value)
     {
         $this->element->setAttribute($name, $value);
     }
-    
+
     public function removeAttribute($name)
     {
         if ($this->hasAttribute($name)) {
             $this->element->removeAttribute($name);
         }
     }
-    
+
     public function hasAttribute($name)
     {
         return $this->element->hasAttribute($name);
     }
-    
+
     public function hasAttributes()
     {
         return $this->element->hasAttributes();
     }
-    
+
     public function getTextContent()
     {
         return $this->element->textContent;
     }
-    
+
     public function insertBefore(HTMLDOMElement $newElement)
     {
         $this->getParentElement()->getData()->insertBefore($newElement->getData(), $this->element);
         return $newElement;
     }
-    
+
     public function insertAfter(HTMLDOMElement $newElement)
     {
         $children = $this->getParentElement()->getData()->childNodes;
@@ -106,25 +106,25 @@ class VanillaHTMLDOMElement implements HTMLDOMElement
         }
         return $newElement;
     }
-    
+
     public function removeElement()
     {
         $this->getParentElement()->getData()->removeChild($this->element);
         return $this;
     }
-    
+
     public function replaceElement(HTMLDOMElement $newElement)
     {
         $this->getParentElement()->getData()->replaceChild($newElement->getData(), $this->element);
         return $newElement;
     }
-    
+
     public function appendElement(HTMLDOMElement $element)
     {
         $this->element->appendChild($element->getData());
         return $element;
     }
-    
+
     public function getChildren()
     {
         $children = $this->element->childNodes;
@@ -136,12 +136,12 @@ class VanillaHTMLDOMElement implements HTMLDOMElement
         }
         return $elements;
     }
-    
+
     public function appendText($text)
     {
         $this->element->appendChild(new \DOMText($text));
     }
-    
+
     public function hasChildren()
     {
         $children = $this->element->childNodes;
@@ -152,7 +152,7 @@ class VanillaHTMLDOMElement implements HTMLDOMElement
         }
         return false;
     }
-    
+
     public function getParentElement()
     {
         if (empty($this->element->parentNode)) {
@@ -160,7 +160,7 @@ class VanillaHTMLDOMElement implements HTMLDOMElement
         }
         return new VanillaHTMLDOMElement($this->element->parentNode);
     }
-    
+
     public function getInnerHTML()
     {
         $innerHTML = '';
@@ -170,27 +170,27 @@ class VanillaHTMLDOMElement implements HTMLDOMElement
         }
         return $innerHTML;
     }
-    
+
     public function getOuterHTML()
     {
         return $this->element->ownerDocument->saveXML($this->element);
     }
-    
+
     public function getData()
     {
         return $this->element;
     }
-    
+
     public function setData($data)
     {
         $this->element = $data;
     }
-    
+
     public function cloneElement()
     {
         return new VanillaHTMLDOMElement($this->element->cloneNode(true));
     }
-    
+
     public function getFirstElementChild()
     {
         $children = $this->element->childNodes;
@@ -201,7 +201,7 @@ class VanillaHTMLDOMElement implements HTMLDOMElement
         }
         return null;
     }
-    
+
     public function getLastElementChild()
     {
         $children = $this->element->childNodes;

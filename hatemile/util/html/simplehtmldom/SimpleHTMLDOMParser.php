@@ -31,25 +31,25 @@ use \hatemile\util\Configure;
  */
 class SimpleHTMLDOMParser implements HTMLDOMParser
 {
-    
+
     /**
      * The root element of the parser.
      * @var \simple_html_dom
      */
     protected $document;
-    
+
     /**
      * The found elements.
      * @var \simple_html_dom_node
      */
     protected $results;
-    
+
     /**
      * The prefix of generated id.
      * @var string
      */
     protected $prefixId;
-    
+
     /**
      * Initializes a new object that encapsulate the parser of Simple HTML DOM
      * library.
@@ -66,7 +66,7 @@ class SimpleHTMLDOMParser implements HTMLDOMParser
         }
         $this->prefixId = $configure->getParameter('prefix-generated-ids');
     }
-    
+
     protected function getSelectorOfElement($selector)
     {
         if ($selector instanceof SimpleHTMLDOMElement) {
@@ -80,7 +80,7 @@ class SimpleHTMLDOMParser implements HTMLDOMParser
             return array('selector' => $selector, 'autoid' => false);
         }
     }
-    
+
     public function find($selector)
     {
         if ($selector instanceof SimpleHTMLDOMElement) {
@@ -90,7 +90,7 @@ class SimpleHTMLDOMParser implements HTMLDOMParser
         }
         return $this;
     }
-    
+
     public function findChildren($selector)
     {
         $sel = $this->getSelectorOfElement($selector);
@@ -109,7 +109,7 @@ class SimpleHTMLDOMParser implements HTMLDOMParser
         }
         return $this;
     }
-    
+
     public function findDescendants($selector)
     {
         $sel = $this->getSelectorOfElement($selector);
@@ -123,7 +123,7 @@ class SimpleHTMLDOMParser implements HTMLDOMParser
         }
         return $this;
     }
-    
+
     public function findAncestors($selector)
     {
         $sel = $this->getSelectorOfElement($selector);
@@ -153,7 +153,7 @@ class SimpleHTMLDOMParser implements HTMLDOMParser
         }
         return $this;
     }
-    
+
     public function firstResult()
     {
         if (empty($this->results)) {
@@ -161,7 +161,7 @@ class SimpleHTMLDOMParser implements HTMLDOMParser
         }
         return new SimpleHTMLDOMElement($this->results[0], $this);
     }
-    
+
     public function lastResult()
     {
         if (empty($this->results)) {
@@ -169,7 +169,7 @@ class SimpleHTMLDOMParser implements HTMLDOMParser
         }
         return new SimpleHTMLDOMElement($this->results[sizeof($this->results) - 1], $this);
     }
-    
+
     public function listResults()
     {
         $array = array();
@@ -178,23 +178,23 @@ class SimpleHTMLDOMParser implements HTMLDOMParser
         }
         return $array;
     }
-    
+
     public function createElement($tag)
     {
         return new SimpleHTMLDOMElement(str_get_html('<' . $tag . '></' . $tag . '>')
                 ->firstChild(), $this);
     }
-    
+
     public function getHTML()
     {
         return $this->document->save();
     }
-    
+
     public function getParser()
     {
         return $this->document;
     }
-    
+
     public function clearParser()
     {
         $this->document->clear();

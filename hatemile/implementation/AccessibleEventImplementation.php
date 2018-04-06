@@ -33,26 +33,26 @@ use \hatemile\util\CommonFunctions;
  */
 class AccessibleEventImplementation implements AccessibleEvent
 {
-    
+
     /**
      * The HTML parser.
      * @var \hatemile\util\html\HTMLDOMParser
      */
     protected $parser;
-    
+
     /**
      * The id of script element that replace the event listener methods.
      * @var string
      */
     protected $idScriptEventListener;
-    
+
     /**
      * The id of script element that contains the list of elements that has
      * inaccessible events.
      * @var string
      */
     protected $idListIdsScript;
-    
+
     /**
      * The id of script element that modify the events of elements.
      * @var string
@@ -64,21 +64,21 @@ class AccessibleEventImplementation implements AccessibleEvent
      * @var string
      */
     protected $prefixId;
-    
+
     /**
      * The state that indicates if the scripts used by solutions was added in
      * parser.
      * @var boolean
      */
     protected $mainScriptAdded;
-    
+
     /**
      * The script element that contains the list of elements that has
      * inaccessible events.
      * @var \hatemile\util\html\HTMLDOMElement
      */
     protected $scriptList;
-    
+
     /**
      * Initializes a new object that manipulate the accessibility of the
      * Javascript events of elements of parser.
@@ -95,7 +95,7 @@ class AccessibleEventImplementation implements AccessibleEvent
         $this->mainScriptAdded = false;
         $this->scriptList = null;
     }
-    
+
     /**
      * Provide keyboard access for element, if it not has.
      * @param \hatemile\util\html\HTMLDOMElement $element The element.
@@ -113,7 +113,7 @@ class AccessibleEventImplementation implements AccessibleEvent
             }
         }
     }
-    
+
     /**
      * Include the scripts used by solutions.
      */
@@ -160,7 +160,7 @@ class AccessibleEventImplementation implements AccessibleEvent
         }
         $this->mainScriptAdded = true;
     }
-    
+
     /**
      * Add a type of event in element.
      * @param \hatemile\util\html\HTMLDOMElement $element The element.
@@ -171,30 +171,30 @@ class AccessibleEventImplementation implements AccessibleEvent
         if (!$this->mainScriptAdded) {
             $this->generateMainScripts();
         }
-        
+
         if ($this->scriptList !== null) {
             CommonFunctions::generateId($element, $this->prefixId);
             $this->scriptList->appendText($event . "Elements.push('"
                     . $element->getAttribute('id') . "');");
         }
     }
-    
+
     public function fixDrop(HTMLDOMElement $element)
     {
         $element->setAttribute('aria-dropeffect', 'none');
-        
+
         $this->addEventInElement($element, 'drop');
     }
-    
+
     public function fixDrag(HTMLDOMElement $element)
     {
         $this->keyboardAccess($element);
-        
+
         $element->setAttribute('aria-grabbed', 'false');
-        
+
         $this->addEventInElement($element, 'drag');
     }
-    
+
     public function fixDragsandDrops()
     {
         $draggableElements = $this->parser
@@ -213,14 +213,14 @@ class AccessibleEventImplementation implements AccessibleEvent
             }
         }
     }
-    
+
     public function fixHover(HTMLDOMElement $element)
     {
         $this->keyboardAccess($element);
-        
+
         $this->addEventInElement($element, 'hover');
     }
-    
+
     public function fixHovers()
     {
         $elements = $this->parser->find('[onmouseover],[onmouseout]')
@@ -231,14 +231,14 @@ class AccessibleEventImplementation implements AccessibleEvent
             }
         }
     }
-    
+
     public function fixActive(HTMLDOMElement $element)
     {
         $this->keyboardAccess($element);
-        
+
         $this->addEventInElement($element, 'active');
     }
-    
+
     public function fixActives()
     {
         $elements = $this->parser

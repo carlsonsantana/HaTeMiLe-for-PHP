@@ -33,19 +33,19 @@ use \hatemile\util\CommonFunctions;
  */
 class AccessibleFormImplementation implements AccessibleForm
 {
-    
+
     /**
      * The HTML parser.
      * @var \hatemile\util\html\HTMLDOMParser
      */
     protected $parser;
-    
+
     /**
      * The prefix of generated id.
      * @var string
      */
     protected $prefixId;
-    
+
     /**
      * Initializes a new object that manipulate the accessibility of the forms
      * of parser.
@@ -57,7 +57,7 @@ class AccessibleFormImplementation implements AccessibleForm
         $this->parser = $parser;
         $this->prefixId = $configure->getParameter('prefix-generated-ids');
     }
-    
+
     /**
      * Returns the appropriate value for attribute aria-autocomplete of field.
      * @param \hatemile\util\html\HTMLDOMElement $field The field.
@@ -98,14 +98,14 @@ class AccessibleFormImplementation implements AccessibleForm
         }
         return null;
     }
-    
+
     public function fixRequiredField(HTMLDOMElement $requiredField)
     {
         if ($requiredField->hasAttribute('required')) {
             $requiredField->setAttribute('aria-required', 'true');
         }
     }
-    
+
     public function fixRequiredFields()
     {
         $requiredFields = $this->parser->find('[required]')->listResults();
@@ -115,7 +115,7 @@ class AccessibleFormImplementation implements AccessibleForm
             }
         }
     }
-    
+
     public function fixRangeField(HTMLDOMElement $rangeField)
     {
         if ($rangeField->hasAttribute('min')) {
@@ -125,7 +125,7 @@ class AccessibleFormImplementation implements AccessibleForm
             $rangeField->setAttribute('aria-valuemax', $rangeField->getAttribute('max'));
         }
     }
-    
+
     public function fixRangeFields()
     {
         $rangeFields = $this->parser->find('[min],[max]')->listResults();
@@ -135,7 +135,7 @@ class AccessibleFormImplementation implements AccessibleForm
             }
         }
     }
-    
+
     public function fixAutoCompleteField(HTMLDOMElement $autoCompleteField)
     {
         $ariaAutoComplete = $this->getARIAAutoComplete($autoCompleteField);
@@ -143,7 +143,7 @@ class AccessibleFormImplementation implements AccessibleForm
             $autoCompleteField->setAttribute('aria-autocomplete', $ariaAutoComplete);
         }
     }
-    
+
     public function fixAutoCompleteFields()
     {
         $elements = $this->parser
