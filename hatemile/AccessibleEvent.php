@@ -24,47 +24,47 @@ use \hatemile\util\html\HTMLDOMElement;
  * with JavaScript events in elements.
  */
 interface AccessibleEvent {
-	
-	/**
-	 * Provide a solution for the element that has drop events.
-	 * @param \hatemile\util\html\HTMLDOMElement $element The element with drop
-	 * event.
-	 */
-	public function fixDrop(HTMLDOMElement $element);
-	
-	/**
-	 * Provide a solution for the element that has drag events.
-	 * @param \hatemile\util\html\HTMLDOMElement $element The element with drag
-	 * event.
-	 */
-	public function fixDrag(HTMLDOMElement $element);
-	
-	/**
-	 * Provide a solution for elements that has Drag-and-Drop events.
-	 */
-	public function fixDragsandDrops();
-	
-	/**
-	 * Provide a solution for the element that has inaccessible hover events.
-	 * @param \hatemile\util\html\HTMLDOMElement $element The element with hover
-	 * event.
-	 */
-	public function fixHover(HTMLDOMElement $element);
-	
-	/**
-	 * Provide a solution for elements that has inaccessible hover events.
-	 */
-	public function fixHovers();
-	
-	/**
-	 * Provide a solution for the element that has inaccessible active events.
-	 * @param \hatemile\util\html\HTMLDOMElement $element The element with active
-	 * event.
-	 */
-	public function fixActive(HTMLDOMElement $element);
-	
-	/**
-	 * Provide a solution for elements that has inaccessible active events.
-	 */
-	public function fixActives();
+    
+    /**
+     * Provide a solution for the element that has drop events.
+     * @param \hatemile\util\html\HTMLDOMElement $element The element with drop
+     * event.
+     */
+    public function fixDrop(HTMLDOMElement $element);
+    
+    /**
+     * Provide a solution for the element that has drag events.
+     * @param \hatemile\util\html\HTMLDOMElement $element The element with drag
+     * event.
+     */
+    public function fixDrag(HTMLDOMElement $element);
+    
+    /**
+     * Provide a solution for elements that has Drag-and-Drop events.
+     */
+    public function fixDragsandDrops();
+    
+    /**
+     * Provide a solution for the element that has inaccessible hover events.
+     * @param \hatemile\util\html\HTMLDOMElement $element The element with hover
+     * event.
+     */
+    public function fixHover(HTMLDOMElement $element);
+    
+    /**
+     * Provide a solution for elements that has inaccessible hover events.
+     */
+    public function fixHovers();
+    
+    /**
+     * Provide a solution for the element that has inaccessible active events.
+     * @param \hatemile\util\html\HTMLDOMElement $element The element with active
+     * event.
+     */
+    public function fixActive(HTMLDOMElement $element);
+    
+    /**
+     * Provide a solution for elements that has inaccessible active events.
+     */
+    public function fixActives();
 }

@@ -26,50 +26,50 @@ use \hatemile\util\Skipper;
  * with navigation.
  */
 interface AccessibleNavigation {
-	
-	/**
-	 * Display the shortcuts of element.
-	 * @param \hatemile\util\html\HTMLDOMElement $element The element with shortcuts.
-	 */
-	public function fixShortcut(HTMLDOMElement $element);
-	
-	/**
-	 * Display the shortcuts of elements.
-	 */
-	public function fixShortcuts();
-	
-	/**
-	 * Provide content skipper for element.
-	 * @param \hatemile\util\html\HTMLDOMElement $element The element.
-	 * @param \hatemile\util\Skipper $skipper The skipper.
-	 */
-	public function fixSkipper(HTMLDOMElement $element, Skipper $skipper);
-	
-	/**
-	 * Provide content skippers.
-	 */
-	public function fixSkippers();
-	
-	/**
-	 * Provide a navigation by heading.
-	 * @param \hatemile\util\html\HTMLDOMElement $element The heading element.
-	 */
-	public function fixHeading(HTMLDOMElement $element);
-	
-	/**
-	 * Provide a navigation by headings.
-	 */
-	public function fixHeadings();
-        
-        /**
-	 * Provide an alternative way to access the long description of element.
-	 * @param \hatemile\util\html\HTMLDOMElement $element The element with long
-	 * description.
-	 */
-	public function fixLongDescription(HTMLDOMElement $element);
-	
-	/**
-	 * Provide an alternative way to access the longs descriptions of elements.
-	 */
-	public function fixLongDescriptions();
+    
+    /**
+     * Display the shortcuts of element.
+     * @param \hatemile\util\html\HTMLDOMElement $element The element with shortcuts.
+     */
+    public function fixShortcut(HTMLDOMElement $element);
+    
+    /**
+     * Display the shortcuts of elements.
+     */
+    public function fixShortcuts();
+    
+    /**
+     * Provide content skipper for element.
+     * @param \hatemile\util\html\HTMLDOMElement $element The element.
+     * @param \hatemile\util\Skipper $skipper The skipper.
+     */
+    public function fixSkipper(HTMLDOMElement $element, Skipper $skipper);
+    
+    /**
+     * Provide content skippers.
+     */
+    public function fixSkippers();
+    
+    /**
+     * Provide a navigation by heading.
+     * @param \hatemile\util\html\HTMLDOMElement $element The heading element.
+     */
+    public function fixHeading(HTMLDOMElement $element);
+    
+    /**
+     * Provide a navigation by headings.
+     */
+    public function fixHeadings();
+    
+    /**
+     * Provide an alternative way to access the long description of element.
+     * @param \hatemile\util\html\HTMLDOMElement $element The element with long
+     * description.
+     */
+    public function fixLongDescription(HTMLDOMElement $element);
+    
+    /**
+     * Provide an alternative way to access the longs descriptions of elements.
+     */
+    public function fixLongDescriptions();
 }

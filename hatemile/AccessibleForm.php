@@ -24,38 +24,38 @@ use \hatemile\util\html\HTMLDOMElement;
  * with forms.
  */
 interface AccessibleForm {
-	
-	/**
-	 * Display that the field is required.
-	 * @param \hatemile\util\html\HTMLDOMElement $requiredField The required field.
-	 */
-	public function fixRequiredField(HTMLDOMElement $requiredField);
-	
-	/**
-	 * Display that the fields is required.
-	 */
-	public function fixRequiredFields();
-	
-	/**
-	 * Display that the field have range.
-	 * @param \hatemile\util\html\HTMLDOMElement $rangeField The range field.
-	 */
-	public function fixRangeField(HTMLDOMElement $rangeField);
-	
-	/**
-	 * Display that the fields have range.
-	 */
-	public function fixRangeFields();
-	
-	/**
-	 * Display that the field have autocomplete.
-	 * @param \hatemile\util\html\HTMLDOMElement $autoCompleteField The field with
-	 * autocomplete.
-	 */
-	public function fixAutoCompleteField(HTMLDOMElement $autoCompleteField);
-	
-	/**
-	 * Display that the fields have autocomplete.
-	 */
-	public function fixAutoCompleteFields();
+    
+    /**
+     * Display that the field is required.
+     * @param \hatemile\util\html\HTMLDOMElement $requiredField The required field.
+     */
+    public function fixRequiredField(HTMLDOMElement $requiredField);
+    
+    /**
+     * Display that the fields is required.
+     */
+    public function fixRequiredFields();
+    
+    /**
+     * Display that the field have range.
+     * @param \hatemile\util\html\HTMLDOMElement $rangeField The range field.
+     */
+    public function fixRangeField(HTMLDOMElement $rangeField);
+    
+    /**
+     * Display that the fields have range.
+     */
+    public function fixRangeFields();
+    
+    /**
+     * Display that the field have autocomplete.
+     * @param \hatemile\util\html\HTMLDOMElement $autoCompleteField The field with
+     * autocomplete.
+     */
+    public function fixAutoCompleteField(HTMLDOMElement $autoCompleteField);
+    
+    /**
+     * Display that the fields have autocomplete.
+     */
+    public function fixAutoCompleteFields();
 }

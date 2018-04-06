@@ -24,26 +24,26 @@ use \hatemile\util\html\HTMLDOMElement;
  * elements.
  */
 interface AccessibleAssociation {
-	
-	/**
-	 * Associate all data cells with header cells of table.
-	 * @param \hatemile\util\html\HTMLDOMElement $table The table.
-	 */
-	public function fixAssociationCellsTable(HTMLDOMElement $table);
-	
-	/**
-	 * Associate all data cells with header cells of all tables of page.
-	 */
-	public function fixAssociationCellsTables();
-        
-        /**
-	 * Associate label with field.
-	 * @param \hatemile\util\html\HTMLDOMElement $label The label.
-	 */
-	public function fixLabel(HTMLDOMElement $label);
-	
-	/**
-	 * Associate labels with fields.
-	 */
-	public function fixLabels();
+    
+    /**
+     * Associate all data cells with header cells of table.
+     * @param \hatemile\util\html\HTMLDOMElement $table The table.
+     */
+    public function fixAssociationCellsTable(HTMLDOMElement $table);
+    
+    /**
+     * Associate all data cells with header cells of all tables of page.
+     */
+    public function fixAssociationCellsTables();
+    
+    /**
+     * Associate label with field.
+     * @param \hatemile\util\html\HTMLDOMElement $label The label.
+     */
+    public function fixLabel(HTMLDOMElement $label);
+    
+    /**
+     * Associate labels with fields.
+     */
+    public function fixLabels();
 }
