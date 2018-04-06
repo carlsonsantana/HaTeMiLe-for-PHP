@@ -22,7 +22,8 @@ use \hatemile\util\html\HTMLDOMElement;
 /**
  * The CommonFuncionts class contains the used methods by HaTeMiLe classes.
  */
-class CommonFunctions {
+class CommonFunctions
+{
     
     /**
      * The name of attribute for not modify the elements.
@@ -39,7 +40,8 @@ class CommonFunctions {
     /**
      * The private constructor prevents that the class not can be initialized.
      */
-    private function __construct() {
+    private function __construct()
+    {
         
     }
 
@@ -48,7 +50,8 @@ class CommonFunctions {
      * @param \hatemile\util\html\HTMLDOMElement $element The element.
      * @param string $prefix The prefix of id.
      */
-    public static function generateId(HTMLDOMElement $element, $prefix) {
+    public static function generateId(HTMLDOMElement $element, $prefix)
+    {
         if (!$element->hasAttribute('id')) {
             $element->setAttribute('id', $prefix . CommonFunctions::$count);
             CommonFunctions::$count++;
@@ -58,7 +61,8 @@ class CommonFunctions {
     /**
      * Reset the count number of ids.
      */
-    public static function resetCount() {
+    public static function resetCount()
+    {
         CommonFunctions::$count = 0;
     }
     
@@ -71,7 +75,8 @@ class CommonFunctions {
      * @param string[] $attributes The list of attributes that will be copied.
      */
     public static function setListAttributes(HTMLDOMElement $element1, HTMLDOMElement $element2
-            , $attributes) {
+            , $attributes)
+    {
         foreach ($attributes as $attribute) {
             if ($element1->hasAttribute($attribute)) {
                 $element2->setAttribute($attribute, $element1->getAttribute($attribute));
@@ -85,7 +90,8 @@ class CommonFunctions {
      * @param string $stringToIncrease The value of item.
      * @return string True if the list contains the item or false is not contains.
      */
-    public static function increaseInList($list, $stringToIncrease) {
+    public static function increaseInList($list, $stringToIncrease)
+    {
         if ((!empty($list)) && (!empty($stringToIncrease))) {
             if (CommonFunctions::inList($list, $stringToIncrease)) {
                 return $list;
@@ -105,7 +111,8 @@ class CommonFunctions {
      * @param string $stringToSearch The value of item.
      * @return boolean True if the list contains the item or false is not contains.
      */
-    public static function inList($list, $stringToSearch) {
+    public static function inList($list, $stringToSearch)
+    {
         if ((!empty($list)) && (!empty($stringToSearch))) {
             $elements = preg_split("/[ \n\t\r]+/", $list);
             foreach ($elements as $element) {
@@ -123,7 +130,8 @@ class CommonFunctions {
      * @return boolean True if element can be manipulated or false if element cannot be
      * manipulated.
      */
-    public static function isValidElement(HTMLDOMElement $element) {
+    public static function isValidElement(HTMLDOMElement $element)
+    {
         if ($element->hasAttribute(CommonFunctions::DATA_IGNORE)) {
             return false;
         } else {

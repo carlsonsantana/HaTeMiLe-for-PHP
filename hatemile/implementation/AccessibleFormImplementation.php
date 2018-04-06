@@ -31,7 +31,8 @@ use \hatemile\util\CommonFunctions;
  * The AccessibleFormImplementation class is official implementation of
  * AccessibleForm interface.
  */
-class AccessibleFormImplementation implements AccessibleForm {
+class AccessibleFormImplementation implements AccessibleForm
+{
     
     /**
      * The HTML parser.
@@ -51,7 +52,8 @@ class AccessibleFormImplementation implements AccessibleForm {
      * @param \hatemile\util\html\HTMLDOMParser $parser The HTML parser.
      * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
      */
-    public function __construct(HTMLDOMParser $parser, Configure $configure) {
+    public function __construct(HTMLDOMParser $parser, Configure $configure)
+    {
         $this->parser = $parser;
         $this->prefixId = $configure->getParameter('prefix-generated-ids');
     }
@@ -61,7 +63,8 @@ class AccessibleFormImplementation implements AccessibleForm {
      * @param \hatemile\util\html\HTMLDOMElement $field The field.
      * @return string The ARIA value of field.
      */
-    protected function getARIAAutoComplete(HTMLDOMElement $field) {
+    protected function getARIAAutoComplete(HTMLDOMElement $field)
+    {
         $tagName = $field->getTagName();
         $type = null;
         if ($field->hasAttribute('type')) {
@@ -96,13 +99,15 @@ class AccessibleFormImplementation implements AccessibleForm {
         return null;
     }
     
-    public function fixRequiredField(HTMLDOMElement $requiredField) {
+    public function fixRequiredField(HTMLDOMElement $requiredField)
+    {
         if ($requiredField->hasAttribute('required')) {
             $requiredField->setAttribute('aria-required', 'true');
         }
     }
     
-    public function fixRequiredFields() {
+    public function fixRequiredFields()
+    {
         $requiredFields = $this->parser->find('[required]')->listResults();
         foreach ($requiredFields as $requiredField) {
             if (CommonFunctions::isValidElement($requiredField)) {
@@ -111,7 +116,8 @@ class AccessibleFormImplementation implements AccessibleForm {
         }
     }
     
-    public function fixRangeField(HTMLDOMElement $rangeField) {
+    public function fixRangeField(HTMLDOMElement $rangeField)
+    {
         if ($rangeField->hasAttribute('min')) {
             $rangeField->setAttribute('aria-valuemin', $rangeField->getAttribute('min'));
         }
@@ -120,7 +126,8 @@ class AccessibleFormImplementation implements AccessibleForm {
         }
     }
     
-    public function fixRangeFields() {
+    public function fixRangeFields()
+    {
         $rangeFields = $this->parser->find('[min],[max]')->listResults();
         foreach ($rangeFields as $rangeField) {
             if (CommonFunctions::isValidElement($rangeField)) {
@@ -129,14 +136,16 @@ class AccessibleFormImplementation implements AccessibleForm {
         }
     }
     
-    public function fixAutoCompleteField(HTMLDOMElement $autoCompleteField) {
+    public function fixAutoCompleteField(HTMLDOMElement $autoCompleteField)
+    {
         $ariaAutoComplete = $this->getARIAAutoComplete($autoCompleteField);
         if (!empty($ariaAutoComplete)) {
             $autoCompleteField->setAttribute('aria-autocomplete', $ariaAutoComplete);
         }
     }
     
-    public function fixAutoCompleteFields() {
+    public function fixAutoCompleteFields()
+    {
         $elements = $this->parser
                 ->find('input[autocomplete],textarea[autocomplete],form[autocomplete] input,form[autocomplete] textarea,[list],[form]')->listResults();
         foreach ($elements as $element) {

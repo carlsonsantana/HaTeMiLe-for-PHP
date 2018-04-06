@@ -23,7 +23,8 @@ use \hatemile\util\html\HTMLDOMElement;
  * The AccessibleForm interface fixes accessibility problems associated
  * with forms.
  */
-interface AccessibleForm {
+interface AccessibleForm
+{
     
     /**
      * Display that the field is required.

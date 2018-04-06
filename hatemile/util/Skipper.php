@@ -18,7 +18,8 @@ namespace hatemile\util;
 /**
  * The Skipper class store the selector that will be add a skipper.
  */
-class Skipper {
+class Skipper
+{
     
     /**
      * The selector.
@@ -44,7 +45,8 @@ class Skipper {
      * @param string $defaultText The default text of skipper.
      * @param string $shortcuts The shortcuts of skipper.
      */
-    public function __construct($selector, $defaultText, $shortcuts) {
+    public function __construct($selector, $defaultText, $shortcuts)
+    {
         $this->selector = $selector;
         $this->defaultText = $defaultText;
         if (!empty($shortcuts)) {
@@ -58,7 +60,8 @@ class Skipper {
      * Returns the selector.
      * @return string The selector.
      */
-    public function getSelector() {
+    public function getSelector()
+    {
         return $this->selector;
     }
     
@@ -66,7 +69,8 @@ class Skipper {
      * Returns the default text of skipper.
      * @return string The default text of skipper.
      */
-    public function getDefaultText() {
+    public function getDefaultText()
+    {
         return $this->defaultText;
     }
     
@@ -74,7 +78,8 @@ class Skipper {
      * Returns the shortcuts of skipper.
      * @return string The shortcuts of skipper.
      */
-    public function getShortcuts() {
+    public function getShortcuts()
+    {
         return array_merge($this->shortcuts);
     }
 }

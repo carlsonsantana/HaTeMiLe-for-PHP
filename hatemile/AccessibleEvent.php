@@ -23,7 +23,8 @@ use \hatemile\util\html\HTMLDOMElement;
  * The AccessibleEvent interface fixes accessibility problems associated
  * with JavaScript events in elements.
  */
-interface AccessibleEvent {
+interface AccessibleEvent
+{
     
     /**
      * Provide a solution for the element that has drop events.

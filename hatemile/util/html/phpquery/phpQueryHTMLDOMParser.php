@@ -26,7 +26,8 @@ use \hatemile\util\html\vanilla\VanillaHTMLDOMElement;
  * The class phpQueryHTMLDOMParser is official implementation of HTMLDOMParser
  * interface for the phpQuery library.
  */
-class phpQueryHTMLDOMParser implements HTMLDOMParser {
+class phpQueryHTMLDOMParser implements HTMLDOMParser
+{
     
     /**
      * The root element of the parser.
@@ -47,7 +48,8 @@ class phpQueryHTMLDOMParser implements HTMLDOMParser {
      * parser from phpQuery library.
      * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
      */
-    public function __construct($codeOrParser) {
+    public function __construct($codeOrParser)
+    {
         if (is_string($codeOrParser)) {
             $this->document = \phpQuery::newDocumentHTML($codeOrParser);
         } else if ($codeOrParser instanceof \phpQueryObject) {
@@ -55,7 +57,8 @@ class phpQueryHTMLDOMParser implements HTMLDOMParser {
         }
     }
     
-    public function find($selector) {
+    public function find($selector)
+    {
         if ($selector instanceof VanillaHTMLDOMElement) {
             $this->results = \pq($selector->getData(), $this->document->getDocumentID());
         } else {
@@ -64,7 +67,8 @@ class phpQueryHTMLDOMParser implements HTMLDOMParser {
         return $this;
     }
     
-    public function findChildren($selector) {
+    public function findChildren($selector)
+    {
         if ($selector instanceof VanillaHTMLDOMElement) {
             $this->results = $this->results->children($selector->getData());
         } else {
@@ -74,7 +78,8 @@ class phpQueryHTMLDOMParser implements HTMLDOMParser {
         return $this;
     }
     
-    public function findDescendants($selector) {
+    public function findDescendants($selector)
+    {
         if ($selector instanceof VanillaHTMLDOMElement) {
             $this->results = $this->results->find($selector->getData());
         } else {
@@ -84,7 +89,8 @@ class phpQueryHTMLDOMParser implements HTMLDOMParser {
         return $this;
     }
     
-    public function findAncestors($selector) {
+    public function findAncestors($selector)
+    {
         if ($selector instanceof VanillaHTMLDOMElement) {
             $this->results = $this->results->parents($selector->getData());
         } else {
@@ -94,21 +100,24 @@ class phpQueryHTMLDOMParser implements HTMLDOMParser {
         return $this;
     }
     
-    public function firstResult() {
+    public function firstResult()
+    {
         if (empty($this->results->elements)) {
             return null;
         }
         return new VanillaHTMLDOMElement($this->results->elements[0], $this);
     }
     
-    public function lastResult() {
+    public function lastResult()
+    {
         if (empty($this->results->elements)) {
             return null;
         }
         return new VanillaHTMLDOMElement($this->results->elements[sizeof($this->results->elements) - 1], $this);
     }
     
-    public function listResults() {
+    public function listResults()
+    {
         $array = array();
         foreach ($this->results->elements as $item) {
             array_push($array, new VanillaHTMLDOMElement($item, $this));
@@ -116,19 +125,23 @@ class phpQueryHTMLDOMParser implements HTMLDOMParser {
         return $array;
     }
     
-    public function createElement($tag) {
+    public function createElement($tag)
+    {
         return new VanillaHTMLDOMElement($this->document->document->createElement($tag), $this);
     }
     
-    public function getHTML() {
+    public function getHTML()
+    {
         return $this->document->htmlOuter();
     }
     
-    public function getParser() {
+    public function getParser()
+    {
         return $this->document;
     }
     
-    public function clearParser() {
+    public function clearParser()
+    {
         pq('*')->remove();
         $this->document = null;
     }

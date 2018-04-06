@@ -25,7 +25,8 @@ use \hatemile\util\html\simplehtmldom\SimpleHTMLDOMParser;
  * The SimpleHTMLDOMElement class is official implementation of HTMLDOMElement
  * interface for the Simple HTML DOM library.
  */
-class SimpleHTMLDOMElement implements HTMLDOMElement {
+class SimpleHTMLDOMElement implements HTMLDOMElement
+{
     
     /**
      * The Simple HTML DOM native element encapsulated.
@@ -39,44 +40,53 @@ class SimpleHTMLDOMElement implements HTMLDOMElement {
      * Initializes a new object that encapsulate the Simple HTML DOM Node.
      * @param \simple_html_dom_node $element The Simple HTML DOM Node.
      */
-    public function __construct(\simple_html_dom_node $element, SimpleHTMLDOMParser $parser) {
+    public function __construct(\simple_html_dom_node $element, SimpleHTMLDOMParser $parser)
+    {
         $this->element = $element;
         $this->parser = $parser;
     }
     
-    public function getTagName() {
+    public function getTagName()
+    {
         return strtoupper($this->element->nodeName());
     }
     
-    public function getAttribute($name) {
+    public function getAttribute($name)
+    {
         return $this->element->getAttribute($name);
     }
     
-    public function setAttribute($name, $value) {
+    public function setAttribute($name, $value)
+    {
         $this->element->setAttribute($name, $value);
     }
     
-    public function removeAttribute($name) {
+    public function removeAttribute($name)
+    {
         if ($this->hasAttribute($name)) {
             $this->element->removeAttribute($name);
             unset($this->element->attr[$name]);
         }
     }
     
-    public function hasAttribute($name) {
+    public function hasAttribute($name)
+    {
         return $this->element->hasAttribute($name);
     }
     
-    public function hasAttributes() {
+    public function hasAttributes()
+    {
         $attributes = $this->element->getAllAttributes();
         return !empty($attributes);
     }
     
-    public function getTextContent() {
+    public function getTextContent()
+    {
         return $this->element->text();
     }
     
-    public function insertBefore(HTMLDOMElement $newElement) {
+    public function insertBefore(HTMLDOMElement $newElement)
+    {
         $parent = $this->getParentElement()->getData();
         $data = $newElement->getData();
         $data->parent = $parent;
@@ -88,7 +98,8 @@ class SimpleHTMLDOMElement implements HTMLDOMElement {
         return $newElement;
     }
     
-    public function insertAfter(HTMLDOMElement $newElement) {
+    public function insertAfter(HTMLDOMElement $newElement)
+    {
         $parent = $this->getParentElement()->getData();
         $data = $newElement->getData();
         $data->parent = $parent;
@@ -100,7 +111,8 @@ class SimpleHTMLDOMElement implements HTMLDOMElement {
         return $newElement;
     }
     
-    public function removeElement() {
+    public function removeElement()
+    {
         $parent = $this->getParentElement()->getData();
         $indexChildren = array_search($this->element, $parent->children);
         $indexNodes = array_search($this->element, $parent->nodes);
@@ -109,7 +121,8 @@ class SimpleHTMLDOMElement implements HTMLDOMElement {
         array_splice($parent->nodes, $indexNodes, 1);
     }
     
-    public function replaceElement(HTMLDOMElement $newElement) {
+    public function replaceElement(HTMLDOMElement $newElement)
+    {
         $parent = $this->getParentElement()->getData();
         $newElement->getData()->parent = $parent;
         $indexChildren = array_search($this->element, $parent->children);
@@ -119,12 +132,14 @@ class SimpleHTMLDOMElement implements HTMLDOMElement {
         $parent->nodes[$indexNodes] = $newElement->getData();
     }
     
-    public function appendElement(HTMLDOMElement $element) {
+    public function appendElement(HTMLDOMElement $element)
+    {
         $this->element->appendChild($element->getData());
         return $element;
     }
     
-    public function getChildren() {
+    public function getChildren()
+    {
         $children = $this->element->children();
         $elements = array();
         foreach ($children as $child) {
@@ -133,50 +148,60 @@ class SimpleHTMLDOMElement implements HTMLDOMElement {
         return $elements;
     }
     
-    public function appendText($text) {
+    public function appendText($text)
+    {
         $this->element->appendChild(str_get_html($text)->nodes[0]);
     }
     
-    public function hasChildren() {
+    public function hasChildren()
+    {
         $children = $this->element->children();
         return !empty($children);
     }
     
-    public function getParentElement() {
+    public function getParentElement()
+    {
         if (empty($this->element->parent)) {
             return null;
         }
         return new SimpleHTMLDOMElement($this->element->parent, $this->parser);
     }
     
-    public function getInnerHTML() {
+    public function getInnerHTML()
+    {
         return $this->element->innertext();
     }
     
-    public function getOuterHTML() {
+    public function getOuterHTML()
+    {
         return $this->element->outertext();
     }
     
-    public function getData() {
+    public function getData()
+    {
         return $this->element;
     }
     
-    public function setData($data) {
+    public function setData($data)
+    {
         $this->element = $data;
     }
     
-    public function cloneElement() {
+    public function cloneElement()
+    {
         return new SimpleHTMLDOMElement(str_get_html($this->getOuterHTML())->firstChild(), $this->parser);
     }
     
-    public function getFirstElementChild() {
+    public function getFirstElementChild()
+    {
         if (!$this->hasChildren()) {
             return null;
         }
         return new SimpleHTMLDOMElement($this->element->first_child(), $this->parser);
     }
     
-    public function getLastElementChild() {
+    public function getLastElementChild()
+    {
         if (!$this->hasChildren()) {
             return null;
         }

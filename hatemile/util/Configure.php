@@ -20,7 +20,8 @@ require_once dirname(__FILE__) . '/Skipper.php';
 /**
  * The Configure class contains the configuration of HaTeMiLe.
  */
-class Configure {
+class Configure
+{
     
     /**
      * The parameters of configuration of HaTeMiLe.
@@ -39,7 +40,8 @@ class Configure {
      * Initializes a new object that contains the configuration of HaTeMiLe.
      * @param string $fileName The full path of file.
      */
-    public function __construct($fileName = null) {
+    public function __construct($fileName = null)
+    {
         $this->parameters = array();
         $this->skippers = array();
         if ($fileName === null) {
@@ -96,7 +98,8 @@ class Configure {
      * Returns the parameters of configuration.
      * @return string[] The parameters of configuration.
      */
-    public function getParameters() {
+    public function getParameters()
+    {
         return array_merge($this->parameters);
     }
     
@@ -105,11 +108,13 @@ class Configure {
      * @param string $parameter The parameter.
      * @return string The value of the parameter.
      */
-    public function getParameter($parameter) {
+    public function getParameter($parameter)
+    {
         return $this->parameters[$parameter];
     }
     
-    public function getSkippers() {
+    public function getSkippers()
+    {
         return array_merge($this->skippers);
     }
 }

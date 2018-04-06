@@ -33,7 +33,8 @@ use \hatemile\AccessibleNavigation;
  * The AccessibleNavigationImplementation class is official implementation of
  * AccessibleNavigation interface.
  */
-class AccessibleNavigationImplementation implements AccessibleNavigation {
+class AccessibleNavigationImplementation implements AccessibleNavigation
+{
     
     /**
      * The HTML parser.
@@ -211,7 +212,8 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
      * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
      * @param string $userAgent The user agent of the user.
      */
-    public function __construct(HTMLDOMParser $parser, Configure $configure, $userAgent = null) {
+    public function __construct(HTMLDOMParser $parser, Configure $configure, $userAgent = null)
+    {
         $this->parser = $parser;
         $this->idContainerShortcuts = 'container-shortcuts';
         $this->idContainerSkippers = 'container-skippers';
@@ -278,7 +280,8 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
      * description.
      * @return string The description of element.
      */
-    protected function getDescription(HTMLDOMElement $element) {
+    protected function getDescription(HTMLDOMElement $element)
+    {
         if ($element->hasAttribute('title')) {
             $description = $element->getAttribute('title');
         } else if ($element->hasAttribute('aria-label')) {
@@ -318,7 +321,8 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
      * Generate the list of shortcuts of page.
      * @return \hatemile\util\html\HTMLDOMElement The list of shortcuts of page.
      */
-    protected function generateListShortcuts() {
+    protected function generateListShortcuts()
+    {
         $container = $this->parser->find('#' . $this->idContainerShortcuts)->firstResult();
         $htmlList = null;
         if ($container === null) {
@@ -355,7 +359,8 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
      * Generate the list of skippers of page.
      * @return \hatemile\util\html\HTMLDOMElement The list of skippers of page.
      */
-    protected function generateListSkippers() {
+    protected function generateListSkippers()
+    {
         $container = $this->parser->find('#' . $this->idContainerSkippers)->firstResult();
         $htmlList = null;
         if ($container === null) {
@@ -381,7 +386,8 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
      * Generate the list of heading links of page.
      * @return \hatemile\util\html\HTMLDOMElement The list of heading links of page.
      */
-    protected function generateListHeading() {
+    protected function generateListHeading()
+    {
         $container = $this->parser->find('#' . $this->idContainerHeading)->firstResult();
         $htmlList = null;
         if ($container === null) {
@@ -417,7 +423,8 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
      * @param \hatemile\util\html\HTMLDOMElement $element The heading.
      * @return integer The level of heading.
      */
-    protected function getHeadingLevel(HTMLDOMElement $element) {
+    protected function getHeadingLevel(HTMLDOMElement $element)
+    {
         $tag = $element->getTagName();
         if ($tag === 'H1') {
             return 1;
@@ -440,7 +447,8 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
      * Inform if the headings of page are sintatic correct.
      * @return boolean True if the headings of page are sintatic correct or false if not.
      */
-    protected function isValidHeading() {
+    protected function isValidHeading()
+    {
         $elements = $this->parser->find('h1,h2,h3,h4,h5,h6')->listResults();
         $lastLevel = 0;
         $countMainHeading = 0;
@@ -470,7 +478,8 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
      * @param string $anchorClass The HTML class of anchor.
      * @return \hatemile\util\html\HTMLDOMElement The anchor.
      */
-    protected function generateAnchorFor(HTMLDOMElement $element, $dataAttribute, $anchorClass) {
+    protected function generateAnchorFor(HTMLDOMElement $element, $dataAttribute, $anchorClass)
+    {
         CommonFunctions::generateId($element, $this->prefixId);
         $anchor = null;
         if ($this->parser->find('[' . $dataAttribute . '="' . $element->getAttribute('id') . '"]')->firstResult() === null) {
@@ -494,7 +503,8 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
      * Replace the shortcut of elements, that has the shortcut passed.
      * @param string $shortcut The shortcut.
      */
-    protected function freeShortcut($shortcut) {
+    protected function freeShortcut($shortcut)
+    {
         $alphaNumbers = '1234567890abcdefghijklmnopqrstuvwxyz';
         $elements = $this->parser->find('[accesskey]')->listResults();
         foreach ($elements as $element) {
@@ -527,7 +537,8 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
      * skippers.
      * @param \hatemile\util\html\HTMLDOMElement $element The element.
      */
-    protected function executeFixSkipper(HTMLDOMElement $element) {
+    protected function executeFixSkipper(HTMLDOMElement $element)
+    {
         if ($this->listSkippers !== null) {
             foreach ($this->skippers as $skipper) {
                 $compareElements = $this->parser->find($skipper->getSelector())->listResults();
@@ -546,13 +557,15 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
      * shortcuts.
      * @param \hatemile\util\html\HTMLDOMElement $element The element.
      */
-    protected function executeFixShortcut(HTMLDOMElement $element) {
+    protected function executeFixShortcut(HTMLDOMElement $element)
+    {
         if ($this->listShortcuts !== null) {
             $this->fixShortcut($element);
         }
     }
     
-    public function fixShortcut(HTMLDOMElement $element) {
+    public function fixShortcut(HTMLDOMElement $element)
+    {
         if ($element->hasAttribute('accesskey')) {
             $description = $this->getDescription($element);
             if (!$element->hasAttribute('title')) {
@@ -579,7 +592,8 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
         }
     }
     
-    public function fixShortcuts() {
+    public function fixShortcuts()
+    {
         $elements = $this->parser->find('[accesskey]')->listResults();
         foreach ($elements as $element) {
             if (CommonFunctions::isValidElement($element)) {
@@ -588,7 +602,8 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
         }
     }
     
-    public function fixSkipper(HTMLDOMElement $element, Skipper $skipper) {
+    public function fixSkipper(HTMLDOMElement $element, Skipper $skipper)
+    {
         if (!$this->listSkippersAdded) {
             $this->listSkippers = $this->generateListSkippers();
         }
@@ -619,7 +634,8 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
         }
     }
 
-    public function fixSkippers() {
+    public function fixSkippers()
+    {
         foreach ($this->skippers as $skipper) {
             $elements = $this->parser->find($skipper->getSelector())->listResults();
             $count = sizeof($elements) > 1;
@@ -647,7 +663,8 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
         }    
     }
 
-    public function fixHeading(HTMLDOMElement $element) {
+    public function fixHeading(HTMLDOMElement $element)
+    {
         if (!$this->validateHeading) {
             $this->validHeading = $this->isValidHeading();
         }
@@ -684,7 +701,8 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
         }
     }
 
-    public function fixHeadings() {
+    public function fixHeadings()
+    {
         $elements = $this->parser->find('h1,h2,h3,h4,h5,h6')->listResults();
         foreach ($elements as $element) {
             if (CommonFunctions::isValidElement($element)) {
@@ -693,7 +711,8 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
         }
     }
     
-    public function fixLongDescription(HTMLDOMElement $element) {
+    public function fixLongDescription(HTMLDOMElement $element)
+    {
         if ($element->hasAttribute('longdesc')) {
             CommonFunctions::generateId($element, $this->prefixId);
             $id = $element->getAttribute('id');
@@ -716,7 +735,8 @@ class AccessibleNavigationImplementation implements AccessibleNavigation {
         }
     }
     
-    public function fixLongDescriptions() {
+    public function fixLongDescriptions()
+    {
         $elements = $this->parser->find('[longdesc]')->listResults();
         foreach ($elements as $element) {
             if (CommonFunctions::isValidElement($element)) {

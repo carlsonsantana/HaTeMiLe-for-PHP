@@ -29,7 +29,8 @@ use \hatemile\util\Configure;
  * The class SimpleHTMLDOMParser is official implementation of HTMLDOMParser
  * interface for the Simple HTML DOM library.
  */
-class SimpleHTMLDOMParser implements HTMLDOMParser {
+class SimpleHTMLDOMParser implements HTMLDOMParser
+{
     
     /**
      * The root element of the parser.
@@ -56,7 +57,8 @@ class SimpleHTMLDOMParser implements HTMLDOMParser {
      * parser from Simple HTML DOM library.
      * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
      */
-    public function __construct($codeOrParser, Configure $configure) {
+    public function __construct($codeOrParser, Configure $configure)
+    {
         if (is_string($codeOrParser)) {
             $this->document = str_get_html($codeOrParser, true, true, DEFAULT_TARGET_CHARSET, false);
         } else if ($codeOrParser instanceof \simple_html_dom) {
@@ -65,7 +67,8 @@ class SimpleHTMLDOMParser implements HTMLDOMParser {
         $this->prefixId = $configure->getParameter('prefix-generated-ids');
     }
     
-    protected function getSelectorOfElement($selector) {
+    protected function getSelectorOfElement($selector)
+    {
         if ($selector instanceof SimpleHTMLDOMElement) {
             $autoid = false;
             if (!$selector->hasAttribute('id')) {
@@ -78,7 +81,8 @@ class SimpleHTMLDOMParser implements HTMLDOMParser {
         }
     }
     
-    public function find($selector) {
+    public function find($selector)
+    {
         if ($selector instanceof SimpleHTMLDOMElement) {
             $this->results = array($selector->getData());
         } else {
@@ -87,7 +91,8 @@ class SimpleHTMLDOMParser implements HTMLDOMParser {
         return $this;
     }
     
-    public function findChildren($selector) {
+    public function findChildren($selector)
+    {
         $sel = $this->getSelectorOfElement($selector);
         $results = $this->results;
         $this->results = array();
@@ -105,7 +110,8 @@ class SimpleHTMLDOMParser implements HTMLDOMParser {
         return $this;
     }
     
-    public function findDescendants($selector) {
+    public function findDescendants($selector)
+    {
         $sel = $this->getSelectorOfElement($selector);
         $results = $this->results;
         $this->results = array();
@@ -118,7 +124,8 @@ class SimpleHTMLDOMParser implements HTMLDOMParser {
         return $this;
     }
     
-    public function findAncestors($selector) {
+    public function findAncestors($selector)
+    {
         $sel = $this->getSelectorOfElement($selector);
         $selectorChildren = array();
         foreach ($this->results as $result) {
@@ -147,21 +154,24 @@ class SimpleHTMLDOMParser implements HTMLDOMParser {
         return $this;
     }
     
-    public function firstResult() {
+    public function firstResult()
+    {
         if (empty($this->results)) {
             return null;
         }
         return new SimpleHTMLDOMElement($this->results[0], $this);
     }
     
-    public function lastResult() {
+    public function lastResult()
+    {
         if (empty($this->results)) {
             return null;
         }
         return new SimpleHTMLDOMElement($this->results[sizeof($this->results) - 1], $this);
     }
     
-    public function listResults() {
+    public function listResults()
+    {
         $array = array();
         foreach ($this->results as $item) {
             array_push($array, new SimpleHTMLDOMElement($item, $this));
@@ -169,20 +179,24 @@ class SimpleHTMLDOMParser implements HTMLDOMParser {
         return $array;
     }
     
-    public function createElement($tag) {
+    public function createElement($tag)
+    {
         return new SimpleHTMLDOMElement(str_get_html('<' . $tag . '></' . $tag . '>')
                 ->firstChild(), $this);
     }
     
-    public function getHTML() {
+    public function getHTML()
+    {
         return $this->document->save();
     }
     
-    public function getParser() {
+    public function getParser()
+    {
         return $this->document;
     }
     
-    public function clearParser() {
+    public function clearParser()
+    {
         $this->document->clear();
         unset($this->document);
         unset($this->prefixId);

@@ -31,7 +31,8 @@ use \hatemile\AccessibleAssociation;
  * The AccessibleAssociationImplementation class is official implementation of
  * AccessibleAssociation.
  */
-class AccessibleAssociationImplementation implements AccessibleAssociation {
+class AccessibleAssociationImplementation implements AccessibleAssociation
+{
     
     /**
      * The HTML parser.
@@ -51,7 +52,8 @@ class AccessibleAssociationImplementation implements AccessibleAssociation {
      * @param \hatemile\util\html\HTMLDOMParser $parser The HTML parser.
      * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
      */
-    public function __construct(HTMLDOMParser $parser, Configure $configure) {
+    public function __construct(HTMLDOMParser $parser, Configure $configure)
+    {
         $this->parser = $parser;
         $this->prefixId = $configure->getParameter('prefix-generated-ids');
     }
@@ -63,7 +65,8 @@ class AccessibleAssociationImplementation implements AccessibleAssociation {
      * @return \hatemile\util\html\HTMLDOMElement[][] The list that represents
      * the table.
      */
-    protected function generatePart(HTMLDOMElement $part) {
+    protected function generatePart(HTMLDOMElement $part)
+    {
         $rows = $this->parser->find($part)->findChildren('tr')->listResults();
         $table = array();
         foreach ($rows as $row) {
@@ -80,7 +83,8 @@ class AccessibleAssociationImplementation implements AccessibleAssociation {
      * @return \hatemile\util\html\HTMLDOMElement[][] The list that represents the
      * table with the rowspans.
      */
-    protected function generateRowspan($rows) {
+    protected function generateRowspan($rows)
+    {
         $copy = array_merge($rows);
         $table = array();
         if (!empty($rows)) {
@@ -123,7 +127,8 @@ class AccessibleAssociationImplementation implements AccessibleAssociation {
      * @return \hatemile\util\html\HTMLDOMElement[] The list that represents the line
      * of table with the colspans.
      */
-    protected function generateColspan($row) {
+    protected function generateColspan($row)
+    {
         $copy = array_merge($row);
         $cells = array_merge($row);
         for ($i = 0, $size = sizeof($row); $i < $size; $i++) {
@@ -145,7 +150,8 @@ class AccessibleAssociationImplementation implements AccessibleAssociation {
      * @return boolean True if the table header is valid or false if the table
      * header is not valid.
      */
-    protected function validateHeader($header) {
+    protected function validateHeader($header)
+    {
         if (empty($header)) {
             return false;
         }
@@ -169,7 +175,8 @@ class AccessibleAssociationImplementation implements AccessibleAssociation {
      * @param integer $index The index of columns.
      * @return string[] The list with ids of rows of same column.
      */
-    protected function returnListIdsColumns($header, $index) {
+    protected function returnListIdsColumns($header, $index)
+    {
         $ids = array();
         foreach ($header as $row) {
             if ($row[$index]->getTagName() === 'TH') {
@@ -184,7 +191,8 @@ class AccessibleAssociationImplementation implements AccessibleAssociation {
      * @param \hatemile\util\html\HTMLDOMElement $element The table body or table
      * footer.
      */
-    protected function fixBodyOrFooter(HTMLDOMElement $element) {
+    protected function fixBodyOrFooter(HTMLDOMElement $element)
+    {
         $table = $this->generatePart($element);
         foreach ($table as $cells) {
             $headersIds = array();
@@ -214,7 +222,8 @@ class AccessibleAssociationImplementation implements AccessibleAssociation {
      * Fix the table header.
      * @param \hatemile\util\html\HTMLDOMElement $tableHeader The table header.
      */
-    protected function fixHeader(HTMLDOMElement $tableHeader) {
+    protected function fixHeader(HTMLDOMElement $tableHeader)
+    {
         $cells = $this->parser->find($tableHeader)->findChildren('tr')->findChildren('th')
                 ->listResults();
         foreach ($cells as $cell) {
@@ -224,7 +233,8 @@ class AccessibleAssociationImplementation implements AccessibleAssociation {
         }
     }
     
-    public function fixAssociationCellsTable(HTMLDOMElement $table) {
+    public function fixAssociationCellsTable(HTMLDOMElement $table)
+    {
         $header = $this->parser->find($table)->findChildren('thead')->firstResult();
         $body = $this->parser->find($table)->findChildren('tbody')->firstResult();
         $footer = $this->parser->find($table)->findChildren('tfoot')->firstResult();
@@ -262,7 +272,8 @@ class AccessibleAssociationImplementation implements AccessibleAssociation {
         }
     }
     
-    public function fixAssociationCellsTables() {
+    public function fixAssociationCellsTables()
+    {
         $tables = $this->parser->find('table')->listResults();
         foreach ($tables as $table) {
             if (CommonFunctions::isValidElement($table)) {
@@ -271,7 +282,8 @@ class AccessibleAssociationImplementation implements AccessibleAssociation {
         }
     }
     
-    public function fixLabel(HTMLDOMElement $label) {
+    public function fixLabel(HTMLDOMElement $label)
+    {
         if ($label->getTagName() === 'LABEL') {
             if ($label->hasAttribute('for')) {
                 $field = $this->parser->find('#' . $label->getAttribute('for'))->firstResult();
@@ -297,7 +309,8 @@ class AccessibleAssociationImplementation implements AccessibleAssociation {
         }
     }
     
-    public function fixLabels() {
+    public function fixLabels()
+    {
         $labels = $this->parser->find('label')->listResults();
         foreach ($labels as $label) {
             if (CommonFunctions::isValidElement($label)) {

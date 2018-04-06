@@ -19,7 +19,8 @@ namespace hatemile\util\html;
  * The HTMLDOMElement interface contains the methods for access of the HTML
  * element.
  */
-interface HTMLDOMElement {
+interface HTMLDOMElement
+{
     
     /**
      * Returns the tag name of element.

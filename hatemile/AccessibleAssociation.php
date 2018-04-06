@@ -23,7 +23,8 @@ use \hatemile\util\html\HTMLDOMElement;
  * The AccessibleAssociation interface improve accessibility, associating
  * elements.
  */
-interface AccessibleAssociation {
+interface AccessibleAssociation
+{
     
     /**
      * Associate all data cells with header cells of table.

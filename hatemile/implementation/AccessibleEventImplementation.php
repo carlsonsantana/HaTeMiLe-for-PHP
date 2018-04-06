@@ -31,7 +31,8 @@ use \hatemile\util\CommonFunctions;
  * The AccessibleEventImplementation class is official implementation of
  * AccessibleEvent interface.
  */
-class AccessibleEventImplementation implements AccessibleEvent {
+class AccessibleEventImplementation implements AccessibleEvent
+{
     
     /**
      * The HTML parser.
@@ -84,7 +85,8 @@ class AccessibleEventImplementation implements AccessibleEvent {
      * @param \hatemile\util\html\HTMLDOMParser $parser The HTML parser.
      * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
      */
-    public function __construct(HTMLDOMParser $parser, Configure $configure) {
+    public function __construct(HTMLDOMParser $parser, Configure $configure)
+    {
         $this->parser = $parser;
         $this->prefixId = $configure->getParameter('prefix-generated-ids');
         $this->idScriptEventListener = 'script-eventlistener';
@@ -98,7 +100,8 @@ class AccessibleEventImplementation implements AccessibleEvent {
      * Provide keyboard access for element, if it not has.
      * @param \hatemile\util\html\HTMLDOMElement $element The element.
      */
-    protected function keyboardAccess(HTMLDOMElement $element) {
+    protected function keyboardAccess(HTMLDOMElement $element)
+    {
         if (!$element->hasAttribute('tabindex')) {
             $tag = $element->getTagName();
             if (($tag === 'A') && (!$element->hasAttribute('href'))) {
@@ -114,7 +117,8 @@ class AccessibleEventImplementation implements AccessibleEvent {
     /**
      * Include the scripts used by solutions.
      */
-    protected function generateMainScripts() {
+    protected function generateMainScripts()
+    {
         $head = $this->parser->find('head')->firstResult();
         if (($head !== null)
                 && ($this->parser->find('#' . $this->idScriptEventListener)
@@ -162,7 +166,8 @@ class AccessibleEventImplementation implements AccessibleEvent {
      * @param \hatemile\util\html\HTMLDOMElement $element The element.
      * @param string $event The type of event.
      */
-    protected function addEventInElement($element, $event) {
+    protected function addEventInElement($element, $event)
+    {
         if (!$this->mainScriptAdded) {
             $this->generateMainScripts();
         }
@@ -174,13 +179,15 @@ class AccessibleEventImplementation implements AccessibleEvent {
         }
     }
     
-    public function fixDrop(HTMLDOMElement $element) {
+    public function fixDrop(HTMLDOMElement $element)
+    {
         $element->setAttribute('aria-dropeffect', 'none');
         
         $this->addEventInElement($element, 'drop');
     }
     
-    public function fixDrag(HTMLDOMElement $element) {
+    public function fixDrag(HTMLDOMElement $element)
+    {
         $this->keyboardAccess($element);
         
         $element->setAttribute('aria-grabbed', 'false');
@@ -188,7 +195,8 @@ class AccessibleEventImplementation implements AccessibleEvent {
         $this->addEventInElement($element, 'drag');
     }
     
-    public function fixDragsandDrops() {
+    public function fixDragsandDrops()
+    {
         $draggableElements = $this->parser
                 ->find('[ondrag],[ondragstart],[ondragend]')->listResults();
         foreach ($draggableElements as $draggableElement) {
@@ -206,13 +214,15 @@ class AccessibleEventImplementation implements AccessibleEvent {
         }
     }
     
-    public function fixHover(HTMLDOMElement $element) {
+    public function fixHover(HTMLDOMElement $element)
+    {
         $this->keyboardAccess($element);
         
         $this->addEventInElement($element, 'hover');
     }
     
-    public function fixHovers() {
+    public function fixHovers()
+    {
         $elements = $this->parser->find('[onmouseover],[onmouseout]')
                 ->listResults();
         foreach ($elements as $element) {
@@ -222,13 +232,15 @@ class AccessibleEventImplementation implements AccessibleEvent {
         }
     }
     
-    public function fixActive(HTMLDOMElement $element) {
+    public function fixActive(HTMLDOMElement $element)
+    {
         $this->keyboardAccess($element);
         
         $this->addEventInElement($element, 'active');
     }
     
-    public function fixActives() {
+    public function fixActives()
+    {
         $elements = $this->parser
                 ->find('[onclick],[onmousedown],[onmouseup],[ondblclick]')
                 ->listResults();

@@ -25,7 +25,8 @@ use \hatemile\util\Skipper;
  * The AccessibleNavigation interface fixes accessibility problems associated
  * with navigation.
  */
-interface AccessibleNavigation {
+interface AccessibleNavigation
+{
     
     /**
      * Display the shortcuts of element.

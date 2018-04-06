@@ -18,7 +18,8 @@ namespace hatemile\util\html;
 /**
  * The HTMLDOMParser interface contains the methods for access a native parser.
  */
-interface HTMLDOMParser {
+interface HTMLDOMParser
+{
     
     /**
      * Find all elements in the parser by selector.
