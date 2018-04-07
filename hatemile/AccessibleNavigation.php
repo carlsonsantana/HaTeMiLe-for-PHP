@@ -30,7 +30,8 @@ interface AccessibleNavigation
 
     /**
      * Display the shortcuts of element.
-     * @param \hatemile\util\html\HTMLDOMElement $element The element with shortcuts.
+     * @param \hatemile\util\html\HTMLDOMElement $element The element with
+     * shortcuts.
      */
     public function fixShortcut(HTMLDOMElement $element);
 

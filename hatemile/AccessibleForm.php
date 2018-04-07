@@ -20,15 +20,16 @@ require_once dirname(__FILE__) . '/util/html/HTMLDOMElement.php';
 use \hatemile\util\html\HTMLDOMElement;
 
 /**
- * The AccessibleForm interface fixes accessibility problems associated
- * with forms.
+ * The AccessibleForm interface fixes accessibility problems associated with
+ * forms.
  */
 interface AccessibleForm
 {
 
     /**
      * Display that the field is required.
-     * @param \hatemile\util\html\HTMLDOMElement $requiredField The required field.
+     * @param \hatemile\util\html\HTMLDOMElement $requiredField The required
+     * field.
      */
     public function fixRequiredField(HTMLDOMElement $requiredField);
 
@@ -50,8 +51,8 @@ interface AccessibleForm
 
     /**
      * Display that the field have autocomplete.
-     * @param \hatemile\util\html\HTMLDOMElement $autoCompleteField The field with
-     * autocomplete.
+     * @param \hatemile\util\html\HTMLDOMElement $autoCompleteField The field
+     * with autocomplete.
      */
     public function fixAutoCompleteField(HTMLDOMElement $autoCompleteField);
 

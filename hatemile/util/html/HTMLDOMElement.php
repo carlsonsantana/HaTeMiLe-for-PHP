@@ -94,8 +94,8 @@ interface HTMLDOMElement
 
     /**
      * Replace this element for other element.
-     * @param \hatemile\util\html\HTMLDOMElement $newElement The element that replace
-     * this element.
+     * @param \hatemile\util\html\HTMLDOMElement $newElement The element that
+     * replace this element.
      * @return \hatemile\util\html\HTMLDOMElement The element replaced.
      */
     public function replaceElement(HTMLDOMElement $newElement);
@@ -110,7 +110,8 @@ interface HTMLDOMElement
 
     /**
      * Returns the children of this element.
-     * @return \hatemile\util\html\HTMLDOMElement[] The children of this element.
+     * @return \hatemile\util\html\HTMLDOMElement[] The children of this
+     * element.
      */
     public function getChildren();
 
@@ -129,7 +130,8 @@ interface HTMLDOMElement
 
     /**
      * Returns the parent element of this element.
-     * @return \hatemile\util\html\HTMLDOMElement The parent element of this element.
+     * @return \hatemile\util\html\HTMLDOMElement The parent element of this
+     * element.
      */
     public function getParentElement();
 
@@ -159,8 +161,8 @@ interface HTMLDOMElement
 
     /**
      * Returns the first element child of this element.
-     * @return \hatemile\util\html\HTMLDOMElement The first element child of this
-     * element.
+     * @return \hatemile\util\html\HTMLDOMElement The first element child of
+     * this element.
      */
     public function getFirstElementChild();
 

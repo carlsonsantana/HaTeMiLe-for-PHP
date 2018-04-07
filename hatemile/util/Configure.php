@@ -66,12 +66,16 @@ class Configure
         }
 
         if ($nodeParameters !== null) {
-            for ($i = 0, $length = $nodeParameters->length; $i < $length; $i++) {
+            $length = $nodeParameters->length;
+            for ($i = 0; $i < $length; $i++) {
                 $parameter = $nodeParameters->item($i);
                 if ($parameter instanceof \DOMElement) {
-                    if ((strtoupper($parameter->tagName) === 'PARAMETER')
-                            && ($parameter->hasAttribute('name'))) {
-                        $this->parameters[$parameter->getAttribute('name')] = $parameter->textContent;
+                    if (
+                        (strtoupper($parameter->tagName) === 'PARAMETER')
+                        && ($parameter->hasAttribute('name'))
+                    ) {
+                        $this->parameters[$parameter->getAttribute('name')] =
+                                $parameter->textContent;
                     }
                 }
             }
@@ -81,13 +85,20 @@ class Configure
             for ($i = 0, $length = $nodeSkippers->length; $i < $length; $i++) {
                 $skipper = $nodeSkippers->item($i);
                 if ($skipper instanceof \DOMElement) {
-                    if ((strtoupper($skipper->tagName) === 'SKIPPER')
-                            && ($skipper->hasAttribute('selector'))
-                            && ($skipper->hasAttribute('default-text'))
-                            && ($skipper->hasAttribute('shortcut'))) {
-                        array_push($this->skippers, new Skipper($skipper->getAttribute('selector')
-                                , $skipper->getAttribute('default-text')
-                                , $skipper->getAttribute('shortcut')));
+                    if (
+                        (strtoupper($skipper->tagName) === 'SKIPPER')
+                        && ($skipper->hasAttribute('selector'))
+                        && ($skipper->hasAttribute('default-text'))
+                        && ($skipper->hasAttribute('shortcut'))
+                    ) {
+                        array_push(
+                            $this->skippers,
+                            new Skipper(
+                                $skipper->getAttribute('selector'),
+                                $skipper->getAttribute('default-text'),
+                                $skipper->getAttribute('shortcut')
+                            )
+                        );
                     }
                 }
             }

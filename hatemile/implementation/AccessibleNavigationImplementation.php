@@ -212,8 +212,11 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
      * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
      * @param string $userAgent The user agent of the user.
      */
-    public function __construct(HTMLDOMParser $parser, Configure $configure, $userAgent = null)
-    {
+    public function __construct(
+        HTMLDOMParser $parser,
+        Configure $configure,
+        $userAgent = null
+    ) {
         $this->parser = $parser;
         $this->idContainerShortcuts = 'container-shortcuts';
         $this->idContainerSkippers = 'container-skippers';
@@ -231,9 +234,15 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
         $this->prefixId = $configure->getParameter('prefix-generated-ids');
         $this->textShortcuts = $configure->getParameter('text-shortcuts');
         $this->textHeading = $configure->getParameter('text-heading');
-        $this->standartPrefix = $configure->getParameter('text-standart-shortcut-prefix');
-        $this->prefixLongDescriptionLink = $configure->getParameter('prefix-longdescription');
-        $this->suffixLongDescriptionLink = $configure->getParameter('suffix-longdescription');
+        $this->standartPrefix = $configure->getParameter(
+            'text-standart-shortcut-prefix'
+        );
+        $this->prefixLongDescriptionLink = $configure->getParameter(
+            'prefix-longdescription'
+        );
+        $this->suffixLongDescriptionLink = $configure->getParameter(
+            'suffix-longdescription'
+        );
         $this->skippers = $configure->getSkippers();
         $this->listShortcutsAdded = false;
         $this->listSkippersAdded = false;
@@ -252,7 +261,10 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
             $windows = strpos($userAgent, 'windows') !== false;
             $chrome = strpos($userAgent, 'chrome') !== false;
             $firefox = preg_match('/firefox\/[2-9]|minefield\/3/', $userAgent);
-            $ie = (strpos($userAgent, 'msie') !== false) || (strpos($userAgent, 'trident') !== false);
+            $ie = (
+                (strpos($userAgent, 'msie') !== false)
+                || (strpos($userAgent, 'trident') !== false)
+            );
 
             if ($opera) {
                 $this->prefix = 'SHIFT + ESC';
@@ -290,24 +302,43 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
             $description = $element->getAttribute('alt');
         } elseif ($element->hasAttribute('label')) {
             $description = $element->getAttribute('label');
-        } elseif (($element->hasAttribute('aria-labelledby'))
-                || ($element->hasAttribute('aria-describedby'))) {
+        } elseif (
+            ($element->hasAttribute('aria-labelledby'))
+            || ($element->hasAttribute('aria-describedby'))
+        ) {
             if ($element->hasAttribute('aria-labelledby')) {
-                $descriptionIds = preg_split("/[ \n\t\r]+/", $element->getAttribute('aria-labelledby'));
+                $descriptionIds = preg_split(
+                    '/[ \n\t\r]+/',
+                    $element->getAttribute('aria-labelledby')
+                );
             } else {
-                $descriptionIds = preg_split("/[ \n\t\r]+/", $element->getAttribute('aria-describedby'));
+                $descriptionIds = preg_split(
+                    '/[ \n\t\r]+/',
+                    $element->getAttribute('aria-describedby')
+                );
             }
             foreach ($descriptionIds as $descriptionId) {
-                $elementDescription = $this->parser->find('#' . $descriptionId)->firstResult();
+                $elementDescription = $this->parser->find(
+                    '#' . $descriptionId
+                )->firstResult();
                 if ($elementDescription !== null) {
                     $description = $elementDescription->getTextContent();
                     break;
                 }
             }
-        } elseif (($element->getTagName() === 'INPUT') && ($element->hasAttribute('type'))) {
+        } elseif (
+            ($element->getTagName() === 'INPUT')
+            && ($element->hasAttribute('type'))
+        ) {
             $type = strtolower($element->getAttribute('type'));
-            if ((($type === 'button') || ($type === 'submit') || ($type === 'reset'))
-                    && ($element->hasAttribute('value'))) {
+            if (
+                (
+                    ($type === 'button')
+                    || ($type === 'submit')
+                    || ($type === 'reset')
+                )
+                && ($element->hasAttribute('value'))
+            ) {
                 $description = $element->getAttribute('value');
             }
         }
@@ -323,7 +354,9 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
      */
     protected function generateListShortcuts()
     {
-        $container = $this->parser->find('#' . $this->idContainerShortcuts)->firstResult();
+        $container = $this->parser->find(
+            '#' . $this->idContainerShortcuts
+        )->firstResult();
         $htmlList = null;
         if ($container === null) {
             $local = $this->parser->find('body')->firstResult();
@@ -343,7 +376,9 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
             }
         }
         if ($container !== null) {
-            $htmlList = $this->parser->find($container)->findChildren('ul')->firstResult();
+            $htmlList = $this->parser->find($container)->findChildren(
+                'ul'
+            )->firstResult();
             if ($htmlList === null) {
                 $htmlList = $this->parser->createElement('ul');
                 $container->appendElement($htmlList);
@@ -361,7 +396,9 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
      */
     protected function generateListSkippers()
     {
-        $container = $this->parser->find('#' . $this->idContainerSkippers)->firstResult();
+        $container = $this->parser->find(
+            '#' . $this->idContainerSkippers
+        )->firstResult();
         $htmlList = null;
         if ($container === null) {
             $local = $this->parser->find('body')->firstResult();
@@ -372,7 +409,9 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
             }
         }
         if ($container !== null) {
-            $htmlList = $this->parser->find($container)->findChildren('ul')->firstResult();
+            $htmlList = $this->parser->find($container)->findChildren(
+                'ul'
+            )->firstResult();
             if ($htmlList == null) {
                 $htmlList = $this->parser->createElement('ul');
                 $container->appendElement($htmlList);
@@ -384,11 +423,14 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
 
     /**
      * Generate the list of heading links of page.
-     * @return \hatemile\util\html\HTMLDOMElement The list of heading links of page.
+     * @return \hatemile\util\html\HTMLDOMElement The list of heading links of
+     * page.
      */
     protected function generateListHeading()
     {
-        $container = $this->parser->find('#' . $this->idContainerHeading)->firstResult();
+        $container = $this->parser->find(
+            '#' . $this->idContainerHeading
+        )->firstResult();
         $htmlList = null;
         if ($container === null) {
             $local = $this->parser->find('body')->firstResult();
@@ -408,7 +450,9 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
             }
         }
         if ($container !== null) {
-            $htmlList = $this->parser->find($container)->findChildren('ol')->firstResult();
+            $htmlList = $this->parser->find($container)->findChildren(
+                'ol'
+            )->firstResult();
             if ($htmlList === null) {
                 $htmlList = $this->parser->createElement('ol');
                 $container->appendElement($htmlList);
@@ -445,7 +489,8 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
 
     /**
      * Inform if the headings of page are sintatic correct.
-     * @return boolean True if the headings of page are sintatic correct or false if not.
+     * @return boolean True if the headings of page are sintatic correct or
+     * false if not.
      */
     protected function isValidHeading()
     {
@@ -473,16 +518,20 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
     /**
      * Generate an anchor for the element.
      * @param \hatemile\util\html\HTMLDOMElement $element The element.
-     * @param string $dataAttribute The name of attribute that links the element with
-     * the anchor.
+     * @param string $dataAttribute The name of attribute that links the element
+     * with the anchor.
      * @param string $anchorClass The HTML class of anchor.
      * @return \hatemile\util\html\HTMLDOMElement The anchor.
      */
-    protected function generateAnchorFor(HTMLDOMElement $element, $dataAttribute, $anchorClass)
-    {
+    protected function generateAnchorFor(
+        HTMLDOMElement $element,
+        $dataAttribute,
+        $anchorClass
+    ) {
         CommonFunctions::generateId($element, $this->prefixId);
         $anchor = null;
-        if ($this->parser->find('[' . $dataAttribute . '="' . $element->getAttribute('id') . '"]')->firstResult() === null) {
+        $at = '[' . $dataAttribute . '="' . $element->getAttribute('id') . '"]';
+        if ($this->parser->find($at)->firstResult() === null) {
             if ($element->getTagName() === 'A') {
                 $anchor = $element;
             } else {
@@ -510,11 +559,14 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
         foreach ($elements as $element) {
             $shortcuts = strtolower($element->getAttribute('accesskey'));
             if (CommonFunctions::inList($shortcuts, $shortcut)) {
-                for ($i = 0, $length = strlen($alphaNumbers); $i < $length; $i++) {
+                $length = strlen($alphaNumbers);
+                for ($i = 0; $i < $length; $i++) {
                     $key = substr($alphaNumbers, 0, 1);
                     $found = true;
                     foreach ($elements as $elementWithShortcuts) {
-                        $shortcuts = strtolower($elementWithShortcuts->getAttribute('accesskey'));
+                        $shortcuts = strtolower(
+                            $elementWithShortcuts->getAttribute('accesskey')
+                        );
                         if (CommonFunctions::inList($shortcuts, $key)) {
                             $found = false;
                             break;
@@ -541,7 +593,9 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
     {
         if ($this->listSkippers !== null) {
             foreach ($this->skippers as $skipper) {
-                $compareElements = $this->parser->find($skipper->getSelector())->listResults();
+                $compareElements = $this->parser->find(
+                    $skipper->getSelector()
+                )->listResults();
                 foreach ($compareElements as $compareElement) {
                     if ($compareElement->getData() === $element->getData()) {
                         $this->fixSkipper($element, $skipper);
@@ -577,14 +631,21 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
             }
 
             if ($this->listShortcuts !== null) {
-                $keys = preg_split("/[ \n\t\r]+/", $element->getAttribute('accesskey'));
+                $keys = preg_split(
+                    '/[ \n\t\r]+/',
+                    $element->getAttribute('accesskey')
+                );
                 foreach ($keys as $key) {
                     $key = strtoupper($key);
-                    if ($this->parser->find($this->listShortcuts)
-                            ->findChildren('[' . $this->dataAccessKey . '="' . $key . '"]')->firstResult() === null) {
+                    $attr = '[' . $this->dataAccessKey . '="' . $key . '"]';
+                    if ($this->parser->find(
+                        $this->listShortcuts
+                    )->findChildren($attr)->firstResult() === null) {
                         $item = $this->parser->createElement('li');
                         $item->setAttribute($this->dataAccessKey, $key);
-                        $item->appendText($this->prefix . ' + ' . $key . ': ' . $description);
+                        $item->appendText(
+                            $this->prefix . ' + ' . $key . ': ' . $description
+                        );
                         $this->listShortcuts->appendElement($item);
                     }
                 }
@@ -608,12 +669,18 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
             $this->listSkippers = $this->generateListSkippers();
         }
         if ($this->listSkippers !== null) {
-            $anchor = $this->generateAnchorFor($element, $this->dataAnchorFor
-                    , $this->classSkipperAnchor);
+            $anchor = $this->generateAnchorFor(
+                $element,
+                $this->dataAnchorFor,
+                $this->classSkipperAnchor
+            );
             if ($anchor !== null) {
                 $itemLink = $this->parser->createElement('li');
                 $link = $this->parser->createElement('a');
-                $link->setAttribute('href', '#' . $anchor->getAttribute('name'));
+                $link->setAttribute(
+                    'href',
+                    '#' . $anchor->getAttribute('name')
+                );
                 $link->appendText($skipper->getDefaultText());
 
                 $shortcuts = $skipper->getShortcuts();
@@ -637,7 +704,9 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
     public function fixSkippers()
     {
         foreach ($this->skippers as $skipper) {
-            $elements = $this->parser->find($skipper->getSelector())->listResults();
+            $elements = $this->parser->find(
+                $skipper->getSelector()
+            )->listResults();
             $count = sizeof($elements) > 1;
             if ($count) {
                 $index = 1;
@@ -646,17 +715,33 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
             foreach ($elements as $element) {
                 if (CommonFunctions::isValidElement($element)) {
                     if ($count) {
-                        $defaultText = $skipper->getDefaultText() . ' ' . ((string) ($index++));
+                        $defaultText = (
+                            $skipper->getDefaultText()
+                            . ' '
+                            . ((string) ($index++))
+                        );
                     } else {
                         $defaultText = $skipper->getDefaultText();
                     }
                     if (sizeof($shortcuts) > 0) {
-                        $this->fixSkipper($element, new Skipper($skipper->getSelector()
-                                , $defaultText, $shortcuts[sizeof($shortcuts) - 1]));
+                        $this->fixSkipper(
+                            $element,
+                            new Skipper(
+                                $skipper->getSelector(),
+                                $defaultText,
+                                $shortcuts[sizeof($shortcuts) - 1]
+                            )
+                        );
                         unset($shortcuts[sizeof($shortcuts) - 1]);
                     } else {
-                        $this->fixSkipper($element, new Skipper($skipper->getSelector()
-                                , $defaultText, ''));
+                        $this->fixSkipper(
+                            $element,
+                            new Skipper(
+                                $skipper->getSelector(),
+                                $defaultText,
+                                ''
+                            )
+                        );
                     }
                 }
             }
@@ -669,17 +754,31 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
             $this->validHeading = $this->isValidHeading();
         }
         if ($this->validHeading) {
-            $anchor = $this->generateAnchorFor($element, $this->dataHeadingAnchorFor, $this->classHeadingAnchor);
+            $anchor = $this->generateAnchorFor(
+                $element,
+                $this->dataHeadingAnchorFor,
+                $this->classHeadingAnchor
+            );
             if ($anchor !== null) {
                 $list = null;
                 $level = $this->getHeadingLevel($element);
                 if ($level === 1) {
                     $list = $this->generateListHeading();
                 } else {
-                    $superItem = $this->parser->find('#' . $this->idContainerHeading)
-                            ->findDescendants('[' . $this->dataHeadingLevel . '="' . ((string) ($level - 1)) . '"]')->lastResult();
+                    $attr = (
+                        '['
+                        . $this->dataHeadingLevel
+                        . '="'
+                        . ((string) ($level - 1))
+                        . '"]'
+                    );
+                    $superItem = $this->parser->find(
+                        '#' . $this->idContainerHeading
+                    )->findDescendants($attr)->lastResult();
                     if ($superItem !== null) {
-                        $list = $this->parser->find($superItem)->findChildren('ol')->firstResult();
+                        $list = $this->parser->find($superItem)->findChildren(
+                            'ol'
+                        )->firstResult();
                         if ($list === null) {
                             $list = $this->parser->createElement('ol');
                             $superItem->appendElement($list);
@@ -688,10 +787,16 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
                 }
                 if ($list !== null) {
                     $item = $this->parser->createElement('li');
-                    $item->setAttribute($this->dataHeadingLevel, ((string) ($level)));
+                    $item->setAttribute(
+                        $this->dataHeadingLevel,
+                        ((string) ($level))
+                    );
 
                     $link = $this->parser->createElement('a');
-                    $link->setAttribute('href', '#' . $anchor->getAttribute('name'));
+                    $link->setAttribute(
+                        'href',
+                        '#' . $anchor->getAttribute('name')
+                    );
                     $link->appendText($element->getTextContent());
 
                     $item->appendElement($link);
@@ -716,16 +821,28 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
         if ($element->hasAttribute('longdesc')) {
             CommonFunctions::generateId($element, $this->prefixId);
             $id = $element->getAttribute('id');
-            if ($this->parser->find('[' . $this->dataLongDescriptionForImage . '="' . $id . '"]')
-                    ->firstResult() === null) {
+            $at = '[' . $this->dataLongDescriptionForImage . '="' . $id . '"]';
+            if ($this->parser->find($at)->firstResult() === null) {
                 if ($element->hasAttribute('alt')) {
-                    $text = $this->prefixLongDescriptionLink . ' ' . $element->getAttribute('alt')
-                            . ' ' . $this->suffixLongDescriptionLink;
+                    $text = (
+                        $this->prefixLongDescriptionLink
+                        . ' '
+                        . $element->getAttribute('alt')
+                        . ' '
+                        . $this->suffixLongDescriptionLink
+                    );
                 } else {
-                    $text = $this->prefixLongDescriptionLink . ' ' . $this->suffixLongDescriptionLink;
+                    $text = (
+                        $this->prefixLongDescriptionLink
+                        . ' '
+                        . $this->suffixLongDescriptionLink
+                    );
                 }
                 $anchor = $this->parser->createElement('a');
-                $anchor->setAttribute('href', $element->getAttribute('longdesc'));
+                $anchor->setAttribute(
+                    'href',
+                    $element->getAttribute('longdesc')
+                );
                 $anchor->setAttribute('target', '_blank');
                 $anchor->setAttribute($this->dataLongDescriptionForImage, $id);
                 $anchor->setAttribute('class', $this->classLongDescriptionLink);

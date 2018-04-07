@@ -60,7 +60,13 @@ class SimpleHTMLDOMParser implements HTMLDOMParser
     public function __construct($codeOrParser, Configure $configure)
     {
         if (is_string($codeOrParser)) {
-            $this->document = str_get_html($codeOrParser, true, true, DEFAULT_TARGET_CHARSET, false);
+            $this->document = str_get_html(
+                $codeOrParser,
+                true,
+                true,
+                DEFAULT_TARGET_CHARSET,
+                false
+            );
         } elseif ($codeOrParser instanceof \simple_html_dom) {
             $this->document = $codeOrParser;
         }
@@ -75,7 +81,10 @@ class SimpleHTMLDOMParser implements HTMLDOMParser
                 CommonFunctions::generateId($selector, $this->prefixId);
                 $autoid = true;
             }
-            return array('selector' => '#' . $selector->getAttribute('id'), 'autoid' => $autoid);
+            return array(
+                'selector' => '#' . $selector->getAttribute('id'),
+                'autoid' => $autoid
+            );
         } else {
             return array('selector' => $selector, 'autoid' => false);
         }
@@ -116,7 +125,10 @@ class SimpleHTMLDOMParser implements HTMLDOMParser
         $results = $this->results;
         $this->results = array();
         foreach ($results as $result) {
-            $this->results = array_merge($this->results, $result->find($sel['selector']));
+            $this->results = array_merge(
+                $this->results,
+                $result->find($sel['selector'])
+            );
         }
         if ($sel['autoid']) {
             $selector->removeAttribute('id');
@@ -129,7 +141,9 @@ class SimpleHTMLDOMParser implements HTMLDOMParser
         $sel = $this->getSelectorOfElement($selector);
         $selectorChildren = array();
         foreach ($this->results as $result) {
-            $selChildren = $this->getSelectorOfElement(new SimpleHTMLDOMElement($result, $this));
+            $selChildren = $this->getSelectorOfElement(
+                new SimpleHTMLDOMElement($result, $this)
+            );
             array_push($selectorChildren, $selChildren);
         }
         $parents = $this->document->find($sel['selector']);
@@ -145,7 +159,9 @@ class SimpleHTMLDOMParser implements HTMLDOMParser
         }
         foreach ($selectorChildren as $selectorChild) {
             if ($selectorChild['autoid']) {
-                $this->find($selectorChild['selector'])->firstResult()->removeAttribute('id');
+                $this->find(
+                    $selectorChild['selector']
+                )->firstResult()->removeAttribute('id');
             }
         }
         if ($sel['autoid']) {
@@ -167,7 +183,10 @@ class SimpleHTMLDOMParser implements HTMLDOMParser
         if (empty($this->results)) {
             return null;
         }
-        return new SimpleHTMLDOMElement($this->results[sizeof($this->results) - 1], $this);
+        return new SimpleHTMLDOMElement(
+            $this->results[sizeof($this->results) - 1],
+            $this
+        );
     }
 
     public function listResults()
@@ -181,8 +200,10 @@ class SimpleHTMLDOMParser implements HTMLDOMParser
 
     public function createElement($tag)
     {
-        return new SimpleHTMLDOMElement(str_get_html('<' . $tag . '></' . $tag . '>')
-                ->firstChild(), $this);
+        return new SimpleHTMLDOMElement(
+            str_get_html('<' . $tag . '></' . $tag . '>')->firstChild(),
+            $this
+        );
     }
 
     public function getHTML()

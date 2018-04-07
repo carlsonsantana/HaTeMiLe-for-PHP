@@ -70,18 +70,19 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
         $rows = $this->parser->find($part)->findChildren('tr')->listResults();
         $table = array();
         foreach ($rows as $row) {
-            array_push($table, $this->generateColspan($this->parser->find($row)->findChildren('td,th')
-                    ->listResults()));
+            array_push($table, $this->generateColspan(
+                $this->parser->find($row)->findChildren('td,th')->listResults()
+            ));
         }
         return $this->generateRowspan($table);
     }
 
     /**
      * Returns a list that represents the table with the rowspans.
-     * @param \hatemile\util\html\HTMLDOMElement[][] $rows The list that represents
-     * the table without the rowspans.
-     * @return \hatemile\util\html\HTMLDOMElement[][] The list that represents the
-     * table with the rowspans.
+     * @param \hatemile\util\html\HTMLDOMElement[][] $rows The list that
+     * represents the table without the rowspans.
+     * @return \hatemile\util\html\HTMLDOMElement[][] The list that represents
+     * the table with the rowspans.
      */
     protected function generateRowspan($rows)
     {
@@ -94,7 +95,8 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
                     $table[$i] = array();
                 }
                 $cells = array_merge($copy[$i]);
-                for ($j = 0, $lengthCells = sizeof($cells); $j < $lengthCells; $j++) {
+                $lengthCells = sizeof($cells);
+                for ($j = 0; $j < $lengthCells; $j++) {
                     $cell = $cells[$j];
                     $m = $j + $columnIndex;
                     $row = $table[$i];
@@ -122,10 +124,10 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
 
     /**
      * Returns a list that represents the line of table with the colspans.
-     * @param \hatemile\util\html\HTMLDOMElement[] $row The list that represents the
-     * line of table without the colspans.
-     * @return \hatemile\util\html\HTMLDOMElement[] The list that represents the line
-     * of table with the colspans.
+     * @param \hatemile\util\html\HTMLDOMElement[] $row The list that represents
+     * the line of table without the colspans.
+     * @return \hatemile\util\html\HTMLDOMElement[] The list that represents the
+     * line of table with the colspans.
      */
     protected function generateColspan($row)
     {
@@ -170,8 +172,8 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
 
     /**
      * Returns a list with ids of rows of same column.
-     * @param \hatemile\util\html\HTMLDOMElement[][] $header The list that represents
-     * the table header.
+     * @param \hatemile\util\html\HTMLDOMElement[][] $header The list that
+     * represents the table header.
      * @param integer $index The index of columns.
      * @return string[] The list with ids of rows of same column.
      */
@@ -188,8 +190,8 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
 
     /**
      * Fix the table body or table footer.
-     * @param \hatemile\util\html\HTMLDOMElement $element The table body or table
-     * footer.
+     * @param \hatemile\util\html\HTMLDOMElement $element The table body or
+     * table footer.
      */
     protected function fixBodyOrFooter(HTMLDOMElement $element)
     {
@@ -209,7 +211,10 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
                     if ($cell->getTagName() === 'TD') {
                         $headers = $cell->getAttribute('headers');
                         foreach ($headersIds as $headerId) {
-                            $headers = CommonFunctions::increaseInList($headers, $headerId);
+                            $headers = CommonFunctions::increaseInList(
+                                $headers,
+                                $headerId
+                            );
                         }
                         $cell->setAttribute('headers', $headers);
                     }
@@ -224,8 +229,9 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
      */
     protected function fixHeader(HTMLDOMElement $tableHeader)
     {
-        $cells = $this->parser->find($tableHeader)->findChildren('tr')->findChildren('th')
-                ->listResults();
+        $cells = $this->parser->find($tableHeader)->findChildren(
+            'tr'
+        )->findChildren('th')->listResults();
         foreach ($cells as $cell) {
             CommonFunctions::generateId($cell, $this->prefixId);
 
@@ -235,9 +241,15 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
 
     public function fixAssociationCellsTable(HTMLDOMElement $table)
     {
-        $header = $this->parser->find($table)->findChildren('thead')->firstResult();
-        $body = $this->parser->find($table)->findChildren('tbody')->firstResult();
-        $footer = $this->parser->find($table)->findChildren('tfoot')->firstResult();
+        $header = $this->parser->find($table)->findChildren(
+            'thead'
+        )->firstResult();
+        $body = $this->parser->find($table)->findChildren(
+            'tbody'
+        )->firstResult();
+        $footer = $this->parser->find($table)->findChildren(
+            'tfoot'
+        )->firstResult();
         if ($header !== null) {
             $this->fixHeader($header);
 
@@ -246,16 +258,25 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
                 $lengthHeader = sizeof($headerCells[0]);
                 $fakeTable = $this->generatePart($body);
                 if ($footer !== null) {
-                    $fakeTable = array_merge($fakeTable, $this->generatePart($footer));
+                    $fakeTable = array_merge(
+                        $fakeTable,
+                        $this->generatePart($footer)
+                    );
                 }
                 foreach ($fakeTable as $cells) {
                     if (sizeof($cells) === $lengthHeader) {
                         $i = 0;
                         foreach ($cells as $cell) {
-                            $headersIds = $this->returnListIdsColumns($headerCells, $i);
+                            $headersIds = $this->returnListIdsColumns(
+                                $headerCells,
+                                $i
+                            );
                             $headers = $cell->getAttribute('headers');
                             foreach ($headersIds as $headersId) {
-                                $headers = CommonFunctions::increaseInList($headers, $headersId);
+                                $headers = CommonFunctions::increaseInList(
+                                    $headers,
+                                    $headersId
+                                );
                             }
                             $cell->setAttribute('headers', $headers);
                             $i++;
@@ -286,10 +307,13 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
     {
         if ($label->getTagName() === 'LABEL') {
             if ($label->hasAttribute('for')) {
-                $field = $this->parser->find('#' . $label->getAttribute('for'))->firstResult();
+                $field = $this->parser->find(
+                    '#' . $label->getAttribute('for')
+                )->firstResult();
             } else {
-                $field = $this->parser->find($label)
-                        ->findDescendants('input,select,textarea')->firstResult();
+                $field = $this->parser->find(
+                    $label
+                )->findDescendants('input,select,textarea')->firstResult();
 
                 if ($field !== null) {
                     CommonFunctions::generateId($field, $this->prefixId);
@@ -298,13 +322,24 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
             }
             if ($field !== null) {
                 if (!$field->hasAttribute('aria-label')) {
-                    $field->setAttribute('aria-label'
-                            , \trim(preg_replace('/[ \n\r\t]+/', ' ', $label->getTextContent())));
+                    $field->setAttribute(
+                        'aria-label',
+                        \trim(preg_replace(
+                            '/[ \n\r\t]+/',
+                            ' ',
+                            $label->getTextContent()
+                        ))
+                    );
                 }
 
                 CommonFunctions::generateId($label, $this->prefixId);
-                $field->setAttribute('aria-labelledby', CommonFunctions::increaseInList
-                        ($field->getAttribute('aria-labelledby') , $label->getAttribute('id')));
+                $field->setAttribute(
+                    'aria-labelledby',
+                    CommonFunctions::increaseInList(
+                        $field->getAttribute('aria-labelledby'),
+                        $label->getAttribute('id')
+                    )
+                );
             }
         }
     }

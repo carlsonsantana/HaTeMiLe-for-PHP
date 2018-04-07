@@ -106,9 +106,13 @@ class AccessibleEventImplementation implements AccessibleEvent
             $tag = $element->getTagName();
             if (($tag === 'A') && (!$element->hasAttribute('href'))) {
                 $element->setAttribute('tabindex', '0');
-            } elseif (($tag !== 'A') && ($tag !== 'INPUT')
-                    && ($tag !== 'BUTTON') && ($tag !== 'SELECT')
-                    && ($tag !== 'TEXTAREA')) {
+            } elseif (
+                ($tag !== 'A')
+                && ($tag !== 'INPUT')
+                && ($tag !== 'BUTTON')
+                && ($tag !== 'SELECT')
+                && ($tag !== 'TEXTAREA')
+            ) {
                 $element->setAttribute('tabindex', '0');
             }
         }
@@ -120,14 +124,18 @@ class AccessibleEventImplementation implements AccessibleEvent
     protected function generateMainScripts()
     {
         $head = $this->parser->find('head')->firstResult();
-        if (($head !== null)
-                && ($this->parser->find('#' . $this->idScriptEventListener)
-                        ->firstResult() === null)) {
+        if (
+            ($head !== null)
+            && ($this->parser->find(
+                '#' . $this->idScriptEventListener
+            )->firstResult() === null)
+        ) {
             $script = $this->parser->createElement('script');
             $script->setAttribute('id', $this->idScriptEventListener);
             $script->setAttribute('type', 'text/javascript');
-            $script->appendText(file_get_contents(dirname(__FILE__)
-                    . '/../../js/eventlistener.js'));
+            $script->appendText(file_get_contents(
+                dirname(__FILE__) . '/../../js/eventlistener.js'
+            ));
             if ($head->hasChildren()) {
                 $head->getFirstElementChild()->insertBefore($script);
             } else {
@@ -136,8 +144,9 @@ class AccessibleEventImplementation implements AccessibleEvent
         }
         $local = $this->parser->find('body')->firstResult();
         if ($local !== null) {
-            $this->scriptList = $this->parser
-                    ->find('#' . $this->idListIdsScript)->firstResult();
+            $this->scriptList = $this->parser->find(
+                '#' . $this->idListIdsScript
+            )->firstResult();
             if ($this->scriptList === null) {
                 $this->scriptList = $this->parser->createElement('script');
                 $this->scriptList->setAttribute('id', $this->idListIdsScript);
@@ -148,13 +157,15 @@ class AccessibleEventImplementation implements AccessibleEvent
                 $this->scriptList->appendText('var dropElements = [];');
                 $local->appendElement($this->scriptList);
             }
-            if ($this->parser->find('#' . $this->idFunctionScriptFix)
-                    ->firstResult() === null) {
+            if ($this->parser->find(
+                '#' . $this->idFunctionScriptFix
+            )->firstResult() === null) {
                 $scriptFunction = $this->parser->createElement('script');
                 $scriptFunction->setAttribute('id', $this->idFunctionScriptFix);
                 $scriptFunction->setAttribute('type', 'text/javascript');
-                $scriptFunction->appendText(file_get_contents(dirname(__FILE__)
-                        . '/../../js/include.js'));
+                $scriptFunction->appendText(file_get_contents(
+                    dirname(__FILE__) . '/../../js/include.js'
+                ));
                 $local->appendElement($scriptFunction);
             }
         }
@@ -174,8 +185,12 @@ class AccessibleEventImplementation implements AccessibleEvent
 
         if ($this->scriptList !== null) {
             CommonFunctions::generateId($element, $this->prefixId);
-            $this->scriptList->appendText($event . "Elements.push('"
-                    . $element->getAttribute('id') . "');");
+            $this->scriptList->appendText(
+                $event
+                . "Elements.push('"
+                . $element->getAttribute('id')
+                . "');"
+            );
         }
     }
 
@@ -197,16 +212,17 @@ class AccessibleEventImplementation implements AccessibleEvent
 
     public function fixDragsandDrops()
     {
-        $draggableElements = $this->parser
-                ->find('[ondrag],[ondragstart],[ondragend]')->listResults();
+        $draggableElements = $this->parser->find(
+            '[ondrag],[ondragstart],[ondragend]'
+        )->listResults();
         foreach ($draggableElements as $draggableElement) {
             if (CommonFunctions::isValidElement($draggableElement)) {
                 $this->fixDrag($draggableElement);
             }
         }
-        $droppableElements = $this->parser
-                ->find('[ondrop],[ondragenter],[ondragleave],[ondragover]')
-                ->listResults();
+        $droppableElements = $this->parser->find(
+            '[ondrop],[ondragenter],[ondragleave],[ondragover]'
+        )->listResults();
         foreach ($droppableElements as $droppableElement) {
             if (CommonFunctions::isValidElement($droppableElement)) {
                 $this->fixDrop($droppableElement);
@@ -223,8 +239,9 @@ class AccessibleEventImplementation implements AccessibleEvent
 
     public function fixHovers()
     {
-        $elements = $this->parser->find('[onmouseover],[onmouseout]')
-                ->listResults();
+        $elements = $this->parser->find(
+            '[onmouseover],[onmouseout]'
+        )->listResults();
         foreach ($elements as $element) {
             if (CommonFunctions::isValidElement($element)) {
                 $this->fixHover($element);
@@ -241,9 +258,9 @@ class AccessibleEventImplementation implements AccessibleEvent
 
     public function fixActives()
     {
-        $elements = $this->parser
-                ->find('[onclick],[onmousedown],[onmouseup],[ondblclick]')
-                ->listResults();
+        $elements = $this->parser->find(
+            '[onclick],[onmousedown],[onmouseup],[ondblclick]'
+        )->listResults();
         foreach ($elements as $element) {
             if (CommonFunctions::isValidElement($element)) {
                 $this->fixActive($element);

@@ -60,7 +60,10 @@ class phpQueryHTMLDOMParser implements HTMLDOMParser
     public function find($selector)
     {
         if ($selector instanceof VanillaHTMLDOMElement) {
-            $this->results = \pq($selector->getData(), $this->document->getDocumentID());
+            $this->results = \pq(
+                $selector->getData(),
+                $this->document->getDocumentID()
+            );
         } else {
             $this->results = \pq($selector, $this->document->getDocumentID());
         }
@@ -113,7 +116,10 @@ class phpQueryHTMLDOMParser implements HTMLDOMParser
         if (empty($this->results->elements)) {
             return null;
         }
-        return new VanillaHTMLDOMElement($this->results->elements[sizeof($this->results->elements) - 1], $this);
+        return new VanillaHTMLDOMElement(
+            $this->results->elements[sizeof($this->results->elements) - 1],
+            $this
+        );
     }
 
     public function listResults()
@@ -127,7 +133,10 @@ class phpQueryHTMLDOMParser implements HTMLDOMParser
 
     public function createElement($tag)
     {
-        return new VanillaHTMLDOMElement($this->document->document->createElement($tag), $this);
+        return new VanillaHTMLDOMElement(
+            $this->document->document->createElement($tag),
+            $this
+        );
     }
 
     public function getHTML()

@@ -20,8 +20,8 @@ require_once dirname(__FILE__) . '/util/html/HTMLDOMElement.php';
 use \hatemile\util\html\HTMLDOMElement;
 
 /**
- * The AccessibleEvent interface fixes accessibility problems associated
- * with JavaScript events in elements.
+ * The AccessibleEvent interface fixes accessibility problems associated with
+ * JavaScript events in elements.
  */
 interface AccessibleEvent
 {
@@ -59,8 +59,8 @@ interface AccessibleEvent
 
     /**
      * Provide a solution for the element that has inaccessible active events.
-     * @param \hatemile\util\html\HTMLDOMElement $element The element with active
-     * event.
+     * @param \hatemile\util\html\HTMLDOMElement $element The element with
+     * active event.
      */
     public function fixActive(HTMLDOMElement $element);
 

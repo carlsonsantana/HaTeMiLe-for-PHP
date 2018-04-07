@@ -73,12 +73,17 @@ class CommonFunctions
      * the attributes.
      * @param string[] $attributes The list of attributes that will be copied.
      */
-    public static function setListAttributes(HTMLDOMElement $element1, HTMLDOMElement $element2
-            , $attributes)
-    {
+    public static function setListAttributes(
+        HTMLDOMElement $element1,
+        HTMLDOMElement $element2,
+        $attributes
+    ) {
         foreach ($attributes as $attribute) {
             if ($element1->hasAttribute($attribute)) {
-                $element2->setAttribute($attribute, $element1->getAttribute($attribute));
+                $element2->setAttribute(
+                    $attribute,
+                    $element1->getAttribute($attribute)
+                );
             }
         }
     }
@@ -87,7 +92,8 @@ class CommonFunctions
      * Increase a item in a list.
      * @param string $list The list.
      * @param string $stringToIncrease The value of item.
-     * @return string True if the list contains the item or false is not contains.
+     * @return string True if the list contains the item or false is not
+     * contains.
      */
     public static function increaseInList($list, $stringToIncrease)
     {
@@ -108,7 +114,8 @@ class CommonFunctions
      * Verify if the list contains the item.
      * @param string $list The list.
      * @param string $stringToSearch The value of item.
-     * @return boolean True if the list contains the item or false is not contains.
+     * @return boolean True if the list contains the item or false is not
+     * contains.
      */
     public static function inList($list, $stringToSearch)
     {
@@ -126,8 +133,8 @@ class CommonFunctions
     /**
      * Check that the element can be manipulated by HaTeMiLe.
      * @param \hatemile\util\html\HTMLDOMElement $element The element
-     * @return boolean True if element can be manipulated or false if element cannot be
-     * manipulated.
+     * @return boolean True if element can be manipulated or false if element
+     * cannot be manipulated.
      */
     public static function isValidElement(HTMLDOMElement $element)
     {

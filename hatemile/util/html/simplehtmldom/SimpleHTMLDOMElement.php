@@ -40,8 +40,10 @@ class SimpleHTMLDOMElement implements HTMLDOMElement
      * Initializes a new object that encapsulate the Simple HTML DOM Node.
      * @param \simple_html_dom_node $element The Simple HTML DOM Node.
      */
-    public function __construct(\simple_html_dom_node $element, SimpleHTMLDOMParser $parser)
-    {
+    public function __construct(
+        \simple_html_dom_node $element,
+        SimpleHTMLDOMParser $parser
+    ) {
         $this->element = $element;
         $this->parser = $parser;
     }
@@ -143,7 +145,10 @@ class SimpleHTMLDOMElement implements HTMLDOMElement
         $children = $this->element->children();
         $elements = array();
         foreach ($children as $child) {
-            array_push($elements, new SimpleHTMLDOMElement($child, $this->parser));
+            array_push(
+                $elements,
+                new SimpleHTMLDOMElement($child, $this->parser)
+            );
         }
         return $elements;
     }
@@ -189,7 +194,10 @@ class SimpleHTMLDOMElement implements HTMLDOMElement
 
     public function cloneElement()
     {
-        return new SimpleHTMLDOMElement(str_get_html($this->getOuterHTML())->firstChild(), $this->parser);
+        return new SimpleHTMLDOMElement(
+            str_get_html($this->getOuterHTML())->firstChild(),
+            $this->parser
+        );
     }
 
     public function getFirstElementChild()
@@ -197,7 +205,10 @@ class SimpleHTMLDOMElement implements HTMLDOMElement
         if (!$this->hasChildren()) {
             return null;
         }
-        return new SimpleHTMLDOMElement($this->element->first_child(), $this->parser);
+        return new SimpleHTMLDOMElement(
+            $this->element->first_child(),
+            $this->parser
+        );
     }
 
     public function getLastElementChild()
@@ -205,6 +216,9 @@ class SimpleHTMLDOMElement implements HTMLDOMElement
         if (!$this->hasChildren()) {
             return null;
         }
-        return new SimpleHTMLDOMElement($this->element->last_child(), $this->parser);
+        return new SimpleHTMLDOMElement(
+            $this->element->last_child(),
+            $this->parser
+        );
     }
 }

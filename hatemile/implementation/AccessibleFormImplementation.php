@@ -70,18 +70,33 @@ class AccessibleFormImplementation implements AccessibleForm
         if ($field->hasAttribute('type')) {
             $type = strtolower($field->getAttribute('type'));
         }
-        if (($tagName === 'TEXTAREA') || (($tagName === 'INPUT')
-                && (!(('button' === $type) || ('submit' === $type)
-                    || ('reset' === $type) || ('image' === $type)
-                    || ('file' === $type) || ('checkbox' === $type)
-                    || ('radio' === $type) || ('hidden' === $type))))) {
+        if (
+            ($tagName === 'TEXTAREA')
+            || (
+                ($tagName === 'INPUT')
+                && (!(
+                    ('button' === $type)
+                    || ('submit' === $type)
+                    || ('reset' === $type)
+                    || ('image' === $type)
+                    || ('file' === $type)
+                    || ('checkbox' === $type)
+                    || ('radio' === $type)
+                    || ('hidden' === $type)
+                ))
+            )
+        ) {
             $value = null;
             if ($field->hasAttribute('autocomplete')) {
                 $value = strtolower($field->getAttribute('autocomplete'));
             } else {
-                $form = $this->parser->find($field)->findAncestors('form')->firstResult();
+                $form = $this->parser->find($field)->findAncestors(
+                    'form'
+                )->firstResult();
                 if (($form === null) && ($field->hasAttribute('form'))) {
-                    $form = $this->parser->find('#' . $field->getAttribute('form'))->firstResult();
+                    $form = $this->parser->find(
+                        '#' . $field->getAttribute('form')
+                    )->firstResult();
                 }
                 if (($form !== null) && ($form->hasAttribute('autocomplete'))) {
                     $value = strtolower($form->getAttribute('autocomplete'));
@@ -89,8 +104,12 @@ class AccessibleFormImplementation implements AccessibleForm
             }
             if ('on' === $value) {
                 return 'both';
-            } elseif (($field->hasAttribute('list')) && ($this->parser
-                    ->find('datalist[id="' . $field->getAttribute('list') . '"]')->firstResult() !== null)) {
+            } elseif (
+                ($field->hasAttribute('list'))
+                && ($this->parser->find(
+                    'datalist[id="' . $field->getAttribute('list') . '"]'
+                )->firstResult() !== null)
+            ) {
                 return 'list';
             } elseif ('off' === $value) {
                 return 'none';
@@ -119,10 +138,16 @@ class AccessibleFormImplementation implements AccessibleForm
     public function fixRangeField(HTMLDOMElement $rangeField)
     {
         if ($rangeField->hasAttribute('min')) {
-            $rangeField->setAttribute('aria-valuemin', $rangeField->getAttribute('min'));
+            $rangeField->setAttribute(
+                'aria-valuemin',
+                $rangeField->getAttribute('min')
+            );
         }
         if ($rangeField->hasAttribute('max')) {
-            $rangeField->setAttribute('aria-valuemax', $rangeField->getAttribute('max'));
+            $rangeField->setAttribute(
+                'aria-valuemax',
+                $rangeField->getAttribute('max')
+            );
         }
     }
 
@@ -140,14 +165,20 @@ class AccessibleFormImplementation implements AccessibleForm
     {
         $ariaAutoComplete = $this->getARIAAutoComplete($autoCompleteField);
         if (!empty($ariaAutoComplete)) {
-            $autoCompleteField->setAttribute('aria-autocomplete', $ariaAutoComplete);
+            $autoCompleteField->setAttribute(
+                'aria-autocomplete',
+                $ariaAutoComplete
+            );
         }
     }
 
     public function fixAutoCompleteFields()
     {
-        $elements = $this->parser
-                ->find('input[autocomplete],textarea[autocomplete],form[autocomplete] input,form[autocomplete] textarea,[list],[form]')->listResults();
+        $elements = $this->parser->find(
+            'input[autocomplete],textarea[autocomplete],'
+            . 'form[autocomplete] input, form[autocomplete] textarea,[list],'
+            . '[form]'
+        )->listResults();
         foreach ($elements as $element) {
             if (CommonFunctions::isValidElement($element)) {
                 $this->fixAutoCompleteField($element);

@@ -80,7 +80,10 @@ class VanillaHTMLDOMElement implements HTMLDOMElement
 
     public function insertBefore(HTMLDOMElement $newElement)
     {
-        $this->getParentElement()->getData()->insertBefore($newElement->getData(), $this->element);
+        $this->getParentElement()->getData()->insertBefore(
+            $newElement->getData(),
+            $this->element
+        );
         return $newElement;
     }
 
@@ -93,7 +96,10 @@ class VanillaHTMLDOMElement implements HTMLDOMElement
             if ($child instanceof \DOMElement) {
                 $child = new VanillaHTMLDOMElement($child);
                 if ($found) {
-                    $child->getParentElement()->getData()->insertBefore($newElement->getData(), $child->getData());
+                    $child->getParentElement()->getData()->insertBefore(
+                        $newElement->getData(),
+                        $child->getData()
+                    );
                     $added = true;
                     break;
                 } elseif ($child->getData() === $this->element) {
@@ -115,7 +121,10 @@ class VanillaHTMLDOMElement implements HTMLDOMElement
 
     public function replaceElement(HTMLDOMElement $newElement)
     {
-        $this->getParentElement()->getData()->replaceChild($newElement->getData(), $this->element);
+        $this->getParentElement()->getData()->replaceChild(
+            $newElement->getData(),
+            $this->element
+        );
         return $newElement;
     }
 
