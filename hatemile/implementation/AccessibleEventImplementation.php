@@ -15,17 +15,17 @@ limitations under the License.
 
 namespace hatemile\implementation;
 
-require_once dirname(__FILE__) . '/../util/html/HTMLDOMElement.php';
-require_once dirname(__FILE__) . '/../util/html/HTMLDOMParser.php';
-require_once dirname(__FILE__) . '/../util/Configure.php';
 require_once dirname(__FILE__) . '/../AccessibleEvent.php';
 require_once dirname(__FILE__) . '/../util/CommonFunctions.php';
+require_once dirname(__FILE__) . '/../util/Configure.php';
+require_once dirname(__FILE__) . '/../util/html/HTMLDOMElement.php';
+require_once dirname(__FILE__) . '/../util/html/HTMLDOMParser.php';
 
-use \hatemile\util\html\HTMLDOMElement;
-use \hatemile\util\html\HTMLDOMParser;
-use \hatemile\util\Configure;
 use \hatemile\AccessibleEvent;
 use \hatemile\util\CommonFunctions;
+use \hatemile\util\Configure;
+use \hatemile\util\html\HTMLDOMElement;
+use \hatemile\util\html\HTMLDOMParser;
 
 /**
  * The AccessibleEventImplementation class is official implementation of

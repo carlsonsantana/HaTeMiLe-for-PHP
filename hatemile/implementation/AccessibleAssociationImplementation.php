@@ -15,17 +15,17 @@ limitations under the License.
 
 namespace hatemile\implementation;
 
+require_once dirname(__FILE__) . '/../AccessibleAssociation.php';
+require_once dirname(__FILE__) . '/../util/CommonFunctions.php';
+require_once dirname(__FILE__) . '/../util/Configure.php';
 require_once dirname(__FILE__) . '/../util/html/HTMLDOMElement.php';
 require_once dirname(__FILE__) . '/../util/html/HTMLDOMParser.php';
-require_once dirname(__FILE__) . '/../util/Configure.php';
-require_once dirname(__FILE__) . '/../util/CommonFunctions.php';
-require_once dirname(__FILE__) . '/../AccessibleAssociation.php';
 
+use \hatemile\AccessibleAssociation;
+use \hatemile\util\CommonFunctions;
+use \hatemile\util\Configure;
 use \hatemile\util\html\HTMLDOMElement;
 use \hatemile\util\html\HTMLDOMParser;
-use \hatemile\util\Configure;
-use \hatemile\util\CommonFunctions;
-use \hatemile\AccessibleAssociation;
 
 /**
  * The AccessibleAssociationImplementation class is official implementation of
