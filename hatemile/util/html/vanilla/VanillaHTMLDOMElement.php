@@ -15,7 +15,10 @@ limitations under the License.
 
 namespace hatemile\util\html\vanilla;
 
-require_once dirname(__FILE__) . '/../HTMLDOMElement.php';
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(dirname(__FILE__)),
+    'HTMLDOMElement.php'
+));
 
 use \hatemile\util\html\HTMLDOMElement;
 

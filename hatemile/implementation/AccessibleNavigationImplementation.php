@@ -15,12 +15,37 @@ limitations under the License.
 
 namespace hatemile\implementation;
 
-require_once dirname(__FILE__) . '/../AccessibleNavigation.php';
-require_once dirname(__FILE__) . '/../util/CommonFunctions.php';
-require_once dirname(__FILE__) . '/../util/Configure.php';
-require_once dirname(__FILE__) . '/../util/Skipper.php';
-require_once dirname(__FILE__) . '/../util/html/HTMLDOMElement.php';
-require_once dirname(__FILE__) . '/../util/html/HTMLDOMParser.php';
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(dirname(__FILE__)),
+    'AccessibleNavigation.php'
+));
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(dirname(__FILE__)),
+    'util',
+    'CommonFunctions.php'
+));
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(dirname(__FILE__)),
+    'util',
+    'Configure.php'
+));
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(dirname(__FILE__)),
+    'util',
+    'Skipper.php'
+));
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(dirname(__FILE__)),
+    'util',
+    'html',
+    'HTMLDOMElement.php'
+));
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(dirname(__FILE__)),
+    'util',
+    'html',
+    'HTMLDOMParser.php'
+));
 
 use \hatemile\AccessibleNavigation;
 use \hatemile\util\CommonFunctions;

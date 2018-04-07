@@ -15,8 +15,17 @@ limitations under the License.
 
 namespace hatemile;
 
-require_once dirname(__FILE__) . '/util/Skipper.php';
-require_once dirname(__FILE__) . '/util/html/HTMLDOMElement.php';
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(__FILE__),
+    'util',
+    'Skipper.php'
+));
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(__FILE__),
+    'util',
+    'html',
+    'HTMLDOMElement.php'
+));
 
 use \hatemile\util\Skipper;
 use \hatemile\util\html\HTMLDOMElement;

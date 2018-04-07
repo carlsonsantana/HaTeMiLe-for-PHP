@@ -15,8 +15,15 @@ limitations under the License.
 
 namespace hatemile\util\html\phpquery;
 
-require_once dirname(__FILE__) . '/../HTMLDOMParser.php';
-require_once dirname(__FILE__) . '/../vanilla/VanillaHTMLDOMElement.php';
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(dirname(__FILE__)),
+    'HTMLDOMParser.php'
+));
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(dirname(__FILE__)),
+    'vanilla',
+    'VanillaHTMLDOMElement.php'
+));
 
 use \hatemile\util\html\HTMLDOMParser;
 use \hatemile\util\html\vanilla\VanillaHTMLDOMElement;

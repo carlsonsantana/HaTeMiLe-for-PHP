@@ -15,11 +15,32 @@ limitations under the License.
 
 namespace hatemile\implementation;
 
-require_once dirname(__FILE__) . '/../AccessibleEvent.php';
-require_once dirname(__FILE__) . '/../util/CommonFunctions.php';
-require_once dirname(__FILE__) . '/../util/Configure.php';
-require_once dirname(__FILE__) . '/../util/html/HTMLDOMElement.php';
-require_once dirname(__FILE__) . '/../util/html/HTMLDOMParser.php';
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(dirname(__FILE__)),
+    'AccessibleEvent.php'
+));
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(dirname(__FILE__)),
+    'util',
+    'CommonFunctions.php'
+));
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(dirname(__FILE__)),
+    'util',
+    'Configure.php'
+));
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(dirname(__FILE__)),
+    'util',
+    'html',
+    'HTMLDOMElement.php'
+));
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(dirname(__FILE__)),
+    'util',
+    'html',
+    'HTMLDOMParser.php'
+));
 
 use \hatemile\AccessibleEvent;
 use \hatemile\util\CommonFunctions;
