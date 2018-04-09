@@ -29,10 +29,10 @@ use \hatemile\util\html\HTMLDOMParser;
 use \hatemile\util\html\vanilla\VanillaHTMLDOMElement;
 
 /**
- * The class phpQueryHTMLDOMParser is official implementation of HTMLDOMParser
+ * The class PhpQueryHTMLDOMParser is official implementation of HTMLDOMParser
  * interface for the phpQuery library.
  */
-class phpQueryHTMLDOMParser implements HTMLDOMParser
+class PhpQueryHTMLDOMParser implements HTMLDOMParser
 {
 
     /**
