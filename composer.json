@@ -1,0 +1,24 @@
+{
+    "name": "hatemile/hatemile",
+    "description": "HaTeMiLe is a library that can convert a HTML code in a HTML code more accessible.",
+    "keywords": ["accessibility", "assistive-technology", "screen-reader", "wcag", "wai-aria"],
+    "homepage": "https://github.com/hatemile/hatemile-for-php",
+    "type": "library",
+    "require": {
+        "electrolinux/phpquery": "^0.9.6"
+    },
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Carlson Santana Cruz",
+            "email": "hatemileforall@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {"hatemile\\": "src/hatemile"}
+    },
+    "support": {
+        "issues": "https://github.com/hatemile/hatemile-for-php/issues",
+        "source": "https://github.com/hatemile/hatemile-for-php"
+    }
+}
