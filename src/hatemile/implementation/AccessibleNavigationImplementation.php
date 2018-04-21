@@ -235,11 +235,13 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
      * navigation of parser.
      * @param \hatemile\util\html\HTMLDOMParser $parser The HTML parser.
      * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
+     * @param string $skipperFileName The file path of skippers configuration.
      * @param string $userAgent The user agent of the user.
      */
     public function __construct(
         HTMLDOMParser $parser,
         Configure $configure,
+        $skipperFileName = null,
         $userAgent = null
     ) {
         $this->parser = $parser;
@@ -268,7 +270,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
         $this->suffixLongDescriptionLink = $configure->getParameter(
             'suffix-longdescription'
         );
-        $this->skippers = $configure->getSkippers();
+        $this->skippers = $this->getSkippers($skipperFileName);
         $this->listShortcutsAdded = false;
         $this->listSkippersAdded = false;
         $this->validateHeading = false;
@@ -309,6 +311,42 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
         } else {
             $this->prefix = $this->standartPrefix;
         }
+    }
+
+    /**
+     * Returns the skippers of configuration.
+     * @param string $fileName The file path of skippers configuration.
+     * @return \hatemile\util\Skipper The skippers of configuration.
+     */
+    protected function getSkippers($fileName)
+    {
+        $skippers = array();
+        if ($fileName === null) {
+            $fileName = dirname(__FILE__) . '/../../skippers.xml';
+        }
+        $file = new \DOMDocument();
+        $file->load($fileName);
+        $document = $file->documentElement;
+        $childNodes = $document->childNodes;
+        foreach ($childNodes as $childNode) {
+            if (
+                ($childNode instanceof \DOMElement)
+                && (strtoupper($childNode->tagName) === 'SKIPPER')
+                && ($childNode->hasAttribute('selector'))
+                && ($childNode->hasAttribute('description'))
+            ) {
+                array_push(
+                    $skippers,
+                    new Skipper(
+                        $childNode->getAttribute('selector'),
+                        $childNode->getAttribute('description'),
+                        $childNode->getAttribute('shortcut')
+                    )
+                );
+            }
+        }
+
+        return $skippers;
     }
 
     /**
