@@ -329,19 +329,12 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
                 && ($child->hasAttribute('selector'))
                 && ($child->hasAttribute('description'))
             ) {
-                $shortcuts = array();
-                if (!empty($child->getAttribute('shortcut'))) {
-                    $shortcuts = preg_split(
-                        '/[ \n\t\r]+/',
-                        $child->getAttribute('shortcut')
-                    );
-                }
                 array_push(
                     $skippers,
                     array(
                         'selector' => $child->getAttribute('selector'),
                         'description' => $child->getAttribute('description'),
-                        'shortcut' => $shortcuts
+                        'shortcut' => $child->getAttribute('shortcut')
                     )
                 );
             }
@@ -705,14 +698,9 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
                 );
                 $link->appendText($skipper['description']);
 
-                $shortcuts = $skipper['shortcut'];
-                if (!empty($shortcuts)) {
-                    $shortcut = $shortcuts[0];
-                    if (!empty($shortcut)) {
-                        $this->freeShortcut($shortcut);
-                        $link->setAttribute('accesskey', $shortcut);
-                    }
-                }
+                $this->freeShortcut($skipper['shortcut']);
+                $link->setAttribute('accesskey', $skipper['shortcut']);
+
                 CommonFunctions::generateId($link, $this->prefixId);
 
                 $itemLink->appendElement($link);
@@ -727,42 +715,16 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
             $elements = $this->parser->find(
                 $skipper['selector']
             )->listResults();
-            $count = sizeof($elements) > 1;
-            if ($count) {
-                $index = 1;
-            }
-            $shortcuts = $skipper['shortcut'];
             foreach ($elements as $element) {
                 if (CommonFunctions::isValidElement($element)) {
-                    if ($count) {
-                        $defaultText = (
-                            $skipper['description']
-                            . ' '
-                            . ((string) ($index++))
-                        );
-                    } else {
-                        $defaultText = $skipper['description'];
-                    }
-                    if (sizeof($shortcuts) > 0) {
-                        $this->fixSkipper(
-                            $element,
-                            array(
-                                'selector' => $skipper['selector'],
-                                'description' => $defaultText,
-                                'shortcut' => $shortcuts[sizeof($shortcuts) - 1]
-                            )
-                        );
-                        unset($shortcuts[sizeof($shortcuts) - 1]);
-                    } else {
-                        $this->fixSkipper(
-                            $element,
-                            array(
-                                'selector' => $skipper['selector'],
-                                'description' => $defaultText,
-                                'shortcut' => ''
-                            )
-                        );
-                    }
+                    $this->fixSkipper(
+                        $element,
+                        array(
+                            'selector' => $skipper['selector'],
+                            'description' => $skipper['description'],
+                            'shortcut' => $skipper['shortcut']
+                        )
+                    );
                 }
             }
         }
