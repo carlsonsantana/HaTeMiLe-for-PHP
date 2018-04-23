@@ -18,16 +18,10 @@ namespace hatemile;
 require_once join(DIRECTORY_SEPARATOR, array(
     dirname(__FILE__),
     'util',
-    'Skipper.php'
-));
-require_once join(DIRECTORY_SEPARATOR, array(
-    dirname(__FILE__),
-    'util',
     'html',
     'HTMLDOMElement.php'
 ));
 
-use \hatemile\util\Skipper;
 use \hatemile\util\html\HTMLDOMElement;
 
 /**
@@ -52,9 +46,9 @@ interface AccessibleNavigation
     /**
      * Provide content skipper for element.
      * @param \hatemile\util\html\HTMLDOMElement $element The element.
-     * @param \hatemile\util\Skipper $skipper The skipper.
+     * @param string[] $skipper The skipper.
      */
-    public function fixSkipper(HTMLDOMElement $element, Skipper $skipper);
+    public function fixSkipper(HTMLDOMElement $element, $skipper);
 
     /**
      * Provide content skippers.

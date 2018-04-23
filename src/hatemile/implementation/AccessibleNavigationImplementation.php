@@ -32,11 +32,6 @@ require_once join(DIRECTORY_SEPARATOR, array(
 require_once join(DIRECTORY_SEPARATOR, array(
     dirname(dirname(__FILE__)),
     'util',
-    'Skipper.php'
-));
-require_once join(DIRECTORY_SEPARATOR, array(
-    dirname(dirname(__FILE__)),
-    'util',
     'html',
     'HTMLDOMElement.php'
 ));
@@ -50,7 +45,6 @@ require_once join(DIRECTORY_SEPARATOR, array(
 use \hatemile\AccessibleNavigation;
 use \hatemile\util\CommonFunctions;
 use \hatemile\util\Configure;
-use \hatemile\util\Skipper;
 use \hatemile\util\html\HTMLDOMElement;
 use \hatemile\util\html\HTMLDOMParser;
 
@@ -147,7 +141,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
 
     /**
      * The skippers configured.
-     * @var \hatemile\util\Skipper[]
+     * @var string[][]
      */
     protected $skippers;
 
@@ -316,7 +310,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
     /**
      * Returns the skippers of configuration.
      * @param string $fileName The file path of skippers configuration.
-     * @return \hatemile\util\Skipper The skippers of configuration.
+     * @return string[][] The skippers of configuration.
      */
     protected function getSkippers($fileName)
     {
@@ -328,19 +322,26 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
         $file->load($fileName);
         $document = $file->documentElement;
         $childNodes = $document->childNodes;
-        foreach ($childNodes as $childNode) {
+        foreach ($childNodes as $child) {
             if (
-                ($childNode instanceof \DOMElement)
-                && (strtoupper($childNode->tagName) === 'SKIPPER')
-                && ($childNode->hasAttribute('selector'))
-                && ($childNode->hasAttribute('description'))
+                ($child instanceof \DOMElement)
+                && (strtoupper($child->tagName) === 'SKIPPER')
+                && ($child->hasAttribute('selector'))
+                && ($child->hasAttribute('description'))
             ) {
+                $shortcuts = array();
+                if (!empty($child->getAttribute('shortcut'))) {
+                    $shortcuts = preg_split(
+                        '/[ \n\t\r]+/',
+                        $child->getAttribute('shortcut')
+                    );
+                }
                 array_push(
                     $skippers,
-                    new Skipper(
-                        $childNode->getAttribute('selector'),
-                        $childNode->getAttribute('description'),
-                        $childNode->getAttribute('shortcut')
+                    array(
+                        'selector' => $child->getAttribute('selector'),
+                        'description' => $child->getAttribute('description'),
+                        'shortcut' => $shortcuts
                     )
                 );
             }
@@ -684,7 +685,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
         }
     }
 
-    public function fixSkipper(HTMLDOMElement $element, Skipper $skipper)
+    public function fixSkipper(HTMLDOMElement $element, $skipper)
     {
         if (!$this->listSkippersAdded) {
             $this->listSkippers = $this->generateListSkippers();
@@ -702,9 +703,9 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
                     'href',
                     '#' . $anchor->getAttribute('name')
                 );
-                $link->appendText($skipper->getDefaultText());
+                $link->appendText($skipper['description']);
 
-                $shortcuts = $skipper->getShortcuts();
+                $shortcuts = $skipper['shortcut'];
                 if (!empty($shortcuts)) {
                     $shortcut = $shortcuts[0];
                     if (!empty($shortcut)) {
@@ -724,41 +725,41 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
     {
         foreach ($this->skippers as $skipper) {
             $elements = $this->parser->find(
-                $skipper->getSelector()
+                $skipper['selector']
             )->listResults();
             $count = sizeof($elements) > 1;
             if ($count) {
                 $index = 1;
             }
-            $shortcuts = $skipper->getShortcuts();
+            $shortcuts = $skipper['shortcut'];
             foreach ($elements as $element) {
                 if (CommonFunctions::isValidElement($element)) {
                     if ($count) {
                         $defaultText = (
-                            $skipper->getDefaultText()
+                            $skipper['description']
                             . ' '
                             . ((string) ($index++))
                         );
                     } else {
-                        $defaultText = $skipper->getDefaultText();
+                        $defaultText = $skipper['description'];
                     }
                     if (sizeof($shortcuts) > 0) {
                         $this->fixSkipper(
                             $element,
-                            new Skipper(
-                                $skipper->getSelector(),
-                                $defaultText,
-                                $shortcuts[sizeof($shortcuts) - 1]
+                            array(
+                                'selector' => $skipper['selector'],
+                                'description' => $defaultText,
+                                'shortcut' => $shortcuts[sizeof($shortcuts) - 1]
                             )
                         );
                         unset($shortcuts[sizeof($shortcuts) - 1]);
                     } else {
                         $this->fixSkipper(
                             $element,
-                            new Skipper(
-                                $skipper->getSelector(),
-                                $defaultText,
-                                ''
+                            array(
+                                'selector' => $skipper['selector'],
+                                'description' => $defaultText,
+                                'shortcut' => ''
                             )
                         );
                     }
