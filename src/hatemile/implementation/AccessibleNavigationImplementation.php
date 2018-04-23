@@ -433,9 +433,6 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
 
                 $container->appendElement($textContainer);
                 $local->appendElement($container);
-
-                $this->executeFixSkipper($container);
-                $this->executeFixSkipper($textContainer);
             }
         }
         if ($container !== null) {
@@ -446,7 +443,6 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
                 $htmlList = $this->parser->createElement('ul');
                 $container->appendElement($htmlList);
             }
-            $this->executeFixSkipper($htmlList);
         }
         $this->listShortcutsAdded = true;
 
@@ -507,9 +503,6 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
 
                 $container->appendElement($textContainer);
                 $local->appendElement($container);
-
-                $this->executeFixSkipper($container);
-                $this->executeFixSkipper($textContainer);
             }
         }
         if ($container !== null) {
@@ -520,7 +513,6 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
                 $htmlList = $this->parser->createElement('ol');
                 $container->appendElement($htmlList);
             }
-            $this->executeFixSkipper($htmlList);
         }
         return $htmlList;
     }
@@ -647,40 +639,6 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
         }
     }
 
-    /**
-     * Call fixSkipper method for element, if the page has the container of
-     * skippers.
-     * @param \hatemile\util\html\HTMLDOMElement $element The element.
-     */
-    protected function executeFixSkipper(HTMLDOMElement $element)
-    {
-        if ($this->listSkippers !== null) {
-            foreach ($this->skippers as $skipper) {
-                $compareElements = $this->parser->find(
-                    $skipper->getSelector()
-                )->listResults();
-                foreach ($compareElements as $compareElement) {
-                    if ($compareElement->getData() === $element->getData()) {
-                        $this->fixSkipper($element, $skipper);
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Call fixShortcut method for element, if the page has the container of
-     * shortcuts.
-     * @param \hatemile\util\html\HTMLDOMElement $element The element.
-     */
-    protected function executeFixShortcut(HTMLDOMElement $element)
-    {
-        if ($this->listShortcuts !== null) {
-            $this->fixShortcut($element);
-        }
-    }
-
     public function fixShortcut(HTMLDOMElement $element)
     {
         if ($element->hasAttribute('accesskey')) {
@@ -758,8 +716,6 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
 
                 $itemLink->appendElement($link);
                 $this->listSkippers->appendElement($itemLink);
-
-                $this->executeFixShortcut($link);
             }
         }
     }

@@ -188,12 +188,14 @@ HaTeMiLe is a libary that can convert a HTML code in a HTML code more accessible
     $accessibleForm->fixRequiredFields();
     $accessibleForm->fixRangeFields();
 
+    $accessibleNavigation->fixHeadings();
     $accessibleNavigation->fixShortcuts();
     $accessibleNavigation->fixSkippers();
-    $accessibleNavigation->fixHeadings();
     $accessibleNavigation->fixLongDescriptions();
 
     $accessibleAssociation->fixAssociationCellsTables();
     $accessibleAssociation->fixLabels();
+
+    $accessibleNavigation->fixSkippers();
 
     echo $parser->getHTML();
