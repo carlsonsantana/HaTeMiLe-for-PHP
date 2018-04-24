@@ -46,9 +46,8 @@ interface AccessibleNavigation
     /**
      * Provide content skipper for element.
      * @param \hatemile\util\html\HTMLDOMElement $element The element.
-     * @param string[] $skipper The skipper.
      */
-    public function fixSkipper(HTMLDOMElement $element, $skipper);
+    public function fixSkipper(HTMLDOMElement $element);
 
     /**
      * Provide content skippers.

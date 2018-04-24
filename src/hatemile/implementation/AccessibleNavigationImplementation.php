@@ -678,33 +678,46 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
         }
     }
 
-    public function fixSkipper(HTMLDOMElement $element, $skipper)
+    public function fixSkipper(HTMLDOMElement $element)
     {
-        if (!$this->listSkippersAdded) {
-            $this->listSkippers = $this->generateListSkippers();
+        $skipper = null;
+        foreach ($this->skippers as $auxiliarSkipper) {
+            $elements = $this->parser->find(
+                $auxiliarSkipper['selector']
+            )->listResults();
+            foreach ($elements as $auxiliarElement) {
+                if ($element->equals($auxiliarElement)) {
+                    $skipper = $auxiliarSkipper;
+                }
+            }
         }
-        if ($this->listSkippers !== null) {
-            $anchor = $this->generateAnchorFor(
-                $element,
-                $this->dataAnchorFor,
-                $this->classSkipperAnchor
-            );
-            if ($anchor !== null) {
-                $itemLink = $this->parser->createElement('li');
-                $link = $this->parser->createElement('a');
-                $link->setAttribute(
-                    'href',
-                    '#' . $anchor->getAttribute('name')
+        if ($skipper !== null) {
+            if (!$this->listSkippersAdded) {
+                $this->listSkippers = $this->generateListSkippers();
+            }
+            if ($this->listSkippers !== null) {
+                $anchor = $this->generateAnchorFor(
+                    $element,
+                    $this->dataAnchorFor,
+                    $this->classSkipperAnchor
                 );
-                $link->appendText($skipper['description']);
+                if ($anchor !== null) {
+                    $itemLink = $this->parser->createElement('li');
+                    $link = $this->parser->createElement('a');
+                    $link->setAttribute(
+                        'href',
+                        '#' . $anchor->getAttribute('name')
+                    );
+                    $link->appendText($skipper['description']);
 
-                $this->freeShortcut($skipper['shortcut']);
-                $link->setAttribute('accesskey', $skipper['shortcut']);
+                    $this->freeShortcut($skipper['shortcut']);
+                    $link->setAttribute('accesskey', $skipper['shortcut']);
 
-                CommonFunctions::generateId($link, $this->prefixId);
+                    CommonFunctions::generateId($link, $this->prefixId);
 
-                $itemLink->appendElement($link);
-                $this->listSkippers->appendElement($itemLink);
+                    $itemLink->appendElement($link);
+                    $this->listSkippers->appendElement($itemLink);
+                }
             }
         }
     }
@@ -717,14 +730,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
             )->listResults();
             foreach ($elements as $element) {
                 if (CommonFunctions::isValidElement($element)) {
-                    $this->fixSkipper(
-                        $element,
-                        array(
-                            'selector' => $skipper['selector'],
-                            'description' => $skipper['description'],
-                            'shortcut' => $skipper['shortcut']
-                        )
-                    );
+                    $this->fixSkipper($element);
                 }
             }
         }

@@ -227,4 +227,14 @@ class VanillaHTMLDOMElement implements HTMLDOMElement
         }
         return null;
     }
+
+    public function equals($obj) {
+        if ($this === $obj) {
+            return true;
+        }
+        if (($obj !== null) && ($obj instanceof VanillaHTMLDOMElement)) {
+            return $this->getData() == $obj->getData();
+        }
+        return false;
+    }
 }
