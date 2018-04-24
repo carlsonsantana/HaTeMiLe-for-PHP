@@ -185,5 +185,5 @@ interface HTMLDOMElement
      * @return boolean True if this object is the same as the obj argument or
      * false otherwise.
      */
-    public function equals(object $obj);
+    public function equals($obj);
 }
