@@ -303,7 +303,10 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
     {
         $skippers = array();
         if ($fileName === null) {
-            $fileName = dirname(__FILE__) . '/../../skippers.xml';
+            $fileName = join(DIRECTORY_SEPARATOR, array(
+                dirname(dirname(dirname(__FILE__))),
+                'skippers.xml'
+            ));
         }
         $file = new \DOMDocument();
         $file->load($fileName);

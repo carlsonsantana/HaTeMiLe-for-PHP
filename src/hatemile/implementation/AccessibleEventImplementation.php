@@ -155,7 +155,11 @@ class AccessibleEventImplementation implements AccessibleEvent
             );
             $script->setAttribute('type', 'text/javascript');
             $script->appendText(file_get_contents(
-                dirname(__FILE__) . '/../../js/eventlistener.js'
+                join(DIRECTORY_SEPARATOR, array(
+                    dirname(dirname(dirname(__FILE__))),
+                    'js',
+                    'eventlistener.js'
+                ))
             ));
             if ($head->hasChildren()) {
                 $head->getFirstElementChild()->insertBefore($script);
@@ -191,7 +195,11 @@ class AccessibleEventImplementation implements AccessibleEvent
                 );
                 $scriptFunction->setAttribute('type', 'text/javascript');
                 $scriptFunction->appendText(file_get_contents(
-                    dirname(__FILE__) . '/../../js/include.js'
+                    join(DIRECTORY_SEPARATOR, array(
+                        dirname(dirname(dirname(__FILE__))),
+                        'js',
+                        'include.js'
+                    ))
                 ));
                 $local->appendElement($scriptFunction);
             }
