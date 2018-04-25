@@ -56,34 +56,95 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
 {
 
     /**
+     * The id of list element that contains the description of shortcuts.
+     * @var string
+     */
+    const ID_CONTAINER_SHORTCUTS = 'container-shortcuts';
+
+    /**
+     * The id of list element that contains the skippers.
+     * @var string
+     */
+    const ID_CONTAINER_SKIPPERS = 'container-skippers';
+
+    /**
+     * The id of list element that contains the links for the headings.
+     * @var string
+     */
+    const ID_CONTAINER_HEADING = 'container-heading';
+
+    /**
+     * The id of text of description of container of shortcuts descriptions.
+     * @var string
+     */
+    const ID_TEXT_SHORTCUTS = 'text-shortcuts';
+
+    /**
+     * The id of text of description of container of heading links.
+     * @var string
+     */
+    const ID_TEXT_HEADING = 'text-heading';
+
+    /**
+     * The HTML class of anchor of skipper.
+     * @var string
+     */
+    const CLASS_SKIPPER_ANCHOR = 'skipper-anchor';
+
+    /**
+     * The HTML class of anchor of heading link.
+     * @var string
+     */
+    const CLASS_HEADING_ANCHOR = 'heading-anchor';
+
+    /**
+     * The HTML class of element for show the long description of image.
+     * @var string
+     */
+    const CLASS_LONG_DESCRIPTION_LINK = 'longdescription-link';
+
+    /**
+     * The name of attribute that link the list item element with the shortcut.
+     * @var string
+     */
+    const DATA_ACCESS_KEY = 'data-shortcutdescriptionfor';
+
+    /**
+     * The name of attribute that links the anchor of skipper with the element.
+     * @var string
+     */
+    const DATA_ANCHOR_FOR = 'data-anchorfor';
+
+    /**
+     * The name of attribute that indicates the level of heading of link.
+     * @var string
+     */
+    const DATA_HEADING_LEVEL = 'data-headinglevel';
+
+    /**
+     * The name of attribute that links the anchor of heading link with heading.
+     * @var string
+     */
+    const DATA_HEADING_ANCHOR_FOR = 'data-headinganchorfor';
+
+    /**
+     * The name of attribute that link the anchor of long description with the
+     * image.
+     * @var string
+     */
+    const DATA_LONG_DESCRIPTION_FOR_IMAGE = 'data-longdescriptionfor';
+
+    /**
      * The HTML parser.
      * @var \hatemile\util\html\HTMLDOMParser
      */
     protected $parser;
 
     /**
-     * The id of list element that contains the description of shortcuts.
-     * @var string
-     */
-    protected $idContainerShortcuts;
-
-    /**
-     * The id of text of description of container of shortcuts descriptions.
-     * @var string
-     */
-    protected $idTextShortcuts;
-
-    /**
      * The text of description of container of shortcuts descriptions.
      * @var string
      */
     protected $textShortcuts;
-
-    /**
-     * The name of attribute that link the list item element with the shortcut.
-     * @var string
-     */
-    protected $dataAccessKey;
 
     /**
      * The browser shortcut prefix.
@@ -96,24 +157,6 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
      * @var string
      */
     protected $standartPrefix;
-
-    /**
-     * The id of list element that contains the skippers.
-     * @var string
-     */
-    protected $idContainerSkippers;
-
-    /**
-     * The id of list element that contains the links for the headings.
-     * @var string
-     */
-    protected $idContainerHeading;
-
-    /**
-     * The id of text of description of container of heading links.
-     * @var string
-     */
-    protected $idTextHeading;
 
     /**
      * The text of description of container of heading links.
@@ -158,49 +201,6 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
     protected $listSkippers;
 
     /**
-     * The name of attribute that links the anchor of skipper with the element.
-     * @var string
-     */
-    protected $dataAnchorFor;
-
-    /**
-     * The HTML class of anchor of skipper.
-     * @var string
-     */
-    protected $classSkipperAnchor;
-
-    /**
-     * The HTML class of anchor of heading link.
-     * @var string
-     */
-    protected $classHeadingAnchor;
-
-    /**
-     * The HTML class of element for show the long description of image.
-     * @var string
-     */
-    protected $classLongDescriptionLink;
-
-    /**
-     * The name of attribute that links the anchor of heading link with heading.
-     * @var string
-     */
-    protected $dataHeadingAnchorFor;
-
-    /**
-     * The name of attribute that indicates the level of heading of link.
-     * @var string
-     */
-    protected $dataHeadingLevel;
-
-    /**
-     * The name of attribute that link the anchor of long description with the
-     * image.
-     * @var string
-     */
-    protected $dataLongDescriptionForImage;
-
-    /**
      * The state that indicates if the sintatic heading of parser be validated.
      * @var boolean
      */
@@ -239,19 +239,6 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
         $userAgent = null
     ) {
         $this->parser = $parser;
-        $this->idContainerShortcuts = 'container-shortcuts';
-        $this->idContainerSkippers = 'container-skippers';
-        $this->idContainerHeading = 'container-heading';
-        $this->idTextShortcuts = 'text-shortcuts';
-        $this->idTextHeading = 'text-heading';
-        $this->classSkipperAnchor = 'skipper-anchor';
-        $this->classHeadingAnchor = 'heading-anchor';
-        $this->classLongDescriptionLink = 'longdescription-link';
-        $this->dataAccessKey = 'data-shortcutdescriptionfor';
-        $this->dataAnchorFor = 'data-anchorfor';
-        $this->dataHeadingAnchorFor = 'data-headinganchorfor';
-        $this->dataHeadingLevel = 'data-headinglevel';
-        $this->dataLongDescriptionForImage = 'data-longdescriptionfor';
         $this->prefixId = $configure->getParameter('prefix-generated-ids');
         $this->textShortcuts = $configure->getParameter('text-shortcuts');
         $this->textHeading = $configure->getParameter('text-heading');
@@ -412,17 +399,23 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
     protected function generateListShortcuts()
     {
         $container = $this->parser->find(
-            '#' . $this->idContainerShortcuts
+            '#' . AccessibleNavigationImplementation::ID_CONTAINER_SHORTCUTS
         )->firstResult();
         $htmlList = null;
         if ($container === null) {
             $local = $this->parser->find('body')->firstResult();
             if ($local !== null) {
                 $container = $this->parser->createElement('div');
-                $container->setAttribute('id', $this->idContainerShortcuts);
+                $container->setAttribute(
+                    'id',
+                    AccessibleNavigationImplementation::ID_CONTAINER_SHORTCUTS
+                );
 
                 $textContainer = $this->parser->createElement('span');
-                $textContainer->setAttribute('id', $this->idTextShortcuts);
+                $textContainer->setAttribute(
+                    'id',
+                    AccessibleNavigationImplementation::ID_TEXT_SHORTCUTS
+                );
                 $textContainer->appendText($this->textShortcuts);
 
                 $container->appendElement($textContainer);
@@ -450,14 +443,17 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
     protected function generateListSkippers()
     {
         $container = $this->parser->find(
-            '#' . $this->idContainerSkippers
+            '#' . AccessibleNavigationImplementation::ID_CONTAINER_SKIPPERS
         )->firstResult();
         $htmlList = null;
         if ($container === null) {
             $local = $this->parser->find('body')->firstResult();
             if ($local !== null) {
                 $container = $this->parser->createElement('div');
-                $container->setAttribute('id', $this->idContainerSkippers);
+                $container->setAttribute(
+                    'id',
+                    AccessibleNavigationImplementation::ID_CONTAINER_SKIPPERS
+                );
                 $local->getFirstElementChild()->insertBefore($container);
             }
         }
@@ -482,17 +478,23 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
     protected function generateListHeading()
     {
         $container = $this->parser->find(
-            '#' . $this->idContainerHeading
+            '#' . AccessibleNavigationImplementation::ID_CONTAINER_HEADING
         )->firstResult();
         $htmlList = null;
         if ($container === null) {
             $local = $this->parser->find('body')->firstResult();
             if ($local !== null) {
                 $container = $this->parser->createElement('div');
-                $container->setAttribute('id', $this->idContainerHeading);
+                $container->setAttribute(
+                    'id',
+                    AccessibleNavigationImplementation::ID_CONTAINER_HEADING
+                );
 
                 $textContainer = $this->parser->createElement('span');
-                $textContainer->setAttribute('id', $this->idTextHeading);
+                $textContainer->setAttribute(
+                    'id',
+                    AccessibleNavigationImplementation::ID_TEXT_HEADING
+                );
                 $textContainer->appendText($this->textHeading);
 
                 $container->appendElement($textContainer);
@@ -652,12 +654,21 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
                 );
                 foreach ($keys as $key) {
                     $key = strtoupper($key);
-                    $attr = '[' . $this->dataAccessKey . '="' . $key . '"]';
+                    $attr = (
+                        '[' .
+                        AccessibleNavigationImplementation::DATA_ACCESS_KEY .
+                        '="' .
+                        $key .
+                        '"]'
+                    );
                     if ($this->parser->find(
                         $this->listShortcuts
                     )->findChildren($attr)->firstResult() === null) {
                         $item = $this->parser->createElement('li');
-                        $item->setAttribute($this->dataAccessKey, $key);
+                        $item->setAttribute(
+                            AccessibleNavigationImplementation::DATA_ACCESS_KEY,
+                            $key
+                        );
                         $item->appendText(
                             $this->prefix . ' + ' . $key . ': ' . $description
                         );
@@ -698,8 +709,8 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
             if ($this->listSkippers !== null) {
                 $anchor = $this->generateAnchorFor(
                     $element,
-                    $this->dataAnchorFor,
-                    $this->classSkipperAnchor
+                    AccessibleNavigationImplementation::DATA_ANCHOR_FOR,
+                    AccessibleNavigationImplementation::CLASS_SKIPPER_ANCHOR
                 );
                 if ($anchor !== null) {
                     $itemLink = $this->parser->createElement('li');
@@ -744,8 +755,8 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
         if ($this->validHeading) {
             $anchor = $this->generateAnchorFor(
                 $element,
-                $this->dataHeadingAnchorFor,
-                $this->classHeadingAnchor
+                AccessibleNavigationImplementation::DATA_HEADING_ANCHOR_FOR,
+                AccessibleNavigationImplementation::CLASS_HEADING_ANCHOR
             );
             if ($anchor !== null) {
                 $list = null;
@@ -755,13 +766,14 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
                 } else {
                     $attr = (
                         '['
-                        . $this->dataHeadingLevel
+                        . AccessibleNavigationImplementation::DATA_HEADING_LEVEL
                         . '="'
                         . ((string) ($level - 1))
                         . '"]'
                     );
                     $superItem = $this->parser->find(
-                        '#' . $this->idContainerHeading
+                        '#' .
+                        AccessibleNavigationImplementation::ID_CONTAINER_HEADING
                     )->findDescendants($attr)->lastResult();
                     if ($superItem !== null) {
                         $list = $this->parser->find($superItem)->findChildren(
@@ -776,7 +788,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
                 if ($list !== null) {
                     $item = $this->parser->createElement('li');
                     $item->setAttribute(
-                        $this->dataHeadingLevel,
+                        AccessibleNavigationImplementation::DATA_HEADING_LEVEL,
                         ((string) ($level))
                     );
 
@@ -809,8 +821,15 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
         if ($element->hasAttribute('longdesc')) {
             CommonFunctions::generateId($element, $this->prefixId);
             $id = $element->getAttribute('id');
-            $at = '[' . $this->dataLongDescriptionForImage . '="' . $id . '"]';
-            if ($this->parser->find($at)->firstResult() === null) {
+            $attr = (
+                '[' .
+                AccessibleNavigationImplementation
+                        ::DATA_LONG_DESCRIPTION_FOR_IMAGE .
+                '="' .
+                $id .
+                '"]'
+            );
+            if ($this->parser->find($attr)->firstResult() === null) {
                 if ($element->hasAttribute('alt')) {
                     $text = (
                         $this->prefixLongDescriptionLink
@@ -832,8 +851,16 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
                     $element->getAttribute('longdesc')
                 );
                 $anchor->setAttribute('target', '_blank');
-                $anchor->setAttribute($this->dataLongDescriptionForImage, $id);
-                $anchor->setAttribute('class', $this->classLongDescriptionLink);
+                $anchor->setAttribute(
+                    AccessibleNavigationImplementation
+                            ::DATA_LONG_DESCRIPTION_FOR_IMAGE,
+                    $id
+                );
+                $anchor->setAttribute(
+                    'class',
+                    AccessibleNavigationImplementation
+                            ::CLASS_LONG_DESCRIPTION_LINK
+                );
                 $anchor->appendText(\trim($text));
                 $element->insertAfter($anchor);
             }

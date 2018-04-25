@@ -56,29 +56,29 @@ class AccessibleEventImplementation implements AccessibleEvent
 {
 
     /**
-     * The HTML parser.
-     * @var \hatemile\util\html\HTMLDOMParser
-     */
-    protected $parser;
-
-    /**
      * The id of script element that replace the event listener methods.
      * @var string
      */
-    protected $idScriptEventListener;
+    const ID_SCRIPT_EVENT_LISTENER = 'script-eventlistener';
 
     /**
      * The id of script element that contains the list of elements that has
      * inaccessible events.
      * @var string
      */
-    protected $idListIdsScript;
+    const ID_LIST_IDS_SCRIPT = 'list-ids-script';
 
     /**
      * The id of script element that modify the events of elements.
      * @var string
      */
-    protected $idFunctionScriptFix;
+    const ID_FUNCTION_SCRIPT_FIX = 'id-function-script-fix';
+
+    /**
+     * The HTML parser.
+     * @var \hatemile\util\html\HTMLDOMParser
+     */
+    protected $parser;
 
     /**
      * The prefix of generated ids.
@@ -110,9 +110,6 @@ class AccessibleEventImplementation implements AccessibleEvent
     {
         $this->parser = $parser;
         $this->prefixId = $configure->getParameter('prefix-generated-ids');
-        $this->idScriptEventListener = 'script-eventlistener';
-        $this->idListIdsScript = 'list-ids-script';
-        $this->idFunctionScriptFix = 'id-function-script-fix';
         $this->mainScriptAdded = false;
         $this->scriptList = null;
     }
@@ -148,11 +145,14 @@ class AccessibleEventImplementation implements AccessibleEvent
         if (
             ($head !== null)
             && ($this->parser->find(
-                '#' . $this->idScriptEventListener
+                '#' . AccessibleEventImplementation::ID_SCRIPT_EVENT_LISTENER
             )->firstResult() === null)
         ) {
             $script = $this->parser->createElement('script');
-            $script->setAttribute('id', $this->idScriptEventListener);
+            $script->setAttribute(
+                'id',
+                AccessibleEventImplementation::ID_SCRIPT_EVENT_LISTENER
+            );
             $script->setAttribute('type', 'text/javascript');
             $script->appendText(file_get_contents(
                 dirname(__FILE__) . '/../../js/eventlistener.js'
@@ -166,11 +166,14 @@ class AccessibleEventImplementation implements AccessibleEvent
         $local = $this->parser->find('body')->firstResult();
         if ($local !== null) {
             $this->scriptList = $this->parser->find(
-                '#' . $this->idListIdsScript
+                '#' . AccessibleEventImplementation::ID_LIST_IDS_SCRIPT
             )->firstResult();
             if ($this->scriptList === null) {
                 $this->scriptList = $this->parser->createElement('script');
-                $this->scriptList->setAttribute('id', $this->idListIdsScript);
+                $this->scriptList->setAttribute(
+                    'id',
+                    AccessibleEventImplementation::ID_LIST_IDS_SCRIPT
+                );
                 $this->scriptList->setAttribute('type', 'text/javascript');
                 $this->scriptList->appendText('var activeElements = [];');
                 $this->scriptList->appendText('var hoverElements = [];');
@@ -179,10 +182,13 @@ class AccessibleEventImplementation implements AccessibleEvent
                 $local->appendElement($this->scriptList);
             }
             if ($this->parser->find(
-                '#' . $this->idFunctionScriptFix
+                '#' . AccessibleEventImplementation::ID_FUNCTION_SCRIPT_FIX
             )->firstResult() === null) {
                 $scriptFunction = $this->parser->createElement('script');
-                $scriptFunction->setAttribute('id', $this->idFunctionScriptFix);
+                $scriptFunction->setAttribute(
+                    'id',
+                    AccessibleEventImplementation::ID_FUNCTION_SCRIPT_FIX
+                );
                 $scriptFunction->setAttribute('type', 'text/javascript');
                 $scriptFunction->appendText(file_get_contents(
                     dirname(__FILE__) . '/../../js/include.js'
