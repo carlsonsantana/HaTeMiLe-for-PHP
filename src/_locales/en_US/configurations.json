@@ -1,0 +1,20 @@
+{
+    "text-shortcuts": "Shortcuts:",
+    "text-standart-shortcut-prefix": "ALT",
+    "text-autocomplete-value-both": "List or Inline",
+    "text-autocomplete-value-list": "List",
+    "text-autocomplete-value-inline": "Inline",
+    "text-autocomplete-value-none": "None",
+    "text-heading": "Summary:",
+    "prefix-required-field": "*",
+    "prefix-range-min-field": "",
+    "prefix-range-max-field": "",
+    "prefix-autocomplete-field": "",
+    "prefix-generated-ids": "id-",
+    "prefix-longdescription": "",
+    "suffix-longdescription": "[d]",
+    "suffix-required-field": "",
+    "suffix-range-min-field": "(Min: {{value}})",
+    "suffix-range-max-field": "(Max: {{value}})",
+    "suffix-autocomplete-field": "(Autocomplete: {{value}})"
+}
