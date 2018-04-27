@@ -23,16 +23,22 @@ require_once join(DIRECTORY_SEPARATOR, array(
 
 use \hatemile\util\html\HTMLDOMElement;
 
+/**
+ * The IDGenerator class generate ids for
+ * {@link \hatemile\util\html\HTMLDOMElement}.
+ */
 class IDGenerator
 {
 
     /**
      * The prefix of generated ids.
+     * @var string
      */
     protected $prefixId;
 
     /**
      * Count the number of ids created.
+     * @var integer
      */
     protected $count;
 
