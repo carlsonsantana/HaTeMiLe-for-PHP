@@ -36,37 +36,10 @@ class CommonFunctions
     const DATA_IGNORE = 'data-ignoreaccessibilityfix';
 
     /**
-     * Count the number of ids created.
-     * @var integer
-     */
-    protected static $count = 0;
-
-    /**
      * The private constructor prevents that the class not can be initialized.
      */
     private function __construct()
     {
-    }
-
-    /**
-     * Generate a id for a element.
-     * @param \hatemile\util\html\HTMLDOMElement $element The element.
-     * @param string $prefix The prefix of id.
-     */
-    public static function generateId(HTMLDOMElement $element, $prefix)
-    {
-        if (!$element->hasAttribute('id')) {
-            $element->setAttribute('id', $prefix . CommonFunctions::$count);
-            CommonFunctions::$count++;
-        }
-    }
-
-    /**
-     * Reset the count number of ids.
-     */
-    public static function resetCount()
-    {
-        CommonFunctions::$count = 0;
     }
 
     /**

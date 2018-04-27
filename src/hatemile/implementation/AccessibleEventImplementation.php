@@ -32,6 +32,11 @@ require_once join(DIRECTORY_SEPARATOR, array(
 require_once join(DIRECTORY_SEPARATOR, array(
     dirname(dirname(__FILE__)),
     'util',
+    'IDGenerator.php'
+));
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(dirname(__FILE__)),
+    'util',
     'html',
     'HTMLDOMElement.php'
 ));
@@ -45,6 +50,7 @@ require_once join(DIRECTORY_SEPARATOR, array(
 use \hatemile\AccessibleEvent;
 use \hatemile\util\CommonFunctions;
 use \hatemile\util\Configure;
+use \hatemile\util\IDGenerator;
 use \hatemile\util\html\HTMLDOMElement;
 use \hatemile\util\html\HTMLDOMParser;
 
@@ -81,10 +87,10 @@ class AccessibleEventImplementation implements AccessibleEvent
     protected $parser;
 
     /**
-     * The prefix of generated ids.
-     * @var string
+     * The id generator.
+     * @var \hatemile\util\IDGenerator
      */
-    protected $prefixId;
+    protected $idGenerator;
 
     /**
      * The state that indicates if the scripts used by solutions was added in
@@ -109,7 +115,7 @@ class AccessibleEventImplementation implements AccessibleEvent
     public function __construct(HTMLDOMParser $parser, Configure $configure)
     {
         $this->parser = $parser;
-        $this->prefixId = $configure->getParameter('prefix-generated-ids');
+        $this->idGenerator = new IDGenerator('event');
         $this->mainScriptAdded = false;
         $this->scriptList = null;
     }
@@ -219,7 +225,7 @@ class AccessibleEventImplementation implements AccessibleEvent
         }
 
         if ($this->scriptList !== null) {
-            CommonFunctions::generateId($element, $this->prefixId);
+            $this->idGenerator->generateId($element);
             $this->scriptList->appendText(
                 $event
                 . "Elements.push('"

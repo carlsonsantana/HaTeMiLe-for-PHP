@@ -10,7 +10,6 @@
     "prefix-range-min-field": "",
     "prefix-range-max-field": "",
     "prefix-autocomplete-field": "",
-    "prefix-generated-ids": "id-",
     "prefix-longdescription": "",
     "suffix-longdescription": "[d]",
     "suffix-required-field": "",

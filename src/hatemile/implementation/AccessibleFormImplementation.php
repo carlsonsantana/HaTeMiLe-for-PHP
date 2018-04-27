@@ -62,12 +62,6 @@ class AccessibleFormImplementation implements AccessibleForm
     protected $parser;
 
     /**
-     * The prefix of generated id.
-     * @var string
-     */
-    protected $prefixId;
-
-    /**
      * Initializes a new object that manipulate the accessibility of the forms
      * of parser.
      * @param \hatemile\util\html\HTMLDOMParser $parser The HTML parser.
@@ -76,7 +70,6 @@ class AccessibleFormImplementation implements AccessibleForm
     public function __construct(HTMLDOMParser $parser, Configure $configure)
     {
         $this->parser = $parser;
-        $this->prefixId = $configure->getParameter('prefix-generated-ids');
     }
 
     /**

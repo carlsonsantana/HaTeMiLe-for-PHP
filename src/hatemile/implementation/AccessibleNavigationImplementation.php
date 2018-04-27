@@ -32,6 +32,11 @@ require_once join(DIRECTORY_SEPARATOR, array(
 require_once join(DIRECTORY_SEPARATOR, array(
     dirname(dirname(__FILE__)),
     'util',
+    'IDGenerator.php'
+));
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(dirname(__FILE__)),
+    'util',
     'html',
     'HTMLDOMElement.php'
 ));
@@ -45,6 +50,7 @@ require_once join(DIRECTORY_SEPARATOR, array(
 use \hatemile\AccessibleNavigation;
 use \hatemile\util\CommonFunctions;
 use \hatemile\util\Configure;
+use \hatemile\util\IDGenerator;
 use \hatemile\util\html\HTMLDOMElement;
 use \hatemile\util\html\HTMLDOMParser;
 
@@ -141,6 +147,12 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
     protected $parser;
 
     /**
+     * The id generator.
+     * @var \hatemile\util\IDGenerator
+     */
+    protected $idGenerator;
+
+    /**
      * The text of description of container of shortcuts descriptions.
      * @var string
      */
@@ -175,12 +187,6 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
      * @var string
      */
     protected $suffixLongDescriptionLink;
-
-    /**
-     * The prefix of generated ids.
-     * @var string
-     */
-    protected $prefixId;
 
     /**
      * The skippers configured.
@@ -239,7 +245,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
         $userAgent = null
     ) {
         $this->parser = $parser;
-        $this->prefixId = $configure->getParameter('prefix-generated-ids');
+        $this->idGenerator = new IDGenerator('navigation');
         $this->textShortcuts = $configure->getParameter('text-shortcuts');
         $this->textHeading = $configure->getParameter('text-heading');
         $this->standartPrefix = $configure->getParameter(
@@ -582,7 +588,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
         $dataAttribute,
         $anchorClass
     ) {
-        CommonFunctions::generateId($element, $this->prefixId);
+        $this->idGenerator->generateId($element);
         $anchor = null;
         $at = '[' . $dataAttribute . '="' . $element->getAttribute('id') . '"]';
         if ($this->parser->find($at)->firstResult() === null) {
@@ -590,7 +596,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
                 $anchor = $element;
             } else {
                 $anchor = $this->parser->createElement('a');
-                CommonFunctions::generateId($anchor, $this->prefixId);
+                $this->idGenerator->generateId($anchor);
                 $anchor->setAttribute('class', $anchorClass);
                 $element->insertBefore($anchor);
             }
@@ -727,7 +733,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
                     $this->freeShortcut($skipper['shortcut']);
                     $link->setAttribute('accesskey', $skipper['shortcut']);
 
-                    CommonFunctions::generateId($link, $this->prefixId);
+                    $this->idGenerator->generateId($link);
 
                     $itemLink->appendElement($link);
                     $this->listSkippers->appendElement($itemLink);
@@ -822,7 +828,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
     public function fixLongDescription(HTMLDOMElement $element)
     {
         if ($element->hasAttribute('longdesc')) {
-            CommonFunctions::generateId($element, $this->prefixId);
+            $this->idGenerator->generateId($element);
             $id = $element->getAttribute('id');
             $attr = (
                 '[' .

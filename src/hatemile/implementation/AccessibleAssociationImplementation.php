@@ -32,6 +32,11 @@ require_once join(DIRECTORY_SEPARATOR, array(
 require_once join(DIRECTORY_SEPARATOR, array(
     dirname(dirname(__FILE__)),
     'util',
+    'IDGenerator.php'
+));
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(dirname(__FILE__)),
+    'util',
     'html',
     'HTMLDOMElement.php'
 ));
@@ -45,6 +50,7 @@ require_once join(DIRECTORY_SEPARATOR, array(
 use \hatemile\AccessibleAssociation;
 use \hatemile\util\CommonFunctions;
 use \hatemile\util\Configure;
+use \hatemile\util\IDGenerator;
 use \hatemile\util\html\HTMLDOMElement;
 use \hatemile\util\html\HTMLDOMParser;
 
@@ -62,10 +68,10 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
     protected $parser;
 
     /**
-     * The prefix of generated id.
-     * @var string
+     * The id generator.
+     * @var \hatemile\util\IDGenerator
      */
-    protected $prefixId;
+    protected $idGenerator;
 
     /**
      * Initializes a new object that manipulate the accessibility of the tables
@@ -76,7 +82,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
     public function __construct(HTMLDOMParser $parser, Configure $configure)
     {
         $this->parser = $parser;
-        $this->prefixId = $configure->getParameter('prefix-generated-ids');
+        $this->idGenerator = new IDGenerator('association');
     }
 
     /**
@@ -221,7 +227,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
             $headersIds = array();
             foreach ($cells as $cell) {
                 if ($cell->getTagName() === 'TH') {
-                    CommonFunctions::generateId($cell, $this->prefixId);
+                    $this->idGenerator->generateId($cell);
                     array_push($headersIds, $cell->getAttribute('id'));
 
                     $cell->setAttribute('scope', 'row');
@@ -254,7 +260,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
             'tr'
         )->findChildren('th')->listResults();
         foreach ($cells as $cell) {
-            CommonFunctions::generateId($cell, $this->prefixId);
+            $this->idGenerator->generateId($cell);
 
             $cell->setAttribute('scope', 'col');
         }
@@ -337,7 +343,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
                 )->findDescendants('input,select,textarea')->firstResult();
 
                 if ($field !== null) {
-                    CommonFunctions::generateId($field, $this->prefixId);
+                    $this->idGenerator->generateId($field);
                     $label->setAttribute('for', $field->getAttribute('id'));
                 }
             }
@@ -353,7 +359,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
                     );
                 }
 
-                CommonFunctions::generateId($label, $this->prefixId);
+                $this->idGenerator->generateId($label);
                 $field->setAttribute(
                     'aria-labelledby',
                     CommonFunctions::increaseInList(
