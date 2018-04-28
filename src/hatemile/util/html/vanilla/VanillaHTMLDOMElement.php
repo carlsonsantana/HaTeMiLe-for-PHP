@@ -23,15 +23,20 @@ require_once join(DIRECTORY_SEPARATOR, array(
     dirname(dirname(__FILE__)),
     'HTMLDOMNode.php'
 ));
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(__FILE__),
+    'VanillaHTMLDOMNode.php'
+));
 
 use \hatemile\util\html\HTMLDOMElement;
 use \hatemile\util\html\HTMLDOMNode;
+use \hatemile\util\html\vanilla\VanillaHTMLDOMNode;
 
 /**
  * The VanillaHTMLDOMElement class is official implementation of HTMLDOMElement
  * interface for the DOMElement.
  */
-class VanillaHTMLDOMElement implements HTMLDOMElement
+class VanillaHTMLDOMElement extends VanillaHTMLDOMNode implements HTMLDOMElement
 {
 
     /**
@@ -46,6 +51,7 @@ class VanillaHTMLDOMElement implements HTMLDOMElement
      */
     public function __construct(\DOMElement $element)
     {
+        parent::__construct($element);
         $this->element = $element;
     }
 
@@ -86,56 +92,6 @@ class VanillaHTMLDOMElement implements HTMLDOMElement
         return $this->element->textContent;
     }
 
-    public function insertBefore(HTMLDOMNode $newNode)
-    {
-        $this->getParentElement()->getData()->insertBefore(
-            $newNode->getData(),
-            $this->element
-        );
-        return $this;
-    }
-
-    public function insertAfter(HTMLDOMNode $newNode)
-    {
-        $children = $this->getParentElement()->getData()->childNodes;
-        $found = false;
-        $added = false;
-        foreach ($children as $child) {
-            if ($child instanceof \DOMElement) {
-                $child = new VanillaHTMLDOMElement($child);
-                if ($found) {
-                    $child->getParentElement()->getData()->insertBefore(
-                        $newNode->getData(),
-                        $child->getData()
-                    );
-                    $added = true;
-                    break;
-                } elseif ($child->getData() === $this->element) {
-                    $found = true;
-                }
-            }
-        }
-        if (!$added) {
-            $this->getParentElement()->appendElement($newNode);
-        }
-        return $this;
-    }
-
-    public function removeNode()
-    {
-        $this->getParentElement()->getData()->removeChild($this->element);
-        return $this;
-    }
-
-    public function replaceNode(HTMLDOMNode $newNode)
-    {
-        $this->getParentElement()->getData()->replaceChild(
-            $newNode->getData(),
-            $this->element
-        );
-        return $this;
-    }
-
     public function appendElement(HTMLDOMElement $element)
     {
         $this->element->appendChild($element->getData());
@@ -170,14 +126,6 @@ class VanillaHTMLDOMElement implements HTMLDOMElement
         return false;
     }
 
-    public function getParentElement()
-    {
-        if (empty($this->element->parentNode)) {
-            return null;
-        }
-        return new VanillaHTMLDOMElement($this->element->parentNode);
-    }
-
     public function getInnerHTML()
     {
         $innerHTML = '';
@@ -191,16 +139,6 @@ class VanillaHTMLDOMElement implements HTMLDOMElement
     public function getOuterHTML()
     {
         return $this->element->ownerDocument->saveXML($this->element);
-    }
-
-    public function getData()
-    {
-        return $this->element;
-    }
-
-    public function setData($data)
-    {
-        $this->element = $data;
     }
 
     public function cloneElement()
@@ -231,15 +169,5 @@ class VanillaHTMLDOMElement implements HTMLDOMElement
             return new VanillaHTMLDOMElement($result);
         }
         return null;
-    }
-
-    public function equals($obj) {
-        if ($this === $obj) {
-            return true;
-        }
-        if (($obj !== null) && ($obj instanceof VanillaHTMLDOMElement)) {
-            return $this->getData() == $obj->getData();
-        }
-        return false;
     }
 }
