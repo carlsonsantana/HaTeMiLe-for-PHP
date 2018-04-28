@@ -15,11 +15,18 @@ limitations under the License.
 
 namespace hatemile\util\html;
 
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(__FILE__),
+    'HTMLDOMNode.php'
+));
+
+use \hatemile\util\html\HTMLDOMNode;
+
 /**
  * The HTMLDOMElement interface contains the methods for access of the HTML
  * element.
  */
-interface HTMLDOMElement
+interface HTMLDOMElement extends HTMLDOMNode
 {
 
     /**
@@ -65,42 +72,6 @@ interface HTMLDOMElement
     public function hasAttributes();
 
     /**
-     * Returns the text of element.
-     * @return string The text of element.
-     */
-    public function getTextContent();
-
-    /**
-     * Insert a element before this element.
-     * @param \hatemile\util\html\HTMLDOMElement $newElement The element that be
-     * inserted.
-     * @return \hatemile\util\html\HTMLDOMElement The element inserted.
-     */
-    public function insertBefore(HTMLDOMElement $newElement);
-
-    /**
-     * Insert a element after this element.
-     * @param \hatemile\util\html\HTMLDOMElement $newElement The element that be
-     * inserted.
-     * @return \hatemile\util\html\HTMLDOMElement The element inserted.
-     */
-    public function insertAfter(HTMLDOMElement $newElement);
-
-    /**
-     * Remove this element of the parser.
-     * @return \hatemile\util\html\HTMLDOMElement The removed element.
-     */
-    public function removeElement();
-
-    /**
-     * Replace this element for other element.
-     * @param \hatemile\util\html\HTMLDOMElement $newElement The element that
-     * replace this element.
-     * @return \hatemile\util\html\HTMLDOMElement The element replaced.
-     */
-    public function replaceElement(HTMLDOMElement $newElement);
-
-    /**
      * Append a element child.
      * @param \hatemile\util\html\HTMLDOMElement $element The element that be
      * inserted.
@@ -116,24 +87,11 @@ interface HTMLDOMElement
     public function getChildren();
 
     /**
-     * Append a text child.
-     * @param string $text The text.
-     */
-    public function appendText($text);
-
-    /**
      * Returns if the element has children.
      * @return boolean True if the element has children or false if the element
      * not has children.
      */
     public function hasChildren();
-
-    /**
-     * Returns the parent element of this element.
-     * @return \hatemile\util\html\HTMLDOMElement The parent element of this
-     * element.
-     */
-    public function getParentElement();
 
     /**
      * Returns the inner HTML code of this element.
@@ -146,18 +104,6 @@ interface HTMLDOMElement
      * @return string The HTML code of this element.
      */
     public function getOuterHTML();
-
-    /**
-     * Returns the native object of this element.
-     * @return object The native object of this element.
-     */
-    public function getData();
-
-    /**
-     * Modify the native object of this element.
-     * @param object $data The native object of this element.
-     */
-    public function setData($data);
 
     /**
      * Returns the first element child of this element.
@@ -178,12 +124,4 @@ interface HTMLDOMElement
      * @return \hatemile\util\html\HTMLDOMElement The clone.
      */
     public function cloneElement();
-
-    /**
-     * Indicates whether some other object is "equal to" this one.
-     * @param object $obj The reference object with which to compare.
-     * @return boolean True if this object is the same as the obj argument or
-     * false otherwise.
-     */
-    public function equals($obj);
 }

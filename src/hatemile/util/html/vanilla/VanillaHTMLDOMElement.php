@@ -19,8 +19,13 @@ require_once join(DIRECTORY_SEPARATOR, array(
     dirname(dirname(__FILE__)),
     'HTMLDOMElement.php'
 ));
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(dirname(__FILE__)),
+    'HTMLDOMNode.php'
+));
 
 use \hatemile\util\html\HTMLDOMElement;
+use \hatemile\util\html\HTMLDOMNode;
 
 /**
  * The VanillaHTMLDOMElement class is official implementation of HTMLDOMElement
@@ -81,16 +86,16 @@ class VanillaHTMLDOMElement implements HTMLDOMElement
         return $this->element->textContent;
     }
 
-    public function insertBefore(HTMLDOMElement $newElement)
+    public function insertBefore(HTMLDOMNode $newNode)
     {
         $this->getParentElement()->getData()->insertBefore(
-            $newElement->getData(),
+            $newNode->getData(),
             $this->element
         );
-        return $newElement;
+        return $this;
     }
 
-    public function insertAfter(HTMLDOMElement $newElement)
+    public function insertAfter(HTMLDOMNode $newNode)
     {
         $children = $this->getParentElement()->getData()->childNodes;
         $found = false;
@@ -100,7 +105,7 @@ class VanillaHTMLDOMElement implements HTMLDOMElement
                 $child = new VanillaHTMLDOMElement($child);
                 if ($found) {
                     $child->getParentElement()->getData()->insertBefore(
-                        $newElement->getData(),
+                        $newNode->getData(),
                         $child->getData()
                     );
                     $added = true;
@@ -111,24 +116,24 @@ class VanillaHTMLDOMElement implements HTMLDOMElement
             }
         }
         if (!$added) {
-            $this->getParentElement()->appendElement($newElement);
+            $this->getParentElement()->appendElement($newNode);
         }
-        return $newElement;
+        return $this;
     }
 
-    public function removeElement()
+    public function removeNode()
     {
         $this->getParentElement()->getData()->removeChild($this->element);
         return $this;
     }
 
-    public function replaceElement(HTMLDOMElement $newElement)
+    public function replaceNode(HTMLDOMNode $newNode)
     {
         $this->getParentElement()->getData()->replaceChild(
-            $newElement->getData(),
+            $newNode->getData(),
             $this->element
         );
-        return $newElement;
+        return $this;
     }
 
     public function appendElement(HTMLDOMElement $element)
