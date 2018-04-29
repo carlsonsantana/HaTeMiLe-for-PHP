@@ -69,4 +69,10 @@ class VanillaHTMLDOMTextNode extends VanillaHTMLDOMNode implements
         $this->setTextContent($this->getTextContent() . $text);
         return $this;
     }
+
+    public function prependText($text)
+    {
+        $this->setTextContent($text . $this->getTextContent());
+        return $this;
+    }
 }

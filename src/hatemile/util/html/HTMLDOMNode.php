@@ -65,6 +65,13 @@ interface HTMLDOMNode
     public function appendText($text);
 
     /**
+     * Prepend a text content in node.
+     * @param string $text The text content.
+     * @return \hatemile\util\html\HTMLDOMNod This node.
+     */
+    public function prependText($text);
+
+    /**
      * Returns the parent element of this node.
      * @return \hatemile\util\html\HTMLDOMElement The parent element of this
      * node.

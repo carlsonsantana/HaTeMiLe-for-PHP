@@ -95,7 +95,21 @@ class VanillaHTMLDOMElement extends VanillaHTMLDOMNode implements HTMLDOMElement
     public function appendElement(HTMLDOMElement $element)
     {
         $this->element->appendChild($element->getData());
-        return $element;
+        return $this;
+    }
+
+    public function prependElement(HTMLDOMElement $element)
+    {
+        $children = $this->element->childNodes;
+        if (empty($children)) {
+            $this->appendElement($element);
+        } else {
+            $this->element->insertBefore(
+                $element->getData(),
+                $children[0]
+            );
+        }
+        return $this;
     }
 
     public function getChildren()
@@ -112,7 +126,24 @@ class VanillaHTMLDOMElement extends VanillaHTMLDOMNode implements HTMLDOMElement
 
     public function appendText($text)
     {
-        $this->element->appendChild(new \DOMText($text));
+        $this->element->appendChild(
+            $this->element->ownerDocument->createTextNode($text)
+        );
+        return $this;
+    }
+
+    public function prependText($text)
+    {
+        $children = $this->element->childNodes;
+        if (empty($children)) {
+            $this->appendText($text);
+        } else {
+            $this->element->insertBefore(
+                $this->element->ownerDocument->createTextNode($text),
+                $children[0]
+            );
+        }
+        return $this;
     }
 
     public function hasChildren()

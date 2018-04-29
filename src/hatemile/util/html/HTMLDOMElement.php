@@ -75,9 +75,17 @@ interface HTMLDOMElement extends HTMLDOMNode
      * Append a element child.
      * @param \hatemile\util\html\HTMLDOMElement $element The element that be
      * inserted.
-     * @return \hatemile\util\html\HTMLDOMElement The element inserted.
+     * @return \hatemile\util\html\HTMLDOMElement This element.
      */
     public function appendElement(HTMLDOMElement $element);
+
+    /**
+     * Prepend a element child.
+     * @param \hatemile\util\html\HTMLDOMElement $element The element that be
+     * inserted.
+     * @return \hatemile\util\html\HTMLDOMElement This element.
+     */
+    public function prependElement(HTMLDOMElement $element);
 
     /**
      * Returns the children of this element.
