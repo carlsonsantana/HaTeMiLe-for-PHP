@@ -127,6 +127,12 @@ interface HTMLDOMElement extends HTMLDOMNode
     public function getOuterHTML();
 
     /**
+     * Clone this element.
+     * @return \hatemile\util\html\HTMLDOMElement The clone.
+     */
+    public function cloneElement();
+
+    /**
      * Returns the first element child of this element.
      * @return \hatemile\util\html\HTMLDOMElement The first element child of
      * this element.
@@ -153,10 +159,4 @@ interface HTMLDOMElement extends HTMLDOMNode
      * element.
      */
     public function getLastNodeChild();
-
-    /**
-     * Clone this element.
-     * @return \hatemile\util\html\HTMLDOMElement The clone.
-     */
-    public function cloneElement();
 }
