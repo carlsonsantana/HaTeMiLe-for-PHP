@@ -167,7 +167,7 @@ class AccessibleEventImplementation implements AccessibleEvent
                     'eventlistener.js'
                 ))
             ));
-            if ($head->hasChildren()) {
+            if ($head->hasChildrenElements()) {
                 $head->getFirstElementChild()->insertBefore($script);
             } else {
                 $head->appendElement($script);

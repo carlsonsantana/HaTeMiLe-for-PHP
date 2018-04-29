@@ -20,17 +20,17 @@ require_once join(DIRECTORY_SEPARATOR, array(
     'HTMLDOMElement.php'
 ));
 require_once join(DIRECTORY_SEPARATOR, array(
-    dirname(dirname(__FILE__)),
-    'HTMLDOMNode.php'
-));
-require_once join(DIRECTORY_SEPARATOR, array(
     dirname(__FILE__),
     'VanillaHTMLDOMNode.php'
 ));
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(__FILE__),
+    'VanillaHTMLDOMTextNode.php'
+));
 
 use \hatemile\util\html\HTMLDOMElement;
-use \hatemile\util\html\HTMLDOMNode;
 use \hatemile\util\html\vanilla\VanillaHTMLDOMNode;
+use \hatemile\util\html\vanilla\VanillaHTMLDOMTextNode;
 
 /**
  * The VanillaHTMLDOMElement class is official implementation of HTMLDOMElement
@@ -112,7 +112,7 @@ class VanillaHTMLDOMElement extends VanillaHTMLDOMNode implements HTMLDOMElement
         return $this;
     }
 
-    public function getChildren()
+    public function getChildrenElements()
     {
         $children = $this->element->childNodes;
         $elements = array();
@@ -122,6 +122,20 @@ class VanillaHTMLDOMElement extends VanillaHTMLDOMNode implements HTMLDOMElement
             }
         }
         return $elements;
+    }
+
+    public function getChildren()
+    {
+        $children = $this->element->childNodes;
+        $nodes = array();
+        foreach ($children as $child) {
+            if ($child instanceof \DOMElement) {
+                array_push($nodes, new VanillaHTMLDOMElement($child));
+            } elseif ($child instanceof \DOMText) {
+                array_push($nodes, new VanillaHTMLDOMTextNode($child));
+            }
+        }
+        return $nodes;
     }
 
     public function appendText($text)
@@ -146,11 +160,25 @@ class VanillaHTMLDOMElement extends VanillaHTMLDOMNode implements HTMLDOMElement
         return $this;
     }
 
-    public function hasChildren()
+    public function hasChildrenElements()
     {
         $children = $this->element->childNodes;
         foreach ($children as $child) {
             if ($child instanceof \DOMElement) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function hasChildren()
+    {
+        $children = $this->element->childNodes;
+        foreach ($children as $child) {
+            if (
+                ($child instanceof \DOMElement)
+                || ($child instanceof \DOMText)
+            ) {
                 return true;
             }
         }
@@ -193,7 +221,37 @@ class VanillaHTMLDOMElement extends VanillaHTMLDOMNode implements HTMLDOMElement
         $children = $this->element->childNodes;
         foreach ($children as $child) {
             if ($child instanceof \DOMElement) {
-                $result = $this->element;
+                $result = $child;
+            }
+        }
+        if ($result != null) {
+            return new VanillaHTMLDOMElement($result);
+        }
+        return null;
+    }
+
+    public function getFirstNodeChild()
+    {
+        $children = $this->element->childNodes;
+        foreach ($children as $child) {
+            if ($child instanceof \DOMElement) {
+                return new VanillaHTMLDOMElement($child);
+            } elseif ($child instanceof \DOMText) {
+                return new VanillaHTMLDOMTextNode($child);
+            }
+        }
+        return null;
+    }
+
+    public function getLastNodeChild()
+    {
+        $children = $this->element->childNodes;
+        foreach ($children as $child) {
+            if (
+                ($child instanceof \DOMElement)
+                || ($child instanceof \DOMText)
+            ) {
+                $result = $child;
             }
         }
         if ($result != null) {

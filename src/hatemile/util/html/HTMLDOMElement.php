@@ -88,14 +88,27 @@ interface HTMLDOMElement extends HTMLDOMNode
     public function prependElement(HTMLDOMElement $element);
 
     /**
+     * Returns the elements children of this element.
+     * @return \hatemile\util\html\HTMLDOMElement[] The elements children of
+     * this element.
+     */
+    public function getChildrenElements();
+
+    /**
      * Returns the children of this element.
-     * @return \hatemile\util\html\HTMLDOMElement[] The children of this
-     * element.
+     * @return \hatemile\util\html\HTMLDOMNode[] The children of this element.
      */
     public function getChildren();
 
     /**
-     * Returns if the element has children.
+     * Check that the element has elements children.
+     * @return boolean True if the element has elements children or false if the
+     * element not has elements children.
+     */
+    public function hasChildrenElements();
+
+    /**
+     * Check that the element has children.
      * @return boolean True if the element has children or false if the element
      * not has children.
      */
@@ -126,6 +139,20 @@ interface HTMLDOMElement extends HTMLDOMNode
      * element.
      */
     public function getLastElementChild();
+
+    /**
+     * Returns the first node child of this element.
+     * @return \hatemile\util\html\HTMLDOMNode The first node child of this
+     * element.
+     */
+    public function getFirstNodeChild();
+
+    /**
+     * Returns the last node child of this element.
+     * @return \hatemile\util\html\HTMLDOMNode The last node child of this
+     * element.
+     */
+    public function getLastNodeChild();
 
     /**
      * Clone this element.
