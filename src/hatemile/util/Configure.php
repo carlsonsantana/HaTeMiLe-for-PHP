@@ -123,6 +123,16 @@ class Configure
     }
 
     /**
+     * Check that the configuration has an parameter.
+     * @param string $parameter The name of parameter.
+     * @return boolean True if the configuration has the parameter or false if
+     * the configuration not has the parameter.
+     */
+    public function hasParameter($parameter) {
+        return array_key_exists($parameter, $this->parameters);
+    }
+
+    /**
      * Returns the value of a parameter of configuration.
      * @param string $parameter The parameter.
      * @return string The value of the parameter.
