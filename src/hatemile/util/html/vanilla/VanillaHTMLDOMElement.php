@@ -160,6 +160,27 @@ class VanillaHTMLDOMElement extends VanillaHTMLDOMNode implements HTMLDOMElement
         return $this;
     }
 
+    public function normalize()
+    {
+        if ($this->hasChildren()) {
+            $last = null;
+            $children = $this->getChildren();
+            foreach ($children as $child) {
+                if ($child instanceof VanillaHTMLDOMElement) {
+                    $child->normalize();
+                } elseif (
+                    ($child instanceof VanillaHTMLDOMTextNode)
+                    && ($last instanceof VanillaHTMLDOMTextNode)
+                ) {
+                    $child->prependText($last->getTextContent());
+                    $last->removeNode();
+                }
+
+                $last = $child;
+            }
+        }
+    }
+
     public function hasChildrenElements()
     {
         $children = $this->element->childNodes;

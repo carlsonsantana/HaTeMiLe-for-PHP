@@ -101,6 +101,12 @@ interface HTMLDOMElement extends HTMLDOMNode
     public function getChildren();
 
     /**
+     * Joins adjacent Text nodes.
+     * @return \hatemile\util\html\HTMLDOMElement This element.
+     */
+    public function normalize();
+
+    /**
      * Check that the element has elements children.
      * @return boolean True if the element has elements children or false if the
      * element not has elements children.
