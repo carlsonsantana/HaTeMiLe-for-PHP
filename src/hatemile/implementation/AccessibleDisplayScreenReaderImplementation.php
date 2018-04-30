@@ -89,13 +89,7 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
      * The browser shortcut prefix.
      * @var string
      */
-    protected $prefix;
-
-    /**
-     * Standart browser prefix.
-     * @var string
-     */
-    protected $standartPrefix;
+    protected $shortcutPrefix;
 
     /**
      * The list element of shortcuts.
@@ -122,13 +116,23 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         $userAgent = null
     ) {
         $this->parser = $parser;
-        $this->textShortcuts = $configure->getParameter('text-shortcuts');
-        $this->standartPrefix = $configure->getParameter(
-            'text-standart-shortcut-prefix'
+        $this->shortcutPrefix = $this->getShortcutPrefix(
+            $userAgent,
+            $configure->getParameter('text-standart-shortcut-prefix')
         );
+        $this->textShortcuts = $configure->getParameter('text-shortcuts');
         $this->listShortcutsAdded = false;
         $this->listShortcuts = null;
+    }
 
+    /**
+     * Returns the shortcut prefix of browser.
+     * @param string $userAgent The user agent of browser.
+     * @param string $standartPrefix The default prefix.
+     * @return string The shortcut prefix of browser.
+     */
+    protected function getShortcutPrefix($userAgent, $standartPrefix)
+    {
         if ($userAgent !== null) {
             $userAgent = strtolower($userAgent);
             $opera = strpos($userAgent, 'opera') !== false;
@@ -138,32 +142,34 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
             $safari = strpos($userAgent, 'applewebkit') !== false;
             $windows = strpos($userAgent, 'windows') !== false;
             $chrome = strpos($userAgent, 'chrome') !== false;
-            $firefox = preg_match('/firefox\/[2-9]|minefield\/3/', $userAgent);
+            $firefox = (
+                strpos($userAgent, 'firefox') !== false
+                || strpos($userAgent, 'minefield') !== false
+            );
             $ie = (
                 (strpos($userAgent, 'msie') !== false)
                 || (strpos($userAgent, 'trident') !== false)
             );
 
             if ($opera) {
-                $this->prefix = 'SHIFT + ESC';
+                return 'SHIFT + ESC';
             } elseif ($chrome && $mac && !$spoofer) {
-                $this->prefix = 'CTRL + OPTION';
+                return 'CTRL + OPTION';
             } elseif ($safari && !$windows && !$spoofer) {
-                $this->prefix = 'CTRL + ALT';
+                return 'CTRL + ALT';
             } elseif (!$windows && ($safari || $mac || $konqueror)) {
-                $this->prefix = 'CTRL';
+                return 'CTRL';
             } elseif ($firefox) {
-                $this->prefix = 'ALT + SHIFT';
+                return 'ALT + SHIFT';
             } elseif ($chrome || $ie) {
-                $this->prefix = 'ALT';
+                return 'ALT';
             } else {
-                $this->prefix = $this->standartPrefix;
+                return $standartPrefix;
             }
         } else {
-            $this->prefix = $this->standartPrefix;
+            return $standartPrefix;
         }
     }
-
     /**
      * Returns the description of element.
      * @param \hatemile\util\html\HTMLDOMElement $element The element with
@@ -310,7 +316,11 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
                             $key
                         );
                         $item->appendText(
-                            $this->prefix . ' + ' . $key . ': ' . $description
+                            $this->shortcutPrefix .
+                            ' + ' .
+                            $key .
+                            ': ' .
+                            $description
                         );
                         $this->listShortcuts->appendElement($item);
                     }
