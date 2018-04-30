@@ -25,43 +25,43 @@ require_once join(DIRECTORY_SEPARATOR, array(
 use \hatemile\util\html\HTMLDOMElement;
 
 /**
- * The AccessibleNavigation interface fixes accessibility problems associated
- * with navigation.
+ * The AccessibleNavigation interface improve the accessibility of navigation.
  */
 interface AccessibleNavigation
 {
 
     /**
-     * Provide content skipper for element.
+     * Provide a content skipper for element.
      * @param \hatemile\util\html\HTMLDOMElement $element The element.
      */
-    public function fixSkipper(HTMLDOMElement $element);
+    public function provideNavigationBySkipper(HTMLDOMElement $element);
 
     /**
-     * Provide content skippers.
+     * Provide navigation by content skippers.
      */
-    public function fixSkippers();
+    public function provideNavigationByAllSkippers();
 
     /**
-     * Provide a navigation by heading.
-     * @param \hatemile\util\html\HTMLDOMElement $element The heading element.
+     * Provide navigation by heading.
+     * @param \hatemile\util\html\HTMLDOMElement $heading The heading element.
      */
-    public function fixHeading(HTMLDOMElement $element);
+    public function provideNavigationByHeading(HTMLDOMElement $heading);
 
     /**
-     * Provide a navigation by headings.
+     * Provide navigation by headings of page.
      */
-    public function fixHeadings();
+    public function provideNavigationByAllHeadings();
 
     /**
      * Provide an alternative way to access the long description of element.
-     * @param \hatemile\util\html\HTMLDOMElement $element The element with long
+     * @param \hatemile\util\html\HTMLDOMElement $image The image with long
      * description.
      */
-    public function fixLongDescription(HTMLDOMElement $element);
+    public function provideNavigationToLongDescription(HTMLDOMElement $image);
 
     /**
-     * Provide an alternative way to access the longs descriptions of elements.
+     * Provide an alternative way to access the longs descriptions of all
+     * elements of page.
      */
-    public function fixLongDescriptions();
+    public function provideNavigationToAllLongDescriptions();
 }

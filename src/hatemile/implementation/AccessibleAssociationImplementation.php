@@ -27,11 +27,6 @@ require_once join(DIRECTORY_SEPARATOR, array(
 require_once join(DIRECTORY_SEPARATOR, array(
     dirname(dirname(__FILE__)),
     'util',
-    'Configure.php'
-));
-require_once join(DIRECTORY_SEPARATOR, array(
-    dirname(dirname(__FILE__)),
-    'util',
     'IDGenerator.php'
 ));
 require_once join(DIRECTORY_SEPARATOR, array(
@@ -49,7 +44,6 @@ require_once join(DIRECTORY_SEPARATOR, array(
 
 use \hatemile\AccessibleAssociation;
 use \hatemile\util\CommonFunctions;
-use \hatemile\util\Configure;
 use \hatemile\util\IDGenerator;
 use \hatemile\util\html\HTMLDOMElement;
 use \hatemile\util\html\HTMLDOMParser;
@@ -77,9 +71,8 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
      * Initializes a new object that manipulate the accessibility of the tables
      * of parser.
      * @param \hatemile\util\html\HTMLDOMParser $parser The HTML parser.
-     * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
      */
-    public function __construct(HTMLDOMParser $parser, Configure $configure)
+    public function __construct(HTMLDOMParser $parser)
     {
         $this->parser = $parser;
         $this->idGenerator = new IDGenerator('association');
@@ -266,7 +259,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
         }
     }
 
-    public function fixAssociationCellsTable(HTMLDOMElement $table)
+    public function associateDataCellsWithHeaderCells(HTMLDOMElement $table)
     {
         $header = $this->parser->find($table)->findChildren(
             'thead'
@@ -320,17 +313,17 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
         }
     }
 
-    public function fixAssociationCellsTables()
+    public function associateAllDataCellsWithHeaderCells()
     {
         $tables = $this->parser->find('table')->listResults();
         foreach ($tables as $table) {
             if (CommonFunctions::isValidElement($table)) {
-                $this->fixAssociationCellsTable($table);
+                $this->associateDataCellsWithHeaderCells($table);
             }
         }
     }
 
-    public function fixLabel(HTMLDOMElement $label)
+    public function associateLabelWithField(HTMLDOMElement $label)
     {
         if ($label->getTagName() === 'LABEL') {
             if ($label->hasAttribute('for')) {
@@ -371,12 +364,12 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
         }
     }
 
-    public function fixLabels()
+    public function associateAllLabelsWithFields()
     {
         $labels = $this->parser->find('label')->listResults();
         foreach ($labels as $label) {
             if (CommonFunctions::isValidElement($label)) {
-                $this->fixLabel($label);
+                $this->associateLabelWithField($label);
             }
         }
     }

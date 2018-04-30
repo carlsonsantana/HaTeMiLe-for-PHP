@@ -27,11 +27,6 @@ require_once join(DIRECTORY_SEPARATOR, array(
 require_once join(DIRECTORY_SEPARATOR, array(
     dirname(dirname(__FILE__)),
     'util',
-    'Configure.php'
-));
-require_once join(DIRECTORY_SEPARATOR, array(
-    dirname(dirname(__FILE__)),
-    'util',
     'IDGenerator.php'
 ));
 require_once join(DIRECTORY_SEPARATOR, array(
@@ -49,14 +44,13 @@ require_once join(DIRECTORY_SEPARATOR, array(
 
 use \hatemile\AccessibleEvent;
 use \hatemile\util\CommonFunctions;
-use \hatemile\util\Configure;
 use \hatemile\util\IDGenerator;
 use \hatemile\util\html\HTMLDOMElement;
 use \hatemile\util\html\HTMLDOMParser;
 
 /**
  * The AccessibleEventImplementation class is official implementation of
- * AccessibleEvent interface.
+ * AccessibleEvent.
  */
 class AccessibleEventImplementation implements AccessibleEvent
 {
@@ -110,9 +104,8 @@ class AccessibleEventImplementation implements AccessibleEvent
      * Initializes a new object that manipulate the accessibility of the
      * Javascript events of elements of parser.
      * @param \hatemile\util\html\HTMLDOMParser $parser The HTML parser.
-     * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
      */
-    public function __construct(HTMLDOMParser $parser, Configure $configure)
+    public function __construct(HTMLDOMParser $parser)
     {
         $this->parser = $parser;
         $this->idGenerator = new IDGenerator('event');
@@ -235,14 +228,14 @@ class AccessibleEventImplementation implements AccessibleEvent
         }
     }
 
-    public function fixDrop(HTMLDOMElement $element)
+    public function makeAccessibleDropEvents(HTMLDOMElement $element)
     {
         $element->setAttribute('aria-dropeffect', 'none');
 
         $this->addEventInElement($element, 'drop');
     }
 
-    public function fixDrag(HTMLDOMElement $element)
+    public function makeAccessibleDragEvents(HTMLDOMElement $element)
     {
         $this->keyboardAccess($element);
 
@@ -251,14 +244,14 @@ class AccessibleEventImplementation implements AccessibleEvent
         $this->addEventInElement($element, 'drag');
     }
 
-    public function fixDragsandDrops()
+    public function makeAccessibleAllDragandDropEvents()
     {
         $draggableElements = $this->parser->find(
             '[ondrag],[ondragstart],[ondragend]'
         )->listResults();
         foreach ($draggableElements as $draggableElement) {
             if (CommonFunctions::isValidElement($draggableElement)) {
-                $this->fixDrag($draggableElement);
+                $this->makeAccessibleDragEvents($draggableElement);
             }
         }
         $droppableElements = $this->parser->find(
@@ -266,45 +259,45 @@ class AccessibleEventImplementation implements AccessibleEvent
         )->listResults();
         foreach ($droppableElements as $droppableElement) {
             if (CommonFunctions::isValidElement($droppableElement)) {
-                $this->fixDrop($droppableElement);
+                $this->makeAccessibleDropEvents($droppableElement);
             }
         }
     }
 
-    public function fixHover(HTMLDOMElement $element)
+    public function makeAccessibleHoverEvents(HTMLDOMElement $element)
     {
         $this->keyboardAccess($element);
 
         $this->addEventInElement($element, 'hover');
     }
 
-    public function fixHovers()
+    public function makeAccessibleAllHoverEvents()
     {
         $elements = $this->parser->find(
             '[onmouseover],[onmouseout]'
         )->listResults();
         foreach ($elements as $element) {
             if (CommonFunctions::isValidElement($element)) {
-                $this->fixHover($element);
+                $this->makeAccessibleHoverEvents($element);
             }
         }
     }
 
-    public function fixActive(HTMLDOMElement $element)
+    public function makeAccessibleClickEvents(HTMLDOMElement $element)
     {
         $this->keyboardAccess($element);
 
         $this->addEventInElement($element, 'active');
     }
 
-    public function fixActives()
+    public function makeAccessibleAllClickEvents()
     {
         $elements = $this->parser->find(
             '[onclick],[onmousedown],[onmouseup],[ondblclick]'
         )->listResults();
         foreach ($elements as $element) {
             if (CommonFunctions::isValidElement($element)) {
-                $this->fixActive($element);
+                $this->makeAccessibleClickEvents($element);
             }
         }
     }

@@ -182,23 +182,23 @@ HaTeMiLe is a libary that can convert a HTML code in a HTML code more accessible
     $accessibleAssociation = new hatemile\implementation\AccessibleAssociationImplementation($parser, $configure);
     $accessibleDisplay = new hatemile\implementation\AccessibleDisplayScreenReaderImplementation($parser, $configure, $_SERVER['HTTP_USER_AGENT']);
 
-    $accessibleEvent->fixDragsandDrops();
-    $accessibleEvent->fixActives();
-    $accessibleEvent->fixHovers();
+    $accessibleEvent->makeAccessibleAllDragandDropEvents();
+    $accessibleEvent->makeAccessibleAllClickEvents();
+    $accessibleEvent->makeAccessibleAllHoverEvents();
 
-    $accessibleForm->fixAutoCompleteFields();
-    $accessibleForm->fixRequiredFields();
-    $accessibleForm->fixRangeFields();
+    $accessibleForm->markAllAutoCompleteFields();
+    $accessibleForm->markAllRequiredFields();
+    $accessibleForm->markAllRangeFields();
 
-    $accessibleNavigation->fixHeadings();
-    $accessibleNavigation->fixSkippers();
-    $accessibleNavigation->fixLongDescriptions();
+    $accessibleNavigation->provideNavigationByAllHeadings();
+    $accessibleNavigation->provideNavigationByAllSkippers();
+    $accessibleNavigation->provideNavigationToAllLongDescriptions();
 
-    $accessibleDisplay->fixShortcuts();
+    $accessibleDisplay->displayAllShortcuts();
 
-    $accessibleAssociation->fixAssociationCellsTables();
-    $accessibleAssociation->fixLabels();
+    $accessibleAssociation->associateAllDataCellsWithHeaderCells();
+    $accessibleAssociation->associateAllLabelsWithFields();
 
-    $accessibleNavigation->fixSkippers();
+    $accessibleNavigation->provideNavigationByAllSkippers();
 
     echo $parser->getHTML();

@@ -25,52 +25,52 @@ require_once join(DIRECTORY_SEPARATOR, array(
 use \hatemile\util\html\HTMLDOMElement;
 
 /**
- * The AccessibleEvent interface fixes accessibility problems associated with
- * JavaScript events in elements.
+ * The AccessibleEvent interface improve the accessibility, making elements
+ * events available from a keyboard.
  */
 interface AccessibleEvent
 {
 
     /**
-     * Provide a solution for the element that has drop events.
+     * Make the drop events of element available from a keyboard.
      * @param \hatemile\util\html\HTMLDOMElement $element The element with drop
      * event.
      */
-    public function fixDrop(HTMLDOMElement $element);
+    public function makeAccessibleDropEvents(HTMLDOMElement $element);
 
     /**
-     * Provide a solution for the element that has drag events.
+     * Make the drag events of element available from a keyboard.
      * @param \hatemile\util\html\HTMLDOMElement $element The element with drag
      * event.
      */
-    public function fixDrag(HTMLDOMElement $element);
+    public function makeAccessibleDragEvents(HTMLDOMElement $element);
 
     /**
-     * Provide a solution for elements that has Drag-and-Drop events.
+     * Make all Drag-and-Drop events of page available from a keyboard.
      */
-    public function fixDragsandDrops();
+    public function makeAccessibleAllDragandDropEvents();
 
     /**
-     * Provide a solution for the element that has inaccessible hover events.
+     * Make the hover events of element available from a keyboard.
      * @param \hatemile\util\html\HTMLDOMElement $element The element with hover
      * event.
      */
-    public function fixHover(HTMLDOMElement $element);
+    public function makeAccessibleHoverEvents(HTMLDOMElement $element);
 
     /**
-     * Provide a solution for elements that has inaccessible hover events.
+     * Make all hover events of page available from a keyboard.
      */
-    public function fixHovers();
+    public function makeAccessibleAllHoverEvents();
 
     /**
-     * Provide a solution for the element that has inaccessible active events.
-     * @param \hatemile\util\html\HTMLDOMElement $element The element with
-     * active event.
+     * Make the click events of element available from a keyboard.
+     * @param \hatemile\util\html\HTMLDOMElement $element The element with click
+     * events.
      */
-    public function fixActive(HTMLDOMElement $element);
+    public function makeAccessibleClickEvents(HTMLDOMElement $element);
 
     /**
-     * Provide a solution for elements that has inaccessible active events.
+     * Make all click events of page available from a keyboard.
      */
-    public function fixActives();
+    public function makeAccessibleAllClickEvents();
 }

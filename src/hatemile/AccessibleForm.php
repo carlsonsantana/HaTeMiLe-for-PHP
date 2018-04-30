@@ -25,44 +25,43 @@ require_once join(DIRECTORY_SEPARATOR, array(
 use \hatemile\util\html\HTMLDOMElement;
 
 /**
- * The AccessibleForm interface fixes accessibility problems associated with
- * forms.
+ * The AccessibleForm interface improve the accessibility of forms.
  */
 interface AccessibleForm
 {
 
     /**
-     * Display that the field is required.
+     * Mark that the field is required.
      * @param \hatemile\util\html\HTMLDOMElement $requiredField The required
      * field.
      */
-    public function fixRequiredField(HTMLDOMElement $requiredField);
+    public function markRequiredField(HTMLDOMElement $requiredField);
 
     /**
-     * Display that the fields is required.
+     * Mark that the fields is required.
      */
-    public function fixRequiredFields();
+    public function markAllRequiredFields();
 
     /**
-     * Display that the field have range.
+     * Mark that the field have range.
      * @param \hatemile\util\html\HTMLDOMElement $rangeField The range field.
      */
-    public function fixRangeField(HTMLDOMElement $rangeField);
+    public function markRangeField(HTMLDOMElement $rangeField);
 
     /**
-     * Display that the fields have range.
+     * Mark that the fields have range.
      */
-    public function fixRangeFields();
+    public function markAllRangeFields();
 
     /**
-     * Display that the field have autocomplete.
+     * Mark that the field have autocomplete.
      * @param \hatemile\util\html\HTMLDOMElement $autoCompleteField The field
      * with autocomplete.
      */
-    public function fixAutoCompleteField(HTMLDOMElement $autoCompleteField);
+    public function markAutoCompleteField(HTMLDOMElement $autoCompleteField);
 
     /**
-     * Display that the fields have autocomplete.
+     * Mark that the fields have autocomplete.
      */
-    public function fixAutoCompleteFields();
+    public function markAllAutoCompleteFields();
 }

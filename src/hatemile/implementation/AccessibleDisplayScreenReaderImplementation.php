@@ -279,7 +279,7 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         return $htmlList;
     }
 
-    public function fixShortcut(HTMLDOMElement $element)
+    public function displayShortcut(HTMLDOMElement $element)
     {
         if ($element->hasAttribute('accesskey')) {
             $description = $this->getDescription($element);
@@ -329,12 +329,12 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         }
     }
 
-    public function fixShortcuts()
+    public function displayAllShortcuts()
     {
         $elements = $this->parser->find('[accesskey]')->listResults();
         foreach ($elements as $element) {
             if (CommonFunctions::isValidElement($element)) {
-                $this->fixShortcut($element);
+                $this->displayShortcut($element);
             }
         }
     }

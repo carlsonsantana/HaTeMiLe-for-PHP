@@ -27,11 +27,6 @@ require_once join(DIRECTORY_SEPARATOR, array(
 require_once join(DIRECTORY_SEPARATOR, array(
     dirname(dirname(__FILE__)),
     'util',
-    'Configure.php'
-));
-require_once join(DIRECTORY_SEPARATOR, array(
-    dirname(dirname(__FILE__)),
-    'util',
     'html',
     'HTMLDOMElement.php'
 ));
@@ -44,13 +39,12 @@ require_once join(DIRECTORY_SEPARATOR, array(
 
 use \hatemile\AccessibleForm;
 use \hatemile\util\CommonFunctions;
-use \hatemile\util\Configure;
 use \hatemile\util\html\HTMLDOMElement;
 use \hatemile\util\html\HTMLDOMParser;
 
 /**
  * The AccessibleFormImplementation class is official implementation of
- * AccessibleForm interface.
+ * AccessibleForm.
  */
 class AccessibleFormImplementation implements AccessibleForm
 {
@@ -65,9 +59,8 @@ class AccessibleFormImplementation implements AccessibleForm
      * Initializes a new object that manipulate the accessibility of the forms
      * of parser.
      * @param \hatemile\util\html\HTMLDOMParser $parser The HTML parser.
-     * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
      */
-    public function __construct(HTMLDOMParser $parser, Configure $configure)
+    public function __construct(HTMLDOMParser $parser)
     {
         $this->parser = $parser;
     }
@@ -132,24 +125,24 @@ class AccessibleFormImplementation implements AccessibleForm
         return null;
     }
 
-    public function fixRequiredField(HTMLDOMElement $requiredField)
+    public function markRequiredField(HTMLDOMElement $requiredField)
     {
         if ($requiredField->hasAttribute('required')) {
             $requiredField->setAttribute('aria-required', 'true');
         }
     }
 
-    public function fixRequiredFields()
+    public function markAllRequiredFields()
     {
         $requiredFields = $this->parser->find('[required]')->listResults();
         foreach ($requiredFields as $requiredField) {
             if (CommonFunctions::isValidElement($requiredField)) {
-                $this->fixRequiredField($requiredField);
+                $this->markRequiredField($requiredField);
             }
         }
     }
 
-    public function fixRangeField(HTMLDOMElement $rangeField)
+    public function markRangeField(HTMLDOMElement $rangeField)
     {
         if ($rangeField->hasAttribute('min')) {
             $rangeField->setAttribute(
@@ -165,17 +158,17 @@ class AccessibleFormImplementation implements AccessibleForm
         }
     }
 
-    public function fixRangeFields()
+    public function markAllRangeFields()
     {
         $rangeFields = $this->parser->find('[min],[max]')->listResults();
         foreach ($rangeFields as $rangeField) {
             if (CommonFunctions::isValidElement($rangeField)) {
-                $this->fixRangeField($rangeField);
+                $this->markRangeField($rangeField);
             }
         }
     }
 
-    public function fixAutoCompleteField(HTMLDOMElement $autoCompleteField)
+    public function markAutoCompleteField(HTMLDOMElement $autoCompleteField)
     {
         $ariaAutoComplete = $this->getARIAAutoComplete($autoCompleteField);
         if (!empty($ariaAutoComplete)) {
@@ -186,7 +179,7 @@ class AccessibleFormImplementation implements AccessibleForm
         }
     }
 
-    public function fixAutoCompleteFields()
+    public function markAllAutoCompleteFields()
     {
         $elements = $this->parser->find(
             'input[autocomplete],textarea[autocomplete],'
@@ -195,7 +188,7 @@ class AccessibleFormImplementation implements AccessibleForm
         )->listResults();
         foreach ($elements as $element) {
             if (CommonFunctions::isValidElement($element)) {
-                $this->fixAutoCompleteField($element);
+                $this->markAutoCompleteField($element);
             }
         }
     }

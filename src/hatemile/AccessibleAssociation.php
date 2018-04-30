@@ -35,21 +35,21 @@ interface AccessibleAssociation
      * Associate all data cells with header cells of table.
      * @param \hatemile\util\html\HTMLDOMElement $table The table.
      */
-    public function fixAssociationCellsTable(HTMLDOMElement $table);
+    public function associateDataCellsWithHeaderCells(HTMLDOMElement $table);
 
     /**
      * Associate all data cells with header cells of all tables of page.
      */
-    public function fixAssociationCellsTables();
+    public function associateAllDataCellsWithHeaderCells();
 
     /**
      * Associate label with field.
      * @param \hatemile\util\html\HTMLDOMElement $label The label.
      */
-    public function fixLabel(HTMLDOMElement $label);
+    public function associateLabelWithField(HTMLDOMElement $label);
 
     /**
-     * Associate labels with fields.
+     * Associate all labels of page with fields.
      */
-    public function fixLabels();
+    public function associateAllLabelsWithFields();
 }

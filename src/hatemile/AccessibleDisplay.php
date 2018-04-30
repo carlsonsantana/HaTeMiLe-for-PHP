@@ -35,10 +35,10 @@ interface AccessibleDisplay
      * @param \hatemile\util\html\HTMLDOMElement $element The element with
      * shortcuts.
      */
-    public function fixShortcut(HTMLDOMElement $element);
+    public function displayShortcut(HTMLDOMElement $element);
 
     /**
-     * Display the shortcuts of elements.
+     * Display all shortcuts of page.
      */
-    public function fixShortcuts();
+    public function displayAllShortcuts();
 }
