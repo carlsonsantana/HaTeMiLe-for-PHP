@@ -32,18 +32,6 @@ interface AccessibleNavigation
 {
 
     /**
-     * Display the shortcuts of element.
-     * @param \hatemile\util\html\HTMLDOMElement $element The element with
-     * shortcuts.
-     */
-    public function fixShortcut(HTMLDOMElement $element);
-
-    /**
-     * Display the shortcuts of elements.
-     */
-    public function fixShortcuts();
-
-    /**
      * Provide content skipper for element.
      * @param \hatemile\util\html\HTMLDOMElement $element The element.
      */
