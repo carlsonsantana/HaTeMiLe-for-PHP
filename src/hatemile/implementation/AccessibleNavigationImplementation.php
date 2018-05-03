@@ -92,10 +92,16 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
     const CLASS_HEADING_ANCHOR = 'heading-anchor';
 
     /**
-     * The HTML class of element for show the long description of image.
+     * The HTML class of force link, before it.
      * @var string
      */
-    const CLASS_LONG_DESCRIPTION_LINK = 'longdescription-link';
+    const CLASS_FORCE_LINK_BEFORE = 'force-link-before';
+
+    /**
+     * The HTML class of force link, after it.
+     * @var string
+     */
+    const CLASS_FORCE_LINK_AFTER = 'force-link-after';
 
     /**
      * The name of attribute that links the anchor of skipper with the element.
@@ -120,7 +126,8 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
      * image.
      * @var string
      */
-    const DATA_LONG_DESCRIPTION_FOR_IMAGE = 'data-longdescriptionfor';
+    const DATA_ATTRIBUTE_LONG_DESCRIPTION_OF =
+            'data-attributelongdescriptionof';
 
     /**
      * The HTML parser.
@@ -141,16 +148,28 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
     protected $textHeading;
 
     /**
-     * The prefix of content of long description.
+     * The prefix of content of long description, before the image.
      * @var string
      */
-    protected $prefixLongDescriptionLink;
+    protected $attributeLongDescriptionPrefixBefore;
 
     /**
-     * The suffix of content of long description.
+     * The suffix of content of long description, before the image.
      * @var string
      */
-    protected $suffixLongDescriptionLink;
+    protected $attributeLongDescriptionSuffixBefore;
+
+    /**
+     * The prefix of content of long description, after the image.
+     * @var string
+     */
+    protected $attributeLongDescriptionPrefixAfter;
+
+    /**
+     * The suffix of content of long description, after the image.
+     * @var string
+     */
+    protected $attributeLongDescriptionSuffixAfter;
 
     /**
      * The skippers configured.
@@ -197,11 +216,17 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
         $this->parser = $parser;
         $this->idGenerator = new IDGenerator('navigation');
         $this->textHeading = $configure->getParameter('text-heading');
-        $this->prefixLongDescriptionLink = $configure->getParameter(
-            'prefix-longdescription'
+        $this->attributeLongDescriptionPrefixBefore = $configure->getParameter(
+            'attribute-longdescription-prefix-before'
         );
-        $this->suffixLongDescriptionLink = $configure->getParameter(
-            'suffix-longdescription'
+        $this->attributeLongDescriptionSuffixBefore = $configure->getParameter(
+            'attribute-longdescription-suffix-before'
+        );
+        $this->attributeLongDescriptionPrefixAfter = $configure->getParameter(
+            'attribute-longdescription-prefix-after'
+        );
+        $this->attributeLongDescriptionSuffixAfter = $configure->getParameter(
+            'attribute-longdescription-suffix-after'
         );
         $this->skippers = $this->getSkippers($skipperFileName);
         $this->listSkippersAdded = false;
@@ -577,51 +602,91 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
 
     public function provideNavigationToLongDescription(HTMLDOMElement $image)
     {
-        if ($image->hasAttribute('longdesc')) {
+        if (
+            ($image->hasAttribute('longdesc'))
+            && ($image->hasAttribute('alt'))
+        ) {
             $this->idGenerator->generateId($image);
             $id = $image->getAttribute('id');
-            $attr = (
+            $selector = (
                 '[' .
                 AccessibleNavigationImplementation
-                        ::DATA_LONG_DESCRIPTION_FOR_IMAGE .
+                        ::DATA_ATTRIBUTE_LONG_DESCRIPTION_OF .
                 '="' .
                 $id .
                 '"]'
             );
-            if ($this->parser->find($attr)->firstResult() === null) {
-                if ($image->hasAttribute('alt')) {
-                    $text = (
-                        $this->prefixLongDescriptionLink
-                        . ' '
-                        . $image->getAttribute('alt')
-                        . ' '
-                        . $this->suffixLongDescriptionLink
-                    );
-                } else {
-                    $text = (
-                        $this->prefixLongDescriptionLink
-                        . ' '
-                        . $this->suffixLongDescriptionLink
-                    );
-                }
-                $anchor = $this->parser->createElement('a');
-                $anchor->setAttribute(
+            $selectorBefore = (
+                '.' .
+                AccessibleNavigationImplementation::CLASS_FORCE_LINK_BEFORE .
+                $selector
+            );
+            $selectorAfter = (
+                '.' .
+                AccessibleNavigationImplementation::CLASS_FORCE_LINK_AFTER .
+                $selector
+            );
+            if (
+                ($this->parser->find($selectorBefore)->firstResult() === null)
+                && (!(
+                    (empty($this->attributeLongDescriptionPrefixBefore))
+                    || (empty($this->attributeLongDescriptionSuffixBefore))
+                ))
+            ) {
+                $beforeText = \trim(
+                    $this->attributeLongDescriptionPrefixBefore .
+                    \trim($image->getAttribute('alt')) .
+                    $this->attributeLongDescriptionSuffixBefore
+                );
+                $beforeAnchor = $this->parser->createElement('a');
+                $beforeAnchor->setAttribute(
                     'href',
                     $image->getAttribute('longdesc')
                 );
-                $anchor->setAttribute('target', '_blank');
-                $anchor->setAttribute(
+                $beforeAnchor->setAttribute('target', '_blank');
+                $beforeAnchor->setAttribute(
                     AccessibleNavigationImplementation
-                            ::DATA_LONG_DESCRIPTION_FOR_IMAGE,
+                            ::DATA_ATTRIBUTE_LONG_DESCRIPTION_OF,
                     $id
                 );
-                $anchor->setAttribute(
+                $beforeAnchor->setAttribute(
                     'class',
                     AccessibleNavigationImplementation
-                            ::CLASS_LONG_DESCRIPTION_LINK
+                            ::CLASS_FORCE_LINK_BEFORE
                 );
-                $anchor->appendText(\trim($text));
-                $image->insertAfter($anchor);
+                $beforeAnchor->appendText($beforeText);
+                $image->insertBefore($beforeAnchor);
+            }
+            if (
+                ($this->parser->find($selectorAfter)->firstResult() === null)
+                && (!(
+                    (empty($this->attributeLongDescriptionPrefixAfter))
+                    || (empty($this->attributeLongDescriptionSuffixAfter))
+                ))
+            ) {
+                $afterText = \trim(
+                    $this->attributeLongDescriptionPrefixAfter .
+                    \trim($image->getAttribute('alt')) .
+                    $this->attributeLongDescriptionSuffixAfter
+                );
+                $afterAnchor = $this->parser->createElement('a');
+                $afterAnchor->setAttribute(
+                    'href',
+                    $image->getAttribute('longdesc')
+                );
+                $afterAnchor->setAttribute('target', '_blank');
+                $afterAnchor->setAttribute(
+                    AccessibleNavigationImplementation
+                            ::DATA_ATTRIBUTE_LONG_DESCRIPTION_OF,
+                    $id
+                );
+                $afterAnchor->setAttribute(
+                    'class',
+                    AccessibleNavigationImplementation
+                            ::CLASS_FORCE_LINK_AFTER
+                );
+                $afterAnchor->appendText($afterText);
+                $image->insertAfter($afterAnchor);
             }
         }
     }

@@ -10,10 +10,12 @@
     "prefix-range-min-field": "",
     "prefix-range-max-field": "",
     "prefix-autocomplete-field": "",
-    "prefix-longdescription": "",
-    "suffix-longdescription": "[d]",
     "suffix-required-field": "",
     "suffix-range-min-field": "(Min: {{value}})",
     "suffix-range-max-field": "(Max: {{value}})",
-    "suffix-autocomplete-field": "(Autocomplete: {{value}})"
+    "suffix-autocomplete-field": "(Autocomplete: {{value}})",
+    "attribute-longdescription-prefix-before": "",
+    "attribute-longdescription-suffix-before": "",
+    "attribute-longdescription-prefix-after": " (Long description of ",
+    "attribute-longdescription-suffix-after": ")"
 }
