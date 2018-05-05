@@ -114,7 +114,14 @@ class PhpQueryHTMLDOMParser implements HTMLDOMParser
         if (empty($this->results->elements)) {
             return null;
         }
-        return new VanillaHTMLDOMElement($this->results->elements[0], $this);
+        foreach ($this->results->elements as $item) {
+            $key = \pq('*', $this->document->getDocumentID())->index($item);
+            $array[$key] = $item;
+        }
+        ksort($array);
+        foreach ($array as $key => $item) {
+            return new VanillaHTMLDOMElement($item, $this);
+        }
     }
 
     public function lastResult()
@@ -122,19 +129,29 @@ class PhpQueryHTMLDOMParser implements HTMLDOMParser
         if (empty($this->results->elements)) {
             return null;
         }
-        return new VanillaHTMLDOMElement(
-            $this->results->elements[sizeof($this->results->elements) - 1],
-            $this
-        );
+        foreach ($this->results->elements as $item) {
+            $key = \pq('*', $this->document->getDocumentID())->index($item);
+            $array[$key] = $item;
+        }
+        krsort($array);
+        foreach ($array as $key => $item) {
+            return new VanillaHTMLDOMElement($item, $this);
+        }
     }
 
     public function listResults()
     {
         $array = array();
         foreach ($this->results->elements as $item) {
-            array_push($array, new VanillaHTMLDOMElement($item, $this));
+            $key = \pq('*', $this->document->getDocumentID())->index($item);
+            $array[$key] = $item;
         }
-        return $array;
+        ksort($array);
+        $arraySorted = array();
+        foreach ($array as $key => $item) {
+            array_push($arraySorted, new VanillaHTMLDOMElement($item, $this));
+        }
+        return $arraySorted;
     }
 
     public function createElement($tag)
