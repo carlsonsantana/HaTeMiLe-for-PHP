@@ -569,7 +569,11 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
             foreach ($elements as $auxiliarElement) {
                 if ($element->equals($auxiliarElement)) {
                     $skipper = $auxiliarSkipper;
+                    break;
                 }
+            }
+            if ($skipper !== null) {
+                break;
             }
         }
         if ($skipper !== null) {
