@@ -5,7 +5,6 @@
     "text-autocomplete-value-list": "List",
     "text-autocomplete-value-inline": "Inline",
     "text-autocomplete-value-none": "None",
-    "text-heading": "Summary:",
     "prefix-required-field": "*",
     "prefix-range-min-field": "",
     "prefix-range-max-field": "",
@@ -17,5 +16,7 @@
     "attribute-longdescription-prefix-before": "",
     "attribute-longdescription-suffix-before": "",
     "attribute-longdescription-prefix-after": " (Long description of ",
-    "attribute-longdescription-suffix-after": ")"
+    "attribute-longdescription-suffix-after": ")",
+    "elements-heading-before": "",
+    "elements-heading-after": "Table of contents"
 }

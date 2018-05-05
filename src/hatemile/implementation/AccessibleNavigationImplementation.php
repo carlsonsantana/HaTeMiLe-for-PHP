@@ -68,16 +68,24 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
     const ID_CONTAINER_SKIPPERS = 'container-skippers';
 
     /**
-     * The id of list element that contains the links for the headings.
+     * The id of list element that contains the links for the headings, before
+     * the whole page.
      * @var string
      */
-    const ID_CONTAINER_HEADING = 'container-heading';
+    const ID_CONTAINER_HEADING_BEFORE = 'container-heading-before';
 
     /**
-     * The id of text of description of container of heading links.
+     * The id of list element that contains the links for the headings, after
+     * the whole page.
      * @var string
      */
-    const ID_TEXT_HEADING = 'text-heading';
+    const ID_CONTAINER_HEADING_AFTER = 'container-heading-after';
+
+    /**
+     * The HTML class of text of description of container of heading links.
+     * @var string
+     */
+    const CLASS_TEXT_HEADING = 'text-heading';
 
     /**
      * The HTML class of anchor of skipper.
@@ -142,10 +150,18 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
     protected $idGenerator;
 
     /**
-     * The text of description of container of heading links.
+     * The text of description of container of heading links, before all
+     * elements.
      * @var string
      */
-    protected $textHeading;
+    protected $elementsHeadingBefore;
+
+    /**
+     * The text of description of container of heading links, after all
+     * elements.
+     * @var string
+     */
+    protected $elementsHeadingAfter;
 
     /**
      * The prefix of content of long description, before the image.
@@ -190,6 +206,18 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
     protected $listSkippers;
 
     /**
+     * The list element of table of content, before the whole content of page;
+     * @var \hatemile\util\html\HTMLDOMElement
+     */
+    protected $listHeadingBefore;
+
+    /**
+     * The list element of table of content, after the whole content of page;
+     * @var \hatemile\util\html\HTMLDOMElement
+     */
+    protected $listHeadingAfter;
+
+    /**
      * The state that indicates if the sintatic heading of parser be validated.
      * @var boolean
      */
@@ -200,6 +228,12 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
      * @var boolean
      */
     protected $validHeading;
+
+    /**
+     * The state that indicates if the container of table of content has added.
+     * @var boolean
+     */
+    protected $listHeadingAdded;
 
     /**
      * Initializes a new object that manipulate the accessibility of the
@@ -215,7 +249,12 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
     ) {
         $this->parser = $parser;
         $this->idGenerator = new IDGenerator('navigation');
-        $this->textHeading = $configure->getParameter('text-heading');
+        $this->elementsHeadingBefore = $configure->getParameter(
+            'elements-heading-before'
+        );
+        $this->elementsHeadingAfter = $configure->getParameter(
+            'elements-heading-after'
+        );
         $this->attributeLongDescriptionPrefixBefore = $configure->getParameter(
             'attribute-longdescription-prefix-before'
         );
@@ -230,9 +269,12 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
         );
         $this->skippers = $this->getSkippers($skipperFileName);
         $this->listSkippersAdded = false;
+        $this->listHeadingAdded = false;
         $this->validateHeading = false;
         $this->validHeading = false;
         $this->listSkippers = null;
+        $this->listHeadingBefore = null;
+        $this->listHeadingAfter = null;
     }
 
     /**
@@ -310,45 +352,89 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
 
     /**
      * Generate the list of heading links of page.
-     * @return \hatemile\util\html\HTMLDOMElement The list of heading links of
-     * page.
      */
     protected function generateListHeading()
     {
-        $container = $this->parser->find(
-            '#' . AccessibleNavigationImplementation::ID_CONTAINER_HEADING
-        )->firstResult();
-        $htmlList = null;
-        if ($container === null) {
-            $local = $this->parser->find('body')->firstResult();
-            if ($local !== null) {
-                $container = $this->parser->createElement('div');
-                $container->setAttribute(
-                    'id',
-                    AccessibleNavigationImplementation::ID_CONTAINER_HEADING
-                );
-
-                $textContainer = $this->parser->createElement('span');
-                $textContainer->setAttribute(
-                    'id',
-                    AccessibleNavigationImplementation::ID_TEXT_HEADING
-                );
-                $textContainer->appendText($this->textHeading);
-
-                $container->appendElement($textContainer);
-                $local->appendElement($container);
-            }
-        }
-        if ($container !== null) {
-            $htmlList = $this->parser->find($container)->findChildren(
-                'ol'
+        $local = $this->parser->find('body')->firstResult();
+        if ($local !== null) {
+            $containerBefore = $this->parser->find(
+                '#' .
+                AccessibleNavigationImplementation::ID_CONTAINER_HEADING_BEFORE
             )->firstResult();
-            if ($htmlList === null) {
-                $htmlList = $this->parser->createElement('ol');
-                $container->appendElement($htmlList);
+            if (
+                ($containerBefore === null)
+                && (!empty($this->elementsHeadingBefore))
+            ) {
+                $containerBefore = $this->parser->createElement('div');
+                $containerBefore->setAttribute(
+                    'id',
+                    AccessibleNavigationImplementation
+                            ::ID_CONTAINER_HEADING_BEFORE
+                );
+
+                $textContainerBefore = $this->parser->createElement('span');
+                $textContainerBefore->setAttribute(
+                    'class',
+                    AccessibleNavigationImplementation::CLASS_TEXT_HEADING
+                );
+                $textContainerBefore->appendText($this->elementsHeadingBefore);
+
+                $containerBefore->appendElement($textContainerBefore);
+                $local->prependElement($containerBefore);
+            }
+
+            if ($containerBefore !== null) {
+                $this->listHeadingBefore = $this->parser->find(
+                    $containerBefore
+                )->findChildren('ol')->firstResult();
+                if ($this->listHeadingBefore === null) {
+                    $this->listHeadingBefore = $this->parser->createElement(
+                        'ol'
+                    );
+                    $containerBefore->appendElement($this->listHeadingBefore);
+                }
+            }
+
+
+            $containerAfter = $this->parser->find(
+                '#' .
+                AccessibleNavigationImplementation::ID_CONTAINER_HEADING_AFTER
+            )->firstResult();
+            if (
+                ($containerAfter === null)
+                && (!empty($this->elementsHeadingAfter))
+            ) {
+                $containerAfter = $this->parser->createElement('div');
+                $containerAfter->setAttribute(
+                    'id',
+                    AccessibleNavigationImplementation
+                            ::ID_CONTAINER_HEADING_AFTER
+                );
+
+                $textContainerAfter = $this->parser->createElement('span');
+                $textContainerAfter->setAttribute(
+                    'class',
+                    AccessibleNavigationImplementation::CLASS_TEXT_HEADING
+                );
+                $textContainerAfter->appendText($this->elementsHeadingAfter);
+
+                $containerAfter->appendElement($textContainerAfter);
+                $local->appendElement($containerAfter);
+            }
+
+            if ($containerAfter !== null) {
+                $this->listHeadingAfter = $this->parser->find(
+                    $containerAfter
+                )->findChildren('ol')->firstResult();
+                if ($this->listHeadingAfter === null) {
+                    $this->listHeadingAfter = $this->parser->createElement(
+                        'ol'
+                    );
+                    $containerAfter->appendElement($this->listHeadingAfter);
+                }
             }
         }
-        return $htmlList;
+        $this->listHeadingAdded = true;
     }
 
     /**
@@ -543,48 +629,75 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
                 AccessibleNavigationImplementation::CLASS_HEADING_ANCHOR
             );
             if ($anchor !== null) {
-                $list = null;
+                if (!$this->listHeadingAdded) {
+                    $this->generateListHeading();
+                }
+                $listBefore = null;
+                $listAfter = null;
                 $level = $this->getHeadingLevel($heading);
                 if ($level === 1) {
-                    $list = $this->generateListHeading();
+                    $listBefore = $this->listHeadingBefore;
+                    $listAfter = $this->listHeadingAfter;
                 } else {
-                    $attr = (
+                    $selector = (
                         '['
                         . AccessibleNavigationImplementation::DATA_HEADING_LEVEL
                         . '="'
                         . ((string) ($level - 1))
                         . '"]'
                     );
-                    $superItem = $this->parser->find(
-                        '#' .
-                        AccessibleNavigationImplementation::ID_CONTAINER_HEADING
-                    )->findDescendants($attr)->lastResult();
-                    if ($superItem !== null) {
-                        $list = $this->parser->find($superItem)->findChildren(
-                            'ol'
-                        )->firstResult();
-                        if ($list === null) {
-                            $list = $this->parser->createElement('ol');
-                            $superItem->appendElement($list);
+                    if ($this->listHeadingBefore !== null) {
+                        $superItemBefore = $this->parser->find(
+                            $this->listHeadingBefore
+                        )->findDescendants($selector)->lastResult();
+                        if ($superItemBefore !== null) {
+                            $listBefore = $this->parser->find(
+                                $superItemBefore
+                            )->findChildren('ol')->firstResult();
+                            if ($listBefore === null) {
+                                $listBefore = $this->parser->createElement(
+                                    'ol'
+                                );
+                                $superItemBefore->appendElement($listBefore);
+                            }
+                        }
+                    }
+                    if ($this->listHeadingAfter !== null) {
+                        $superItemAfter = $this->parser->find(
+                            $this->listHeadingAfter
+                        )->findDescendants($selector)->lastResult();
+                        if ($superItemAfter !== null) {
+                            $listAfter = $this->parser->find(
+                                $superItemAfter
+                            )->findChildren('ol')->firstResult();
+                            if ($listAfter === null) {
+                                $listAfter = $this->parser->createElement('ol');
+                                $superItemAfter->appendElement($listAfter);
+                            }
                         }
                     }
                 }
-                if ($list !== null) {
-                    $item = $this->parser->createElement('li');
-                    $item->setAttribute(
-                        AccessibleNavigationImplementation::DATA_HEADING_LEVEL,
-                        ((string) ($level))
-                    );
 
-                    $link = $this->parser->createElement('a');
-                    $link->setAttribute(
-                        'href',
-                        '#' . $anchor->getAttribute('name')
-                    );
-                    $link->appendText($heading->getTextContent());
+                $item = $this->parser->createElement('li');
+                $item->setAttribute(
+                    AccessibleNavigationImplementation::DATA_HEADING_LEVEL,
+                    ((string) ($level))
+                );
+                $link = $this->parser->createElement('a');
+                $link->setAttribute(
+                    'href',
+                    '#' . $anchor->getAttribute('name')
+                );
+                $link->appendText($heading->getTextContent());
+                $item->appendElement($link);
 
-                    $item->appendElement($link);
-                    $list->appendElement($item);
+                if ($listBefore !== null) {
+                    $itemBefore = $item->cloneElement();
+                    $listBefore->appendElement($itemBefore);
+                }
+                if ($listAfter !== null) {
+                    $itemAfter = $item->cloneElement();
+                    $listAfter->appendElement($itemAfter);
                 }
             }
         }
