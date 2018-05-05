@@ -120,7 +120,7 @@ abstract class VanillaHTMLDOMNode implements HTMLDOMNode
             return true;
         }
         if (($obj !== null) && ($obj instanceof VanillaHTMLDOMNode)) {
-            return $this->getData() == $obj->getData();
+            return $this->getData() === $obj->getData();
         }
         return false;
     }
