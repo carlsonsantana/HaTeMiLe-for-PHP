@@ -119,7 +119,7 @@ class CommonFunctions
             return false;
         } else {
             $parentElement = $element->getParentElement();
-            if ($parentElement != null) {
+            if ($parentElement !== null) {
                 $tagName = $parentElement->getTagName();
                 if (($tagName !== 'BODY') && ($tagName !== 'HTML')) {
                     return CommonFunctions::isValidElement($parentElement);

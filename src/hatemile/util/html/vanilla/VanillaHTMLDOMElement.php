@@ -245,7 +245,7 @@ class VanillaHTMLDOMElement extends VanillaHTMLDOMNode implements HTMLDOMElement
                 $result = $child;
             }
         }
-        if ($result != null) {
+        if ($result !== null) {
             return new VanillaHTMLDOMElement($result);
         }
         return null;
@@ -275,7 +275,7 @@ class VanillaHTMLDOMElement extends VanillaHTMLDOMNode implements HTMLDOMElement
                 $result = $child;
             }
         }
-        if ($result != null) {
+        if ($result !== null) {
             return new VanillaHTMLDOMElement($result);
         }
         return null;

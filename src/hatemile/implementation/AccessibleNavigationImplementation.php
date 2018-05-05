@@ -341,7 +341,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
             $htmlList = $this->parser->find($container)->findChildren(
                 'ul'
             )->firstResult();
-            if ($htmlList == null) {
+            if ($htmlList === null) {
                 $htmlList = $this->parser->createElement('ul');
                 $container->appendElement($htmlList);
             }
