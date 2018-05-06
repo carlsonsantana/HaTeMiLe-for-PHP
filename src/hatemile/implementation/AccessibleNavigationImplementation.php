@@ -337,7 +337,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
                     'id',
                     AccessibleNavigationImplementation::ID_CONTAINER_SKIPPERS
                 );
-                $local->getFirstElementChild()->insertBefore($container);
+                $local->prependElement($container);
             }
         }
         if ($container !== null) {
@@ -699,12 +699,10 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
                 $item->appendElement($link);
 
                 if ($listBefore !== null) {
-                    $itemBefore = $item->cloneElement();
-                    $listBefore->appendElement($itemBefore);
+                    $listBefore->appendElement($item->cloneElement());
                 }
                 if ($listAfter !== null) {
-                    $itemAfter = $item->cloneElement();
-                    $listAfter->appendElement($itemAfter);
+                    $listAfter->appendElement($item->cloneElement());
                 }
             }
         }
