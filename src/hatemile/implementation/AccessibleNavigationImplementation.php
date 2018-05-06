@@ -267,7 +267,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
         $this->attributeLongDescriptionSuffixAfter = $configure->getParameter(
             'attribute-longdescription-suffix-after'
         );
-        $this->skippers = $this->getSkippers($skipperFileName);
+        $this->skippers = $this->getSkippers($skipperFileName, $configure);
         $this->listSkippersAdded = false;
         $this->listHeadingAdded = false;
         $this->validateHeading = false;
@@ -280,9 +280,10 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
     /**
      * Returns the skippers of configuration.
      * @param string $fileName The file path of skippers configuration.
+     * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
      * @return string[][] The skippers of configuration.
      */
-    protected function getSkippers($fileName)
+    protected function getSkippers($fileName, $configure)
     {
         $skippers = array();
         if ($fileName === null) {
@@ -306,7 +307,9 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
                     $skippers,
                     array(
                         'selector' => $child->getAttribute('selector'),
-                        'description' => $child->getAttribute('description'),
+                        'description' => $configure->getParameter(
+                            $child->getAttribute('description')
+                        ),
                         'shortcut' => $child->getAttribute('shortcut')
                     )
                 );
