@@ -51,22 +51,31 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
 {
 
     /**
-     * The id of list element that contains the description of shortcuts.
+     * The id of list element that contains the description of shortcuts, before
+     * the whole content of page.
      * @var string
      */
-    const ID_CONTAINER_SHORTCUTS = 'container-shortcuts';
+    const ID_CONTAINER_SHORTCUTS_BEFORE = 'container-shortcuts-before';
 
     /**
-     * The id of text of description of container of shortcuts descriptions.
+     * The id of list element that contains the description of shortcuts, after
+     * the whole content of page.
      * @var string
      */
-    const ID_TEXT_SHORTCUTS = 'text-shortcuts';
+    const ID_CONTAINER_SHORTCUTS_AFTER = 'container-shortcuts-after';
 
     /**
-     * The name of attribute that link the list item element with the shortcut.
+     * The HTML class of text of description of container of shortcuts
+     * descriptions.
      * @var string
      */
-    const DATA_ACCESS_KEY = 'data-shortcutdescriptionfor';
+    const CLASS_TEXT_SHORTCUTS = 'text-shortcuts';
+
+    /**
+     * The name of attribute that links the description of shortcut of element.
+     * @var string
+     */
+    const DATA_ATTRIBUTE_ACCESSKEY_OF = 'data-attributeaccesskeyof';
 
     /**
      * The HTML parser.
@@ -75,22 +84,34 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
     protected $parser;
 
     /**
-     * The text of description of container of shortcuts descriptions.
-     * @var string
-     */
-    protected $textShortcuts;
-
-    /**
      * The browser shortcut prefix.
      * @var string
      */
     protected $shortcutPrefix;
 
     /**
-     * The list element of shortcuts.
+     * The description of shortcut list, before all elements.
+     * @var string
+     */
+    protected $attributeAccesskeyBefore;
+
+    /**
+     * The description of shortcut list, after all elements.
+     * @var string
+     */
+    protected $attributeAccesskeyAfter;
+
+    /**
+     * The list element of shortcuts, before the whole content of page.
      * @var \hatemile\util\html\HTMLDOMElement
      */
-    protected $listShortcuts;
+    protected $listShortcutsBefore;
+
+    /**
+     * The list element of shortcuts, after the whole content of page.
+     * @var \hatemile\util\html\HTMLDOMElement
+     */
+    protected $listShortcutsAfter;
 
     /**
      * The state that indicates if the list of shortcuts of page was added.
@@ -115,9 +136,15 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
             $userAgent,
             $configure->getParameter('text-standart-shortcut-prefix')
         );
-        $this->textShortcuts = $configure->getParameter('text-shortcuts');
+        $this->attributeAccesskeyBefore = $configure->getParameter(
+            'attribute-accesskey-before'
+        );
+        $this->attributeAccesskeyAfter = $configure->getParameter(
+            'attribute-accesskey-after'
+        );
         $this->listShortcutsAdded = false;
-        $this->listShortcuts = null;
+        $this->listShortcutsBefore = null;
+        $this->listShortcutsAfter = null;
     }
 
     /**
@@ -230,49 +257,91 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
 
     /**
      * Generate the list of shortcuts of page.
-     * @return \hatemile\util\html\HTMLDOMElement The list of shortcuts of page.
      */
     protected function generateListShortcuts()
     {
-        $container = $this->parser->find(
-            '#' .
-            AccessibleDisplayScreenReaderImplementation::ID_CONTAINER_SHORTCUTS
-        )->firstResult();
-        $htmlList = null;
-        if ($container === null) {
-            $local = $this->parser->find('body')->firstResult();
-            if ($local !== null) {
-                $container = $this->parser->createElement('div');
-                $container->setAttribute(
+        $local = $this->parser->find('body')->firstResult();
+        if ($local !== null) {
+            $containerBefore = $this->parser->find(
+                '#' .
+                AccessibleDisplayScreenReaderImplementation
+                    ::ID_CONTAINER_SHORTCUTS_BEFORE
+            )->firstResult();
+            if (
+                ($containerBefore === null)
+                && (!empty($this->attributeAccesskeyBefore))
+            ) {
+                $containerBefore = $this->parser->createElement('div');
+                $containerBefore->setAttribute(
                     'id',
                     AccessibleDisplayScreenReaderImplementation
-                            ::ID_CONTAINER_SHORTCUTS
+                            ::ID_CONTAINER_SHORTCUTS_BEFORE
                 );
 
                 $textContainer = $this->parser->createElement('span');
                 $textContainer->setAttribute(
+                    'class',
+                    AccessibleDisplayScreenReaderImplementation
+                            ::CLASS_TEXT_SHORTCUTS
+                );
+                $textContainer->appendText($this->attributeAccesskeyBefore);
+
+                $containerBefore->appendElement($textContainer);
+                $local->prependElement($containerBefore);
+            }
+            if ($containerBefore !== null) {
+                $this->listShortcutsBefore = $this->parser->find(
+                    $containerBefore
+                )->findChildren('ul')->firstResult();
+                if ($this->listShortcutsBefore === null) {
+                    $this->listShortcutsBefore = $this->parser->createElement(
+                        'ul'
+                    );
+                    $containerBefore->appendElement($this->listShortcutsBefore);
+                }
+            }
+
+
+            $containerAfter = $this->parser->find(
+                '#' .
+                AccessibleDisplayScreenReaderImplementation
+                    ::ID_CONTAINER_SHORTCUTS_AFTER
+            )->firstResult();
+            if (
+                ($containerAfter === null)
+                && (!empty($this->attributeAccesskeyAfter))
+            ) {
+                $containerAfter = $this->parser->createElement('div');
+                $containerAfter->setAttribute(
                     'id',
                     AccessibleDisplayScreenReaderImplementation
-                            ::ID_TEXT_SHORTCUTS
+                            ::ID_CONTAINER_SHORTCUTS_AFTER
                 );
-                $textContainer->appendText($this->textShortcuts);
 
-                $container->appendElement($textContainer);
-                $local->appendElement($container);
+                $textContainer = $this->parser->createElement('span');
+                $textContainer->setAttribute(
+                    'class',
+                    AccessibleDisplayScreenReaderImplementation
+                            ::CLASS_TEXT_SHORTCUTS
+                );
+                $textContainer->appendText($this->attributeAccesskeyAfter);
+
+                $containerAfter->appendElement($textContainer);
+                $local->appendElement($containerAfter);
             }
-        }
-        if ($container !== null) {
-            $htmlList = $this->parser->find($container)->findChildren(
-                'ul'
-            )->firstResult();
-            if ($htmlList === null) {
-                $htmlList = $this->parser->createElement('ul');
-                $container->appendElement($htmlList);
+            if ($containerAfter !== null) {
+                $this->listShortcutsAfter = $this->parser->find(
+                    $containerAfter
+                )->findChildren('ul')->firstResult();
+                if ($this->listShortcutsAfter === null) {
+                    $this->listShortcutsAfter = $this->parser->createElement(
+                        'ul'
+                    );
+                    $containerAfter->appendElement($this->listShortcutsAfter);
+                }
             }
         }
         $this->listShortcutsAdded = true;
-
-        return $htmlList;
     }
 
     public function displayShortcut(HTMLDOMElement $element)
@@ -287,39 +356,52 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
                 $this->listShortcuts = $this->generateListShortcuts();
             }
 
-            if ($this->listShortcuts !== null) {
-                $keys = preg_split(
-                    '/[ \n\t\r]+/',
-                    $element->getAttribute('accesskey')
+            $keys = preg_split(
+                '/[ \n\t\r]+/',
+                $element->getAttribute('accesskey')
+            );
+            foreach ($keys as $key) {
+                $key = strtoupper($key);
+                $item = $this->parser->createElement('li');
+                $item->setAttribute(
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ATTRIBUTE_ACCESSKEY_OF,
+                    $key
                 );
-                foreach ($keys as $key) {
-                    $key = strtoupper($key);
-                    $attr = (
-                        '[' .
-                        AccessibleDisplayScreenReaderImplementation
-                                ::DATA_ACCESS_KEY .
-                        '="' .
-                        $key .
-                        '"]'
+                $item->appendText(
+                    $this->shortcutPrefix .
+                    ' + ' .
+                    $key .
+                    ': ' .
+                    $description
+                );
+                $selector = (
+                    '[' .
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ATTRIBUTE_ACCESSKEY_OF .
+                    '="' .
+                    $key .
+                    '"]'
+                );
+                if (
+                    ($this->listShortcutsBefore)
+                    && ($this->parser->find(
+                        $this->listShortcutsBefore
+                    )->findChildren($selector)->firstResult() === null)
+                ) {
+                    $this->listShortcutsBefore->appendElement(
+                        $item->cloneElement()
                     );
-                    if ($this->parser->find(
-                        $this->listShortcuts
-                    )->findChildren($attr)->firstResult() === null) {
-                        $item = $this->parser->createElement('li');
-                        $item->setAttribute(
-                            AccessibleDisplayScreenReaderImplementation
-                                    ::DATA_ACCESS_KEY,
-                            $key
-                        );
-                        $item->appendText(
-                            $this->shortcutPrefix .
-                            ' + ' .
-                            $key .
-                            ': ' .
-                            $description
-                        );
-                        $this->listShortcuts->appendElement($item);
-                    }
+                }
+                if (
+                    ($this->listShortcutsAfter)
+                    && ($this->parser->find(
+                        $this->listShortcutsAfter
+                    )->findChildren($selector)->firstResult() === null)
+                ) {
+                    $this->listShortcutsAfter->appendElement(
+                        $item->cloneElement()
+                    );
                 }
             }
         }
