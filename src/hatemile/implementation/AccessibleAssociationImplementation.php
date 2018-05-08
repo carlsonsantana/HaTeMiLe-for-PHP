@@ -328,7 +328,8 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
         if ($label->getTagName() === 'LABEL') {
             if ($label->hasAttribute('for')) {
                 $field = $this->parser->find(
-                    '#' . $label->getAttribute('for')
+                    '#' .
+                    $label->getAttribute('for')
                 )->firstResult();
             } else {
                 $field = $this->parser->find(

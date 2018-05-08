@@ -203,7 +203,8 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
             }
             foreach ($descriptionIds as $descriptionId) {
                 $elementDescription = $this->parser->find(
-                    '#' . $descriptionId
+                    '#' .
+                    $descriptionId
                 )->firstResult();
                 if ($elementDescription !== null) {
                     $description = $elementDescription->getTextContent();
@@ -229,7 +230,7 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         if (empty($description)) {
             $description = $element->getTextContent();
         }
-        return \trim(\preg_replace("/[ \n\r\t]+/", ' ', $description));
+        return \trim(\preg_replace('/[ \n\r\t]+/', ' ', $description));
     }
 
     /**

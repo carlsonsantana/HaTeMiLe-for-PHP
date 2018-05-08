@@ -169,7 +169,8 @@ class AccessibleEventImplementation implements AccessibleEvent
                 $head->prependElement($commonFunctionsScript);
             }
             if ($this->parser->find(
-                '#' . AccessibleEventImplementation::ID_SCRIPT_EVENT_LISTENER
+                '#' .
+                AccessibleEventImplementation::ID_SCRIPT_EVENT_LISTENER
             )->firstResult() === null) {
                 $script = $this->parser->createElement('script');
                 $script->setAttribute(
@@ -190,7 +191,8 @@ class AccessibleEventImplementation implements AccessibleEvent
         $local = $this->parser->find('body')->firstResult();
         if ($local !== null) {
             $this->scriptList = $this->parser->find(
-                '#' . AccessibleEventImplementation::ID_LIST_IDS_SCRIPT
+                '#' .
+                AccessibleEventImplementation::ID_LIST_IDS_SCRIPT
             )->firstResult();
             if ($this->scriptList === null) {
                 $this->scriptList = $this->parser->createElement('script');
@@ -206,7 +208,8 @@ class AccessibleEventImplementation implements AccessibleEvent
                 $local->appendElement($this->scriptList);
             }
             if ($this->parser->find(
-                '#' . AccessibleEventImplementation::ID_FUNCTION_SCRIPT_FIX
+                '#' .
+                AccessibleEventImplementation::ID_FUNCTION_SCRIPT_FIX
             )->firstResult() === null) {
                 $scriptFunction = $this->parser->createElement('script');
                 $scriptFunction->setAttribute(
@@ -241,10 +244,10 @@ class AccessibleEventImplementation implements AccessibleEvent
         if ($this->scriptList !== null) {
             $this->idGenerator->generateId($element);
             $this->scriptList->appendText(
-                $event
-                . "Elements.push('"
-                . $element->getAttribute('id')
-                . "');"
+                $event .
+                'Elements.push("' .
+                $element->getAttribute('id') .
+                '");'
             );
         }
     }

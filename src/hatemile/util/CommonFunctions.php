@@ -97,7 +97,7 @@ class CommonFunctions
     public static function inList($list, $stringToSearch)
     {
         if ((!empty($list)) && (!empty($stringToSearch))) {
-            $elements = preg_split("/[ \n\t\r]+/", $list);
+            $elements = preg_split('/[ \n\t\r]+/', $list);
             foreach ($elements as $element) {
                 if ($element === $stringToSearch) {
                     return true;

@@ -209,7 +209,8 @@ class AccessibleFormImplementation implements AccessibleForm
                 )->firstResult();
                 if (($form === null) && ($field->hasAttribute('form'))) {
                     $form = $this->parser->find(
-                        '#' . $field->getAttribute('form')
+                        '#' .
+                        $field->getAttribute('form')
                     )->firstResult();
                 }
                 if (($form !== null) && ($form->hasAttribute('autocomplete'))) {
@@ -221,7 +222,9 @@ class AccessibleFormImplementation implements AccessibleForm
             } elseif (
                 ($field->hasAttribute('list'))
                 && ($this->parser->find(
-                    'datalist[id="' . $field->getAttribute('list') . '"]'
+                    'datalist[id="' .
+                    $field->getAttribute('list') .
+                    '"]'
                 )->firstResult() !== null)
             ) {
                 return 'list';
@@ -387,9 +390,9 @@ class AccessibleFormImplementation implements AccessibleForm
     public function markAllAutoCompleteFields()
     {
         $elements = $this->parser->find(
-            'input[autocomplete],textarea[autocomplete],'
-            . 'form[autocomplete] input, form[autocomplete] textarea,[list],'
-            . '[form]'
+            'input[autocomplete],textarea[autocomplete],' .
+            'form[autocomplete] input, form[autocomplete] textarea,[list],' .
+            '[form]'
         )->listResults();
         foreach ($elements as $element) {
             if (CommonFunctions::isValidElement($element)) {

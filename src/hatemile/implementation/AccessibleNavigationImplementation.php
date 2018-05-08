@@ -326,7 +326,8 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
     protected function generateListSkippers()
     {
         $container = $this->parser->find(
-            '#' . AccessibleNavigationImplementation::ID_CONTAINER_SKIPPERS
+            '#' .
+            AccessibleNavigationImplementation::ID_CONTAINER_SKIPPERS
         )->firstResult();
         $htmlList = null;
         if ($container === null) {
@@ -647,11 +648,11 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
                     $listAfter = $this->listHeadingAfter;
                 } else {
                     $selector = (
-                        '['
-                        . AccessibleNavigationImplementation::DATA_HEADING_LEVEL
-                        . '="'
-                        . ((string) ($level - 1))
-                        . '"]'
+                        '[' .
+                        AccessibleNavigationImplementation::DATA_HEADING_LEVEL .
+                        '="' .
+                        ((string) ($level - 1)) .
+                        '"]'
                     );
                     if ($this->listHeadingBefore !== null) {
                         $superItemBefore = $this->parser->find(
