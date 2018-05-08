@@ -144,7 +144,12 @@ class PhpQueryHTMLDOMParser implements HTMLDOMParser
         ksort($array);
         $arraySorted = array();
         foreach ($array as $key => $item) {
-            array_push($arraySorted, new VanillaHTMLDOMElement($item, $this));
+            if ($item instanceof \DOMElement) {
+                array_push($arraySorted, new VanillaHTMLDOMElement(
+                    $item,
+                    $this
+                ));
+            }
         }
         return $arraySorted;
     }

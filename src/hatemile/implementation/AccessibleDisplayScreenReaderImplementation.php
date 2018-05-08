@@ -27,6 +27,11 @@ require_once join(DIRECTORY_SEPARATOR, array(
 require_once join(DIRECTORY_SEPARATOR, array(
     dirname(dirname(__FILE__)),
     'util',
+    'IDGenerator.php'
+));
+require_once join(DIRECTORY_SEPARATOR, array(
+    dirname(dirname(__FILE__)),
+    'util',
     'html',
     'HTMLDOMElement.php'
 ));
@@ -40,6 +45,7 @@ require_once join(DIRECTORY_SEPARATOR, array(
 use \hatemile\AccessibleDisplay;
 use \hatemile\util\CommonFunctions;
 use \hatemile\util\Configure;
+use \hatemile\util\IDGenerator;
 use \hatemile\util\html\HTMLDOMElement;
 use \hatemile\util\html\HTMLDOMParser;
 
@@ -72,6 +78,20 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
     const CLASS_TEXT_SHORTCUTS = 'text-shortcuts';
 
     /**
+     * The HTML class of content to force the screen reader show the current
+     * state of element, before it.
+     * @var string
+     */
+    const CLASS_FORCE_READ_BEFORE = 'force-read-before';
+
+    /**
+     * The HTML class of content to force the screen reader show the current
+     * state of element, after it.
+     * @var string
+     */
+    const CLASS_FORCE_READ_AFTER = 'force-read-after';
+
+    /**
      * The name of attribute that links the description of shortcut of element.
      * @var string
      */
@@ -82,6 +102,12 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
      * @var \hatemile\util\html\HTMLDOMParser
      */
     protected $parser;
+
+    /**
+     * The id generator.
+     * @var \hatemile\util\IDGenerator
+     */
+    protected $idGenerator;
 
     /**
      * The browser shortcut prefix.
@@ -100,6 +126,30 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
      * @var string
      */
     protected $attributeAccesskeyAfter;
+
+    /**
+     * The prefix description of shortcut list, before all elements.
+     * @var string
+     */
+    protected $attributeAccesskeyPrefixBefore;
+
+    /**
+     * The suffix description of shortcut list, before all elements.
+     * @var string
+     */
+    protected $attributeAccesskeySuffixBefore;
+
+    /**
+     * The prefix description of shortcut list, after all elements.
+     * @var string
+     */
+    protected $attributeAccesskeyPrefixAfter;
+
+    /**
+     * The suffix description of shortcut list, after all elements.
+     * @var string
+     */
+    protected $attributeAccesskeySuffixAfter;
 
     /**
      * The list element of shortcuts, before the whole content of page.
@@ -132,6 +182,7 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         $userAgent = null
     ) {
         $this->parser = $parser;
+        $this->idGenerator = new IDGenerator('display');
         $this->shortcutPrefix = $this->getShortcutPrefix(
             $userAgent,
             $configure->getParameter('text-standart-shortcut-prefix')
@@ -141,6 +192,18 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         );
         $this->attributeAccesskeyAfter = $configure->getParameter(
             'attribute-accesskey-after'
+        );
+        $this->attributeAccesskeyPrefixBefore = $configure->getParameter(
+            'attribute-accesskey-prefix-before'
+        );
+        $this->attributeAccesskeySuffixBefore = $configure->getParameter(
+            'attribute-accesskey-suffix-before'
+        );
+        $this->attributeAccesskeyPrefixAfter = $configure->getParameter(
+            'attribute-accesskey-prefix-after'
+        );
+        $this->attributeAccesskeySuffixAfter = $configure->getParameter(
+            'attribute-accesskey-suffix-after'
         );
         $this->listShortcutsAdded = false;
         $this->listShortcutsBefore = null;
@@ -344,6 +407,177 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         $this->listShortcutsAdded = true;
     }
 
+    /**
+     * Insert a element before or after other element.
+     * @param \hatemile\util\html\HTMLDOMElement $element The reference element.
+     * @param \hatemile\util\html\HTMLDOMElement $insertedElement The element
+     * that be inserted.
+     * @param bool $before To insert the element before the other element.
+     */
+    protected function insert(
+        HTMLDOMElement $element,
+        HTMLDOMElement $insertedElement,
+        $before
+    ) {
+        $tagName = $element->getTagName();
+        $appendTags = array(
+            'BODY',
+            'A',
+            'FIGCAPTION',
+            'LI',
+            'DT',
+            'DD',
+            'LABEL',
+            'OPTION',
+            'TD',
+            'TH'
+        );
+        $controls = array('INPUT', 'SELECT', 'TEXTAREA');
+        if ($tagName === 'HTML') {
+            $body = $this->parser->find('body')->firstResult();
+            if ($body !== null) {
+                $this->insert($body, $insertedElement, $before);
+            }
+        } elseif (in_array($tagName, $appendTags)) {
+            if ($before) {
+                $element->prependElement($insertedElement);
+            } else {
+                $element->appendElement($insertedElement);
+            }
+        } elseif (in_array($tagName, $controls)) {
+            $labels = array();
+            if ($element->hasAttribute('id')) {
+                $labels = $this->parser->find(
+                    'label[for="' .
+                    $element->getAttribute('id') .
+                    '"]'
+                )->listResults();
+            }
+            if (empty($labels)) {
+                $labels = $this->parser->find($element)->findAncestors(
+                    'label'
+                )->listResults();
+            }
+            foreach ($labels as $label) {
+                $this->insert($label, $insertedElement, $before);
+            }
+        } elseif ($before) {
+            $element->insertBefore($insertedElement);
+        } else {
+            $element->insertAfter($insertedElement);
+        }
+    }
+
+    /**
+     * Force the screen reader display an information of element.
+     * @param \hatemile\util\html\HTMLDOMElement $element The reference element.
+     * @param string $textBefore The text content to show before the element.
+     * @param string $textAfter The text content to show after the element.
+     * @param string $dataOf The name of attribute that links the content with
+     * element.
+     */
+    protected function forceReadSimple(
+        HTMLDOMElement $element,
+        $textBefore,
+        $textAfter,
+        $dataOf
+    ) {
+        $this->idGenerator->generateId($element);
+        $identifier = $element->getAttribute('id');
+        $selector = '[' . $dataOf . '="' . $identifier . '"]';
+
+        $referenceBefore = $this->parser->find(
+            '.' .
+            AccessibleDisplayScreenReaderImplementation
+                    ::CLASS_FORCE_READ_BEFORE .
+            $selector
+        )->firstResult();
+        $referenceAfter = $this->parser->find(
+            '.' .
+            AccessibleDisplayScreenReaderImplementation
+                    ::CLASS_FORCE_READ_AFTER .
+            $selector
+        )->firstResult();
+        $references = $this->parser->find($selector)->listResults();
+        for ($i = sizeof($references) - 1; $i >= 0; $i--) {
+            if (
+                ($references[$i]->equals($referenceBefore))
+                || ($references[$i]->equals($referenceAfter))
+            ) {
+                array_splice($references, $i, 1);
+            }
+        }
+
+        if (empty($references)) {
+            if (!empty($textBefore)) {
+                if ($referenceBefore !== null) {
+                    $referenceBefore->removeNode();
+                }
+
+                $span = $this->parser->createElement('span');
+                $span->setAttribute(
+                    'class',
+                    AccessibleDisplayScreenReaderImplementation
+                            ::CLASS_FORCE_READ_BEFORE
+                );
+                $span->setAttribute($dataOf, $identifier);
+                $span->appendText($textBefore);
+                $this->insert($element, $span, true);
+            }
+            if (!empty($textAfter)) {
+                if ($referenceAfter !== null) {
+                    $referenceAfter->removeNode();
+                }
+
+                $span = $this->parser->createElement('span');
+                $span->setAttribute(
+                    'class',
+                    AccessibleDisplayScreenReaderImplementation
+                            ::CLASS_FORCE_READ_AFTER
+                );
+                $span->setAttribute($dataOf, $identifier);
+                $span->appendText($textAfter);
+                $this->insert($element, $span, false);
+            }
+        }
+    }
+
+    /**
+     * Force the screen reader display an information of element with prefixes
+     * or suffixes.
+     * @param \hatemile\util\html\HTMLDOMElement $element The reference element.
+     * @param string $value The value to be show.
+     * @param string $textPrefixBefore The prefix of value to show before the
+     * element.
+     * @param string $textSuffixBefore The suffix of value to show before the
+     * element.
+     * @param string $textPrefixAfter The prefix of value to show after the
+     * element.
+     * @param string $textSuffixAfter The suffix of value to show after the
+     * element.
+     * @param string $dataOf The name of attribute that links the content with
+     * element.
+     */
+    protected function forceRead(
+        HTMLDOMElement $element,
+        $value,
+        $textPrefixBefore,
+        $textSuffixBefore,
+        $textPrefixAfter,
+        $textSuffixAfter,
+        $dataOf
+    ) {
+        $textBefore = '';
+        $textAfter = '';
+        if ((!empty($textPrefixBefore)) || (!empty($textSuffixBefore))) {
+            $textBefore = $textPrefixBefore . $value . $textSuffixBefore;
+        }
+        if ((!empty($textPrefixAfter)) || (!empty($textSuffixAfter))) {
+            $textAfter = $textPrefixAfter . $value . $textSuffixAfter;
+        }
+        $this->forceReadSimple($element, $textBefore, $textAfter, $dataOf);
+    }
+
     public function displayShortcut(HTMLDOMElement $element)
     {
         if ($element->hasAttribute('accesskey')) {
@@ -358,10 +592,9 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
 
             $keys = preg_split(
                 '/[ \n\t\r]+/',
-                $element->getAttribute('accesskey')
+                strtoupper($element->getAttribute('accesskey'))
             );
             foreach ($keys as $key) {
-                $key = strtoupper($key);
                 $selector = (
                     '[' .
                     AccessibleDisplayScreenReaderImplementation
@@ -370,6 +603,17 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
                     $key .
                     '"]'
                 );
+                $shortcut = $this->shortcutPrefix . ' + ' . $key;
+                $this->forceRead(
+                    $element,
+                    $shortcut,
+                    $this->attributeAccesskeyPrefixBefore,
+                    $this->attributeAccesskeySuffixBefore,
+                    $this->attributeAccesskeyPrefixAfter,
+                    $this->attributeAccesskeySuffixAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ATTRIBUTE_ACCESSKEY_OF
+                );
 
                 $item = $this->parser->createElement('li');
                 $item->setAttribute(
@@ -377,13 +621,7 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
                             ::DATA_ATTRIBUTE_ACCESSKEY_OF,
                     $key
                 );
-                $item->appendText(
-                    $this->shortcutPrefix .
-                    ' + ' .
-                    $key .
-                    ': ' .
-                    $description
-                );
+                $item->appendText($shortcut . ': ' . $description);
                 if (
                     ($this->listShortcutsBefore)
                     && ($this->parser->find(
