@@ -86,8 +86,7 @@ class CommonFunctions
      * Verify if the list contains the item.
      * @param string $list The list.
      * @param string $stringToSearch The value of item.
-     * @return boolean True if the list contains the item or false is not
-     * contains.
+     * @return bool True if the list contains the item or false is not contains.
      */
     public static function inList($list, $stringToSearch)
     {
@@ -105,7 +104,7 @@ class CommonFunctions
     /**
      * Check that the element can be manipulated by HaTeMiLe.
      * @param \hatemile\util\html\HTMLDOMElement $element The element
-     * @return boolean True if element can be manipulated or false if element
+     * @return bool True if element can be manipulated or false if element
      * cannot be manipulated.
      */
     public static function isValidElement(HTMLDOMElement $element)

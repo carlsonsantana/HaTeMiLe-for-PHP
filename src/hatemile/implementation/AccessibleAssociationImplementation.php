@@ -164,7 +164,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
      * Validate the list that represents the table header.
      * @param \hatemile\util\html\HTMLDOMElement[][] $header The list that
      * represents the table header.
-     * @return boolean True if the table header is valid or false if the table
+     * @return bool True if the table header is valid or false if the table
      * header is not valid.
      */
     protected function validateHeader($header)
@@ -189,7 +189,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
      * Returns a list with ids of rows of same column.
      * @param \hatemile\util\html\HTMLDOMElement[][] $header The list that
      * represents the table header.
-     * @param integer $index The index of columns.
+     * @param int $index The index of columns.
      * @return string[] The list with ids of rows of same column.
      */
     protected function returnListIdsColumns($header, $index)

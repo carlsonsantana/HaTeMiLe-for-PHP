@@ -88,8 +88,8 @@ interface HTMLDOMNode
     /**
      * Indicates whether some other object is "equal to" this one.
      * @param object $obj The reference object with which to compare.
-     * @return boolean True if this object is the same as the obj argument or
-     * false otherwise.
+     * @return bool True if this object is the same as the obj argument or false
+     * otherwise.
      */
     public function equals($obj);
 }

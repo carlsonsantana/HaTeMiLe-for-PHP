@@ -190,7 +190,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
 
     /**
      * The state that indicates if the container of skippers has added.
-     * @var boolean
+     * @var bool
      */
     protected $listSkippersAdded;
 
@@ -214,19 +214,19 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
 
     /**
      * The state that indicates if the sintatic heading of parser be validated.
-     * @var boolean
+     * @var bool
      */
     protected $validateHeading;
 
     /**
      * The state that indicates if the sintatic heading of parser is correct.
-     * @var boolean
+     * @var bool
      */
     protected $validHeading;
 
     /**
      * The state that indicates if the container of table of content has added.
-     * @var boolean
+     * @var bool
      */
     protected $listHeadingAdded;
 
@@ -439,7 +439,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
     /**
      * Returns the level of heading.
      * @param \hatemile\util\html\HTMLDOMElement $element The heading.
-     * @return integer The level of heading.
+     * @return int The level of heading.
      */
     protected function getHeadingLevel(HTMLDOMElement $element)
     {
@@ -463,8 +463,8 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
 
     /**
      * Inform if the headings of page are sintatic correct.
-     * @return boolean True if the headings of page are sintatic correct or
-     * false if not.
+     * @return bool True if the headings of page are sintatic correct or false
+     * if not.
      */
     protected function isValidHeading()
     {

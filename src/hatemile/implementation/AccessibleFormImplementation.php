@@ -145,7 +145,7 @@ class AccessibleFormImplementation implements AccessibleForm
     /**
      * The state that indicates if the scripts used by solutions was added in
      * parser.
-     * @var boolean
+     * @var bool
      */
     protected $scriptsAdded;
 

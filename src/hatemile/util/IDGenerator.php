@@ -33,7 +33,7 @@ class IDGenerator
 
     /**
      * Count the number of ids created.
-     * @var integer
+     * @var int
      */
     protected $count;
 

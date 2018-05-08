@@ -90,7 +90,7 @@ class AccessibleEventImplementation implements AccessibleEvent
     /**
      * The state that indicates if the scripts used by solutions was added in
      * parser.
-     * @var boolean
+     * @var bool
      */
     protected $mainScriptAdded;
 

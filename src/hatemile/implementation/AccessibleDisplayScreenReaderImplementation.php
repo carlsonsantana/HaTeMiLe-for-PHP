@@ -94,7 +94,7 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
 
     /**
      * The state that indicates if the list of shortcuts of page was added.
-     * @var boolean
+     * @var bool
      */
     protected $listShortcutsAdded;
 

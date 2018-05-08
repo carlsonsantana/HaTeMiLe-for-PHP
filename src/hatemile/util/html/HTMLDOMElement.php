@@ -54,15 +54,15 @@ interface HTMLDOMElement extends HTMLDOMNode
     /**
      * Returns if the element has an attribute.
      * @param string $name The name of attribute.
-     * @return boolean True if the element has the attribute or false if the
+     * @return bool True if the element has the attribute or false if the
      * element not has the attribute.
      */
     public function hasAttribute($name);
 
     /**
      * Returns if the element has attributes.
-     * @return boolean True if the element has attributes or false if the
-     * element not has attributes.
+     * @return bool True if the element has attributes or false if the element
+     * not has attributes.
      */
     public function hasAttributes();
 
@@ -103,15 +103,15 @@ interface HTMLDOMElement extends HTMLDOMNode
 
     /**
      * Check that the element has elements children.
-     * @return boolean True if the element has elements children or false if the
+     * @return bool True if the element has elements children or false if the
      * element not has elements children.
      */
     public function hasChildrenElements();
 
     /**
      * Check that the element has children.
-     * @return boolean True if the element has children or false if the element
-     * not has children.
+     * @return bool True if the element has children or false if the element not
+     * has children.
      */
     public function hasChildren();
 
