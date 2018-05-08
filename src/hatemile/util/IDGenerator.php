@@ -66,7 +66,7 @@ class IDGenerator
 
     /**
      * Generate a id for a element.
-     * @param \hatemile\util\html\HTMLDOMElement element The element.
+     * @param \hatemile\util\html\HTMLDOMElement $element The element.
      */
     public function generateId(HTMLDOMElement $element) {
         if (!$element->hasAttribute('id')) {

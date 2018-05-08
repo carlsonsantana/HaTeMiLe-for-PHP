@@ -38,7 +38,7 @@ class VanillaHTMLDOMTextNode extends VanillaHTMLDOMNode implements
 
     /**
      * Initializes a new object that encapsulate the DOMText.
-     * @param \DOMText The DOMText.
+     * @param \DOMText $textNode The DOMText.
      */
     public function __construct(\DOMText $textNode)
     {
