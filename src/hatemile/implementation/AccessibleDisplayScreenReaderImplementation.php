@@ -353,7 +353,7 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
             }
 
             if (!$this->listShortcutsAdded) {
-                $this->listShortcuts = $this->generateListShortcuts();
+                $this->generateListShortcuts();
             }
 
             $keys = preg_split(
@@ -362,6 +362,15 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
             );
             foreach ($keys as $key) {
                 $key = strtoupper($key);
+                $selector = (
+                    '[' .
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ATTRIBUTE_ACCESSKEY_OF .
+                    '="' .
+                    $key .
+                    '"]'
+                );
+
                 $item = $this->parser->createElement('li');
                 $item->setAttribute(
                     AccessibleDisplayScreenReaderImplementation
@@ -374,14 +383,6 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
                     $key .
                     ': ' .
                     $description
-                );
-                $selector = (
-                    '[' .
-                    AccessibleDisplayScreenReaderImplementation
-                            ::DATA_ATTRIBUTE_ACCESSKEY_OF .
-                    '="' .
-                    $key .
-                    '"]'
                 );
                 if (
                     ($this->listShortcutsBefore)
