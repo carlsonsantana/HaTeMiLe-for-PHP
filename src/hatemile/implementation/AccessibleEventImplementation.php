@@ -75,6 +75,12 @@ class AccessibleEventImplementation implements AccessibleEvent
     const ID_FUNCTION_SCRIPT_FIX = 'id-function-script-fix';
 
     /**
+     * The ID of script element that contains the common functions of scripts.
+     * @var string
+     */
+    const ID_SCRIPT_COMMON_FUNCTIONS = 'hatemile-common-functions';
+
+    /**
      * The HTML parser.
      * @var \hatemile\util\html\HTMLDOMParser
      */
@@ -141,29 +147,44 @@ class AccessibleEventImplementation implements AccessibleEvent
     protected function generateMainScripts()
     {
         $head = $this->parser->find('head')->firstResult();
-        if (
-            ($head !== null)
-            && ($this->parser->find(
+        if ($head !== null) {
+            $commonFunctionsScript = $this->parser->find(
+                '#' .
+                AccessibleEventImplementation::ID_SCRIPT_COMMON_FUNCTIONS
+            )->firstResult();
+            if ($commonFunctionsScript === null) {
+                $commonFunctionsScript = $this->parser->createElement('script');
+                $commonFunctionsScript->setAttribute(
+                    'id',
+                    AccessibleEventImplementation::ID_SCRIPT_COMMON_FUNCTIONS
+                );
+                $commonFunctionsScript->setAttribute('type', 'text/javascript');
+                $commonFunctionsScript->appendText(file_get_contents(
+                    join(DIRECTORY_SEPARATOR, array(
+                        dirname(dirname(dirname(__FILE__))),
+                        'js',
+                        'common.js'
+                    ))
+                ));
+                $head->prependElement($commonFunctionsScript);
+            }
+            if ($this->parser->find(
                 '#' . AccessibleEventImplementation::ID_SCRIPT_EVENT_LISTENER
-            )->firstResult() === null)
-        ) {
-            $script = $this->parser->createElement('script');
-            $script->setAttribute(
-                'id',
-                AccessibleEventImplementation::ID_SCRIPT_EVENT_LISTENER
-            );
-            $script->setAttribute('type', 'text/javascript');
-            $script->appendText(file_get_contents(
-                join(DIRECTORY_SEPARATOR, array(
-                    dirname(dirname(dirname(__FILE__))),
-                    'js',
-                    'eventlistener.js'
-                ))
-            ));
-            if ($head->hasChildrenElements()) {
-                $head->getFirstElementChild()->insertBefore($script);
-            } else {
-                $head->appendElement($script);
+            )->firstResult() === null) {
+                $script = $this->parser->createElement('script');
+                $script->setAttribute(
+                    'id',
+                    AccessibleEventImplementation::ID_SCRIPT_EVENT_LISTENER
+                );
+                $script->setAttribute('type', 'text/javascript');
+                $script->appendText(file_get_contents(
+                    join(DIRECTORY_SEPARATOR, array(
+                        dirname(dirname(dirname(__FILE__))),
+                        'js',
+                        'eventlistener.js'
+                    ))
+                ));
+                $commonFunctionsScript->insertAfter($script);
             }
         }
         $local = $this->parser->find('body')->firstResult();

@@ -64,4 +64,15 @@ interface AccessibleForm
      * Mark that the fields have autocomplete.
      */
     public function markAllAutoCompleteFields();
+
+    /**
+     * Mark a solution to display that this field is invalid.
+     * @param \hatemile\util\html\HTMLDOMElement $field The field.
+     */
+    public function markInvalidField(HTMLDOMElement $field);
+
+    /**
+     * Mark a solution to display that a fields are invalid.
+     */
+    public function markAllInvalidFields();
 }
