@@ -98,10 +98,23 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
     const DATA_ATTRIBUTE_ACCESSKEY_OF = 'data-attributeaccesskeyof';
 
     /**
+     * The name of attribute that links the content of role of element with the
+     * element.
+     * @var string
+     */
+    const DATA_ROLE_OF = 'data-roleof';
+
+    /**
      * The HTML parser.
      * @var \hatemile\util\html\HTMLDOMParser
      */
     protected $parser;
+
+    /**
+     * The configuration of HaTeMiLe.
+     * @var \hatemile\util\Configure
+     */
+    protected $configure;
 
     /**
      * The id generator.
@@ -152,6 +165,30 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
     protected $attributeAccesskeySuffixAfter;
 
     /**
+     * The prefix text of role of element, before it.
+     * @var string
+     */
+    protected $attributeRolePrefixBefore;
+
+    /**
+     * The suffix text of role of element, before it.
+     * @var string
+     */
+    protected $attributeRoleSuffixBefore;
+
+    /**
+     * The prefix text of role of element, after it.
+     * @var string
+     */
+    protected $attributeRolePrefixAfter;
+
+    /**
+     * The suffix text of role of element, after it.
+     * @var string
+     */
+    protected $attributeRoleSuffixAfter;
+
+    /**
      * The list element of shortcuts, before the whole content of page.
      * @var \hatemile\util\html\HTMLDOMElement
      */
@@ -182,6 +219,7 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         $userAgent = null
     ) {
         $this->parser = $parser;
+        $this->configure = $configure;
         $this->idGenerator = new IDGenerator('display');
         $this->shortcutPrefix = $this->getShortcutPrefix(
             $userAgent,
@@ -204,6 +242,18 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         );
         $this->attributeAccesskeySuffixAfter = $configure->getParameter(
             'attribute-accesskey-suffix-after'
+        );
+        $this->attributeRolePrefixBefore = $configure->getParameter(
+            'attribute-role-prefix-before'
+        );
+        $this->attributeRoleSuffixBefore = $configure->getParameter(
+            'attribute-role-suffix-before'
+        );
+        $this->attributeRolePrefixAfter = $configure->getParameter(
+            'attribute-role-prefix-after'
+        );
+        $this->attributeRoleSuffixAfter = $configure->getParameter(
+            'attribute-role-suffix-after'
         );
         $this->listShortcutsAdded = false;
         $this->listShortcutsBefore = null;
@@ -255,6 +305,21 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
             return $standartPrefix;
         }
     }
+
+    /**
+     * Returns the description of role.
+     * @param string role The role.
+     * @return string The description of role.
+     */
+    protected function getRoleDescription($role) {
+        $parameter = 'role-' . strtolower($role);
+        if ($this->configure->hasParameter($parameter)) {
+            return $this->configure->getParameter($parameter);
+        } else {
+            return null;
+        }
+    }
+
     /**
      * Returns the description of element.
      * @param \hatemile\util\html\HTMLDOMElement $element The element with
@@ -652,6 +717,36 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         foreach ($elements as $element) {
             if (CommonFunctions::isValidElement($element)) {
                 $this->displayShortcut($element);
+            }
+        }
+    }
+
+    public function displayRole(HTMLDOMElement $element)
+    {
+        if ($element->hasAttribute('role')) {
+            $roleDescription = $this->getRoleDescription(
+                $element->getAttribute('role')
+            );
+            if ($roleDescription !== null) {
+                $this->forceRead(
+                    $element,
+                    $roleDescription,
+                    $this->attributeRolePrefixBefore,
+                    $this->attributeRoleSuffixBefore,
+                    $this->attributeRolePrefixAfter,
+                    $this->attributeRoleSuffixAfter,
+                    AccessibleDisplayScreenReaderImplementation::DATA_ROLE_OF
+                );
+            }
+        }
+    }
+
+    public function displayAllRoles()
+    {
+        $elements = $this->parser->find('[role]')->listResults();
+        foreach ($elements as $element) {
+            if (CommonFunctions::isValidElement($element)) {
+                $this->displayRole($element);
             }
         }
     }

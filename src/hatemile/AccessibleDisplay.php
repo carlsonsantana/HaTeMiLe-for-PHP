@@ -36,4 +36,15 @@ interface AccessibleDisplay
      * Display all shortcuts of page.
      */
     public function displayAllShortcuts();
+
+    /**
+     * Display the WAI-ARIA role of element.
+     * @param \hatemile\util\html\HTMLDOMElement $element The element.
+     */
+    public function displayRole(HTMLDOMElement $element);
+
+    /**
+     * Display the WAI-ARIA roles of all elements of page.
+     */
+    public function displayAllRoles();
 }
