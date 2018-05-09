@@ -98,6 +98,13 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
     const DATA_ATTRIBUTE_ACCESSKEY_OF = 'data-attributeaccesskeyof';
 
     /**
+     * The name of attribute that links the content of header cell with the
+     * data cell.
+     * @var string
+     */
+    const DATA_ATTRIBUTE_HEADERS_OF = 'data-headersof';
+
+    /**
      * The name of attribute that links the content of role of element with the
      * element.
      * @var string
@@ -163,6 +170,30 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
      * @var string
      */
     protected $attributeAccesskeySuffixAfter;
+
+    /**
+     * The prefix text of header cell, before it content.
+     * @var string
+     */
+    protected $attributeHeadersPrefixBefore;
+
+    /**
+     * The suffix text of header cell, before it content.
+     * @var string
+     */
+    protected $attributeHeadersSuffixBefore;
+
+    /**
+     * The prefix text of header cell, after it content.
+     * @var string
+     */
+    protected $attributeHeadersPrefixAfter;
+
+    /**
+     * The suffix text of header cell, after it content.
+     * @var string
+     */
+    protected $attributeHeadersSuffixAfter;
 
     /**
      * The prefix text of role of element, before it.
@@ -242,6 +273,18 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         );
         $this->attributeAccesskeySuffixAfter = $configure->getParameter(
             'attribute-accesskey-suffix-after'
+        );
+        $this->attributeHeadersPrefixBefore = $configure->getParameter(
+            'attribute-headers-prefix-before'
+        );
+        $this->attributeHeadersSuffixBefore = $configure->getParameter(
+            'attribute-headers-suffix-before'
+        );
+        $this->attributeHeadersPrefixAfter = $configure->getParameter(
+            'attribute-headers-prefix-after'
+        );
+        $this->attributeHeadersSuffixAfter = $configure->getParameter(
+            'attribute-headers-suffix-after'
         );
         $this->attributeRolePrefixBefore = $configure->getParameter(
             'attribute-role-prefix-before'
@@ -747,6 +790,55 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         foreach ($elements as $element) {
             if (CommonFunctions::isValidElement($element)) {
                 $this->displayRole($element);
+            }
+        }
+    }
+
+    public function displayCellHeader(HTMLDOMElement $tableCell)
+    {
+        if ($tableCell->hasAttribute('headers')) {
+            $textHeader = '';
+            $idsHeaders = preg_split(
+                '/[ \n\t\r]+/',
+                $tableCell->getAttribute('headers')
+            );
+            foreach ($idsHeaders as $idHeader) {
+                $header = $this->parser->find('#' . $idHeader)->firstResult();
+                if ($header !== null) {
+                    if ($textHeader === '') {
+                        $textHeader = \trim($header->getTextContent());
+                    } else {
+                        $textHeader = (
+                            $textHeader .
+                            ' ' .
+                            \trim($header->getTextContent())
+                        );
+                    }
+                }
+            }
+            if (!empty(\trim($textHeader))) {
+                $this->forceRead(
+                    $tableCell,
+                    $textHeader,
+                    $this->attributeHeadersPrefixBefore,
+                    $this->attributeHeadersSuffixBefore,
+                    $this->attributeHeadersPrefixAfter,
+                    $this->attributeHeadersSuffixAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ATTRIBUTE_HEADERS_OF
+                );
+            }
+        }
+    }
+
+    public function displayAllCellHeaders()
+    {
+        $elements = $this->parser->find(
+            'td[headers],th[headers]'
+        )->listResults();
+        foreach ($elements as $element) {
+            if (CommonFunctions::isValidElement($element)) {
+                $this->displayCellHeader($element);
             }
         }
     }

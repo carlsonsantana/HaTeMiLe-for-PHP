@@ -47,4 +47,15 @@ interface AccessibleDisplay
      * Display the WAI-ARIA roles of all elements of page.
      */
     public function displayAllRoles();
+
+    /**
+     * Display the headers of each data cell of table.
+     * @param \hatemile\util\html\HTMLDOMElement $tableCell The table cell.
+     */
+    public function displayCellHeader(HTMLDOMElement $tableCell);
+
+    /**
+     * Display the headers of each data cell of all tables of page.
+     */
+    public function displayAllCellHeaders();
 }
