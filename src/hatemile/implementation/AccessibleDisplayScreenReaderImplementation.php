@@ -185,7 +185,7 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         $this->idGenerator = new IDGenerator('display');
         $this->shortcutPrefix = $this->getShortcutPrefix(
             $userAgent,
-            $configure->getParameter('text-standart-shortcut-prefix')
+            $configure->getParameter('attribute-accesskey-default')
         );
         $this->attributeAccesskeyBefore = $configure->getParameter(
             'attribute-accesskey-before'
