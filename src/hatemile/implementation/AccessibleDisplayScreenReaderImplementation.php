@@ -2074,7 +2074,9 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
 
     public function displayTitle(HTMLDOMElement $element)
     {
-        if (
+        if ($element->getTagName() === 'IMG') {
+            $this->displayAlternativeTextImage($element);
+        } elseif (
             ($element->hasAttribute('title'))
             && (!empty($element->getAttribute('title')))
         ) {
@@ -2132,6 +2134,43 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         foreach ($elements as $element) {
             if (CommonFunctions::isValidElement($element)) {
                 $this->displayLanguage($element);
+            }
+        }
+    }
+
+    public function displayAlternativeTextImage(HTMLDOMElement $image)
+    {
+        if (($image->hasAttribute('alt')) || ($image->hasAttribute('title'))) {
+            if (
+                ($image->hasAttribute('alt'))
+                && (!$image->hasAttribute('title'))
+            ) {
+                $image->setAttribute('title', $image->getAttribute('alt'));
+            } elseif (
+                ($image->hasAttribute('title'))
+                && (!$image->hasAttribute('alt'))
+            ) {
+                $image->setAttribute('alt', $image->getAttribute('title'));
+            }
+            $this->idGenerator->generateId($image);
+            $image->setAttribute(
+                AccessibleDisplayScreenReaderImplementation
+                        ::DATA_ATTRIBUTE_TITLE_OF,
+                $image->getAttribute('id')
+            );
+        } else {
+            $image->setAttribute('alt', '');
+            $image->setAttribute('role', 'presentation');
+            $image->setAttribute('aria-hidden', 'true');
+        }
+    }
+
+    public function displayAllAlternativeTextImages()
+    {
+        $images = $this->parser->find('img')->listResults();
+        foreach ($images as $image) {
+            if (CommonFunctions::isValidElement($image)) {
+                $this->displayAlternativeTextImage($image);
             }
         }
     }

@@ -104,4 +104,15 @@ interface AccessibleDisplay
      * Display the language of all elements of page.
      */
     public function displayAllLanguages();
+
+    /**
+     * Display the alternative text of image.
+     * @param \hatemile\util\html\HTMLDOMElement $image The image.
+     */
+    public function displayAlternativeTextImage(HTMLDOMElement $image);
+
+    /**
+     * Display the alternative text of all images of page.
+     */
+    public function displayAllAlternativeTextImages();
 }
