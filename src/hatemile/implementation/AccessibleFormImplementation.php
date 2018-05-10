@@ -443,37 +443,37 @@ class AccessibleFormImplementation implements AccessibleForm
                     $field,
                     AccessibleFormImplementation::WEEK_FIELDS_LIST
                 );
-            } else if ($type === 'month') {
+            } elseif ($type === 'month') {
                 $this->validate(
                     $field,
                     AccessibleFormImplementation::MONTH_FIELDS_LIST
                 );
-            } else if (($type === 'datetime-local') || ($type === 'datetime')) {
+            } elseif (($type === 'datetime-local') || ($type === 'datetime')) {
                 $this->validate(
                     $field,
                     AccessibleFormImplementation::DATETIME_FIELDS_LIST
                 );
-            } else if ($type === 'time') {
+            } elseif ($type === 'time') {
                 $this->validate(
                     $field,
                     AccessibleFormImplementation::TIME_FIELDS_LIST
                 );
-            } else if ($type === 'date') {
+            } elseif ($type === 'date') {
                 $this->validate(
                     $field,
                     AccessibleFormImplementation::DATE_FIELDS_LIST
                 );
-            } else if (($type === 'number') || ($type === 'range')) {
+            } elseif (($type === 'number') || ($type === 'range')) {
                 $this->validate(
                     $field,
                     AccessibleFormImplementation::RANGE_FIELDS_LIST
                 );
-            } else if ($type === 'email') {
+            } elseif ($type === 'email') {
                 $this->validate(
                     $field,
                     AccessibleFormImplementation::EMAIL_FIELDS_LIST
                 );
-            } else if ($type === 'url') {
+            } elseif ($type === 'url') {
                 $this->validate(
                     $field,
                     AccessibleFormImplementation::URL_FIELDS_LIST
