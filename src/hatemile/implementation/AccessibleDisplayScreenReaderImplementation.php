@@ -1482,79 +1482,6 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         $this->forceReadSimple($element, $textBefore, $textAfter, $dataOf);
     }
 
-    /**
-     * Display that the element has WAI-ARIA drag-and-drop state.
-     * @param \hatemile\util\html\HTMLDOMElement $element The element with
-     * WAI-ARIA drag-and-drop state.
-     */
-    protected function displayWAIARIADragandDrop(HTMLDOMElement $element)
-    {
-        if ($element->hasAttribute('aria-dropeffect')) {
-            $attributeValue = $element->getAttribute('aria-dropeffect');
-            if ($attributeValue === 'copy') {
-                $this->forceReadSimple(
-                    $element,
-                    $this->ariaDropeffectCopyBefore,
-                    $this->ariaDropeffectCopyAfter,
-                    AccessibleDisplayScreenReaderImplementation
-                            ::DATA_ARIA_DROPEFFECT_OF
-                );
-            } elseif ($attributeValue === 'move') {
-                $this->forceReadSimple(
-                    $element,
-                    $this->ariaDropeffectMoveBefore,
-                    $this->ariaDropeffectMoveAfter,
-                    AccessibleDisplayScreenReaderImplementation
-                            ::DATA_ARIA_DROPEFFECT_OF
-                );
-            } elseif ($attributeValue === 'link') {
-                $this->forceReadSimple(
-                    $element,
-                    $this->ariaDropeffectLinkBefore,
-                    $this->ariaDropeffectLinkAfter,
-                    AccessibleDisplayScreenReaderImplementation
-                            ::DATA_ARIA_DROPEFFECT_OF
-                );
-            } elseif ($attributeValue === 'execute') {
-                $this->forceReadSimple(
-                    $element,
-                    $this->ariaDropeffectExecuteBefore,
-                    $this->ariaDropeffectExecuteAfter,
-                    AccessibleDisplayScreenReaderImplementation
-                            ::DATA_ARIA_DROPEFFECT_OF
-                );
-            } elseif ($attributeValue === 'popup') {
-                $this->forceReadSimple(
-                    $element,
-                    $this->ariaDropeffectPopupBefore,
-                    $this->ariaDropeffectPopupAfter,
-                    AccessibleDisplayScreenReaderImplementation
-                            ::DATA_ARIA_DROPEFFECT_OF
-                );
-            }
-        }
-        if ($element->hasAttribute('aria-grabbed')) {
-            $attributeValue = $element->getAttribute('aria-grabbed');
-            if ($attributeValue === 'true') {
-                $this->forceReadSimple(
-                    $element,
-                    $this->ariaGrabbedTrueBefore,
-                    $this->ariaGrabbedTrueAfter,
-                    AccessibleDisplayScreenReaderImplementation
-                            ::DATA_ARIA_GRABBED_OF
-                );
-            } elseif ($attributeValue === 'false') {
-                $this->forceReadSimple(
-                    $element,
-                    $this->ariaGrabbedFalseBefore,
-                    $this->ariaGrabbedFalseAfter,
-                    AccessibleDisplayScreenReaderImplementation
-                            ::DATA_ARIA_GRABBED_OF
-                );
-            }
-        }
-    }
-
     public function displayShortcut(HTMLDOMElement $element)
     {
         if ($element->hasAttribute('accesskey')) {
@@ -1962,7 +1889,70 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
                 );
             }
         }
-        $this->displayWAIARIADragandDrop($element);
+        if ($element->hasAttribute('aria-dropeffect')) {
+            $attributeValue = $element->getAttribute('aria-dropeffect');
+            if ($attributeValue === 'copy') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaDropeffectCopyBefore,
+                    $this->ariaDropeffectCopyAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_DROPEFFECT_OF
+                );
+            } elseif ($attributeValue === 'move') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaDropeffectMoveBefore,
+                    $this->ariaDropeffectMoveAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_DROPEFFECT_OF
+                );
+            } elseif ($attributeValue === 'link') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaDropeffectLinkBefore,
+                    $this->ariaDropeffectLinkAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_DROPEFFECT_OF
+                );
+            } elseif ($attributeValue === 'execute') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaDropeffectExecuteBefore,
+                    $this->ariaDropeffectExecuteAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_DROPEFFECT_OF
+                );
+            } elseif ($attributeValue === 'popup') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaDropeffectPopupBefore,
+                    $this->ariaDropeffectPopupAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_DROPEFFECT_OF
+                );
+            }
+        }
+        if ($element->hasAttribute('aria-grabbed')) {
+            $attributeValue = $element->getAttribute('aria-grabbed');
+            if ($attributeValue === 'true') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaGrabbedTrueBefore,
+                    $this->ariaGrabbedTrueAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_GRABBED_OF
+                );
+            } elseif ($attributeValue === 'false') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaGrabbedFalseBefore,
+                    $this->ariaGrabbedFalseAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_GRABBED_OF
+                );
+            }
+        }
     }
 
     public function displayAllWAIARIAStates()
