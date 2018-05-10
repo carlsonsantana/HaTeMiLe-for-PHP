@@ -93,7 +93,10 @@ abstract class VanillaHTMLDOMNode implements HTMLDOMNode
 
     public function getParentElement()
     {
-        if (empty($this->node->parentNode)) {
+        if (
+            (empty($this->node->parentNode))
+            || (!($this->node->parentNode instanceof \DOMElement))
+        ) {
             return null;
         }
         return new VanillaHTMLDOMElement($this->node->parentNode);

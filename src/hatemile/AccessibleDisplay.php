@@ -93,4 +93,15 @@ interface AccessibleDisplay
      * Display the titles of all elements of page.
      */
     public function displayAllTitles();
+
+    /**
+     * Display the language of element.
+     * @param \hatemile\util\html\HTMLDOMElement $element The element.
+     */
+    public function displayLanguage(HTMLDOMElement $element);
+
+    /**
+     * Display the language of all elements of page.
+     */
+    public function displayAllLanguages();
 }

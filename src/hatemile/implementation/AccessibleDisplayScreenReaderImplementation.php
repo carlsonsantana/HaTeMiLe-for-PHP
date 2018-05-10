@@ -111,6 +111,13 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
     const DATA_ATTRIBUTE_HEADERS_OF = 'data-headersof';
 
     /**
+     * The name of attribute that links the description of language with the
+     * element.
+     * @var string
+     */
+    const DATA_ATTRIBUTE_LANGUAGE_OF = 'data-languageof';
+
+    /**
      * The name of attribute that links the content of link that open a new
      * instance.
      * @var string
@@ -322,6 +329,30 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
      * @var string
      */
     protected $attributeHeadersSuffixAfter;
+
+    /**
+     * The prefix text of description of language element, before it.
+     * @var string
+     */
+    protected $attributeLanguagePrefixBefore;
+
+    /**
+     * The suffix text of description of language element, after it.
+     * @var string
+     */
+    protected $attributeLanguageSuffixBefore;
+
+    /**
+     * The prefix text of description of language element, before it.
+     * @var string
+     */
+    protected $attributeLanguagePrefixAfter;
+
+    /**
+     * The suffix text of description of language element, after it.
+     * @var string
+     */
+    protected $attributeLanguageSuffixAfter;
 
     /**
      * The prefix text of role of element, before it.
@@ -864,6 +895,18 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         $this->attributeHeadersSuffixAfter = $configure->getParameter(
             'attribute-headers-suffix-after'
         );
+        $this->attributeLanguagePrefixBefore = $configure->getParameter(
+            'attribute-language-prefix-before'
+        );
+        $this->attributeLanguageSuffixBefore = $configure->getParameter(
+            'attribute-language-suffix-before'
+        );
+        $this->attributeLanguagePrefixAfter = $configure->getParameter(
+            'attribute-language-prefix-after'
+        );
+        $this->attributeLanguageSuffixAfter = $configure->getParameter(
+            'attribute-language-suffix-after'
+        );
         $this->attributeRolePrefixBefore = $configure->getParameter(
             'attribute-role-prefix-before'
         );
@@ -1157,6 +1200,27 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         } else {
             return null;
         }
+    }
+
+    /**
+     * Returns the description of language.
+     * @param string $languageCode The BCP 47 code language.
+     * @return string The description of language.
+     */
+    protected function getLanguageDescription($languageCode)
+    {
+        $language = strtolower($languageCode);
+        $parameter = 'language-' . $language;
+        if ($this->configure->hasParameter($parameter)) {
+            return $this->configure->getParameter($parameter);
+        } elseif (strpos($language, '-') !== false) {
+            $codes = \preg_split('/\-/', $language);
+            $parameter = 'language-' . $codes[0];
+            if ($this->configure->hasParameter($parameter)) {
+                return $this->configure->getParameter($parameter);
+            }
+        }
+        return null;
     }
 
     /**
@@ -2033,6 +2097,41 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         foreach ($elements as $element) {
             if (CommonFunctions::isValidElement($element)) {
                 $this->displayTitle($element);
+            }
+        }
+    }
+
+    public function displayLanguage(HTMLDOMElement $element)
+    {
+        $languageCode = null;
+        if ($element->hasAttribute('lang')) {
+            $languageCode = $element->getAttribute('lang');
+        } elseif ($element->hasAttribute('hreflang')) {
+            $languageCode = $element->getAttribute('hreflang');
+        }
+        $language = $this->getLanguageDescription($languageCode);
+        if ($language !== null) {
+            $this->forceRead(
+                $element,
+                $language,
+                $this->attributeLanguagePrefixBefore,
+                $this->attributeLanguageSuffixBefore,
+                $this->attributeLanguagePrefixAfter,
+                $this->attributeLanguageSuffixAfter,
+                AccessibleDisplayScreenReaderImplementation
+                        ::DATA_ATTRIBUTE_LANGUAGE_OF
+            );
+        }
+    }
+
+    public function displayAllLanguages()
+    {
+        $elements = $this->parser->find(
+            'html[lang],body[lang],body [lang],body [hreflang]'
+        )->listResults();
+        foreach ($elements as $element) {
+            if (CommonFunctions::isValidElement($element)) {
+                $this->displayLanguage($element);
             }
         }
     }
