@@ -118,6 +118,12 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
     const DATA_ATTRIBUTE_TARGET_OF = 'data-attributetargetof';
 
     /**
+     * The name of attribute that links the content of title of element.
+     * @var string
+     */
+    const DATA_ATTRIBUTE_TITLE_OF = 'data-attributetitleof';
+
+    /**
      * The name of attribute that links the content of autocomplete state of
      * field.
      * @var string
@@ -352,6 +358,30 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
      * @var string
      */
     protected $attributeTargetBlankAfter;
+
+    /**
+     * The prefix text of title of element, before it.
+     * @var string
+     */
+    protected $attributeTitlePrefixBefore;
+
+    /**
+     * The suffix text of title of element, before it.
+     * @var string
+     */
+    protected $attributeTitleSuffixBefore;
+
+    /**
+     * The prefix text of title of element, after it.
+     * @var string
+     */
+    protected $attributeTitlePrefixAfter;
+
+    /**
+     * The suffix text of title of element, after it.
+     * @var string
+     */
+    protected $attributeTitleSuffixAfter;
 
     /**
      * The content of autocomplete inline and list state of field, before it.
@@ -852,6 +882,19 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         $this->attributeTargetBlankAfter = $configure->getParameter(
             'attribute-target-blank-after'
         );
+        $this->attributeTitlePrefixBefore = $configure->getParameter(
+            'attribute-title-prefix-before'
+        );
+        $this->attributeTitleSuffixBefore = $configure->getParameter(
+            'attribute-title-suffix-before'
+        );
+        $this->attributeTitlePrefixAfter = $configure->getParameter(
+            'attribute-title-prefix-after'
+        );
+        $this->attributeTitleSuffixAfter = $configure->getParameter(
+            'attribute-title-suffix-after'
+        );
+
         $this->ariaAutoCompleteBothBefore = $configure->getParameter(
             'aria-autocomplete-both-before'
         );
@@ -1517,6 +1560,12 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         if ($element->hasAttribute('accesskey')) {
             $description = $this->getDescription($element);
             if (!$element->hasAttribute('title')) {
+                $this->idGenerator->generateId($element);
+                $element->setAttribute(
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ATTRIBUTE_TITLE_OF,
+                    $element->getAttribute('id')
+                );
                 $element->setAttribute('title', $description);
             }
 
@@ -1965,6 +2014,35 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         foreach ($elements as $element) {
             if (CommonFunctions::isValidElement($element)) {
                 $this->displayLinkAttributes($element);
+            }
+        }
+    }
+
+    public function displayTitle(HTMLDOMElement $element)
+    {
+        if (
+            ($element->hasAttribute('title'))
+            && (!empty($element->getAttribute('title')))
+        ) {
+            $this->forceRead(
+                $element,
+                $element->getAttribute('title'),
+                $this->attributeTitlePrefixBefore,
+                $this->attributeTitleSuffixBefore,
+                $this->attributeTitlePrefixAfter,
+                $this->attributeTitleSuffixAfter,
+                AccessibleDisplayScreenReaderImplementation
+                        ::DATA_ATTRIBUTE_TITLE_OF
+            );
+        }
+    }
+
+    public function displayAllTitles()
+    {
+        $elements = $this->parser->find('body [title]')->listResults();
+        foreach ($elements as $element) {
+            if (CommonFunctions::isValidElement($element)) {
+                $this->displayTitle($element);
             }
         }
     }

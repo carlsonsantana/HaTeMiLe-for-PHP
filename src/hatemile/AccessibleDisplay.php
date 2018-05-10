@@ -81,4 +81,16 @@ interface AccessibleDisplay
      * Display the attributes of all links of page.
      */
     public function displayAllLinksAttributes();
+
+    /**
+     * Display the title of element.
+     * @param \hatemile\util\html\HTMLDOMElement $element The element with
+     * title.
+     */
+    public function displayTitle(HTMLDOMElement $element);
+
+    /**
+     * Display the titles of all elements of page.
+     */
+    public function displayAllTitles();
 }
