@@ -58,4 +58,16 @@ interface AccessibleDisplay
      * Display the headers of each data cell of all tables of page.
      */
     public function displayAllCellHeaders();
+
+    /**
+     * Display the WAI-ARIA attributes of element.
+     * @param \hatemile\util\html\HTMLDOMElement $element The element with
+     * WAI-ARIA attributes.
+     */
+    public function displayWAIARIAStates(HTMLDOMElement $element);
+
+    /**
+     * Display the WAI-ARIA attributes of all elements of page.
+     */
+    public function displayAllWAIARIAStates();
 }

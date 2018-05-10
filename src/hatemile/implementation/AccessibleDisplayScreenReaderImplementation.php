@@ -105,6 +105,103 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
     const DATA_ATTRIBUTE_HEADERS_OF = 'data-headersof';
 
     /**
+     * The name of attribute that links the content of autocomplete state of
+     * field.
+     * @var string
+     */
+    const DATA_ARIA_AUTOCOMPLETE_OF = 'data-ariaautocompleteof';
+
+    /**
+     * The name of attribute that links the content of busy state of element.
+     * @var string
+     */
+    const DATA_ARIA_BUSY_OF = 'data-ariabusyof';
+
+    /**
+     * The name of attribute that links the content of checked state field.
+     * @var string
+     */
+    const DATA_ARIA_CHECKED_OF = 'data-ariacheckedof';
+
+    /**
+     * The name of attribute that links the content of drop effect state of
+     * element.
+     * @var string
+     */
+    const DATA_ARIA_DROPEFFECT_OF = 'data-ariadropeffectof';
+
+    /**
+     * The name of attribute that links the content of expanded state of
+     * element.
+     * @var string
+     */
+    const DATA_ARIA_EXPANDED_OF = 'data-ariaexpandedof';
+
+    /**
+     * The name of attribute that links the content of grabbed state of element.
+     * @var string
+     */
+    const DATA_ARIA_GRABBED_OF = 'data-ariagrabbedof';
+
+    /**
+     * The name of attribute that links the content that show if the field has
+     * popup.
+     * @var string
+     */
+    const DATA_ARIA_HASPOPUP_OF = 'data-ariahaspopupof';
+
+    /**
+     * The name of attribute that links the content of level state of element.
+     * @var string
+     */
+    const DATA_ARIA_LEVEL_OF = 'data-arialevelof';
+
+    /**
+     * The name of attribute that links the content of orientation state of
+     * element.
+     * @var string
+     */
+    const DATA_ARIA_ORIENTATION_OF = 'data-ariaorientationof';
+
+    /**
+     * The name of attribute that links the content of pressed state of field.
+     * @var string
+     */
+    const DATA_ARIA_PRESSED_OF = 'data-ariapressedof';
+
+    /**
+     * The name of attribute that links the content of minimum range state of
+     * field.
+     * @var string
+     */
+    const DATA_ARIA_RANGE_MIN_OF = 'data-attributevalueminof';
+
+    /**
+     * The name of attribute that links the content of maximum range state of
+     * field.
+     * @var string
+     */
+    const DATA_ARIA_RANGE_MAX_OF = 'data-attributevaluemaxof';
+
+    /**
+     * The name of attribute that links the content of required state of field.
+     * @var string
+     */
+    const DATA_ARIA_REQUIRED_OF = 'data-attributerequiredof';
+
+    /**
+     * The name of attribute that links the content of selected state of field.
+     * @var string
+     */
+    const DATA_ARIA_SELECTED_OF = 'data-ariaselectedof';
+
+    /**
+     * The name of attribute that links the content of sort state of element.
+     * @var string
+     */
+    const DATA_ARIA_SORT_OF = 'data-ariasortof';
+
+    /**
      * The name of attribute that links the content of role of element with the
      * element.
      * @var string
@@ -220,6 +317,414 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
     protected $attributeRoleSuffixAfter;
 
     /**
+     * The content of autocomplete inline and list state of field, before it.
+     * @var string
+     */
+    protected $ariaAutoCompleteBothBefore;
+
+    /**
+     * The content of autocomplete inline and list state of field, after it.
+     * @var string
+     */
+    protected $ariaAutoCompleteBothAfter;
+
+    /**
+     * The content of autocomplete inline state of field, before it.
+     * @var string
+     */
+    protected $ariaAutoCompleteInlineBefore;
+
+    /**
+     * The content of autocomplete inline state of field, after it.
+     * @var string
+     */
+    protected $ariaAutoCompleteInlineAfter;
+
+    /**
+     * The content of autocomplete list state of field, before it.
+     * @var string
+     */
+    protected $ariaAutoCompleteListBefore;
+
+    /**
+     * The content of autocomplete list state of field, after it.
+     * @var string
+     */
+    protected $ariaAutoCompleteListAfter;
+
+    /**
+     * The content of busy state of element, before it.
+     * @var string
+     */
+    protected $ariaBusyTrueBefore;
+
+    /**
+     * The content of busy state of element, after it.
+     * @var string
+     */
+    protected $ariaBusyTrueAfter;
+
+    /**
+     * The content of unchecked state field, before it.
+     * @var string
+     */
+    protected $ariaCheckedFalseBefore;
+
+    /**
+     * The content of unchecked state field, after it.
+     * @var string
+     */
+    protected $ariaCheckedFalseAfter;
+
+    /**
+     * The content of mixed checked state field, before it.
+     * @var string
+     */
+    protected $ariaCheckedMixedBefore;
+
+    /**
+     * The content of mixed checked state field, after it.
+     * @var string
+     */
+    protected $ariaCheckedMixedAfter;
+
+    /**
+     * The content of checked state field, before it.
+     * @var string
+     */
+    protected $ariaCheckedTrueBefore;
+
+    /**
+     * The content of checked state field, after it.
+     * @var string
+     */
+    protected $ariaCheckedTrueAfter;
+
+    /**
+     * The content of drop with copy effect state of element, before it.
+     * @var string
+     */
+    protected $ariaDropeffectCopyBefore;
+
+    /**
+     * The content of drop with copy effect state of element, after it.
+     * @var string
+     */
+    protected $ariaDropeffectCopyAfter;
+
+    /**
+     * The content of drop with execute effect state of element, before it.
+     * @var string
+     */
+    protected $ariaDropeffectExecuteBefore;
+
+    /**
+     * The content of drop with execute effect state of element, after it.
+     * @var string
+     */
+    protected $ariaDropeffectExecuteAfter;
+
+    /**
+     * The content of drop with link effect state of element, before it.
+     * @var string
+     */
+    protected $ariaDropeffectLinkBefore;
+
+    /**
+     * The content of drop with link effect state of element, after it.
+     * @var string
+     */
+    protected $ariaDropeffectLinkAfter;
+
+    /**
+     * The content of drop with move effect state of element, before it.
+     * @var string
+     */
+    protected $ariaDropeffectMoveBefore;
+
+    /**
+     * The content of drop with move effect state of element, after it.
+     * @var string
+     */
+    protected $ariaDropeffectMoveAfter;
+
+    /**
+     * The content of drop with popup effect state of element, before it.
+     * @var string
+     */
+    protected $ariaDropeffectPopupBefore;
+
+    /**
+     * The content of drop with popup effect state of element, after it.
+     * @var string
+     */
+    protected $ariaDropeffectPopupAfter;
+
+    /**
+     * The content of collapsed state of element, before it.
+     * @var string
+     */
+    protected $ariaExpandedFalseBefore;
+
+    /**
+     * The content of collapsed state of element, after it.
+     * @var string
+     */
+    protected $ariaExpandedFalseAfter;
+
+    /**
+     * The content of expanded state of element, before it.
+     * @var string
+     */
+    protected $ariaExpandedTrueBefore;
+
+    /**
+     * The content of expanded state of element, after it.
+     * @var string
+     */
+    protected $ariaExpandedTrueAfter;
+
+    /**
+     * The content of ungrabbed state of element, before it.
+     * @var string
+     */
+    protected $ariaGrabbedFalseBefore;
+
+    /**
+     * The content of ungrabbed state of element, after it.
+     * @var string
+     */
+    protected $ariaGrabbedFalseAfter;
+
+    /**
+     * The content of grabbed state of element, before it.
+     * @var string
+     */
+    protected $ariaGrabbedTrueBefore;
+
+    /**
+     * The content of grabbed state of element, after it.
+     * @var string
+     */
+    protected $ariaGrabbedTrueAfter;
+
+    /**
+     * The content that show if the field has popup, before it.
+     * @var string
+     */
+    protected $ariaHaspopupTrueBefore;
+
+    /**
+     * The content that show if the field has popup, after it.
+     * @var string
+     */
+    protected $ariaHaspopupTrueAfter;
+
+    /**
+     * The prefix content of level state of element, before it.
+     * @var string
+     */
+    protected $ariaLevelPrefixBefore;
+
+    /**
+     * The suffix content of level state of element, before it.
+     * @var string
+     */
+    protected $ariaLevelSuffixBefore;
+
+    /**
+     * The prefix content of level state of element, after it.
+     * @var string
+     */
+    protected $ariaLevelPrefixAfter;
+
+    /**
+     * The suffix content of level state of element, after it.
+     * @var string
+     */
+    protected $ariaLevelSuffixAfter;
+
+    /**
+     * The prefix content of maximum range state of field, before it.
+     * @var string
+     */
+    protected $ariaValueMaximumPrefixBefore;
+
+    /**
+     * The suffix content of maximum range state of field, before it.
+     * @var string
+     */
+    protected $ariaValueMaximumSuffixBefore;
+
+    /**
+     * The prefix content of maximum range state of field, after it.
+     * @var string
+     */
+    protected $ariaValueMaximumPrefixAfter;
+
+    /**
+     * The suffix content of maximum range state of field, after it.
+     * @var string
+     */
+    protected $ariaValueMaximumSuffixAfter;
+
+    /**
+     * The prefix content of minimum range state of field, before it.
+     * @var string
+     */
+    protected $ariaValueMinimumPrefixBefore;
+
+    /**
+     * The suffix content of minimum range state of field, before it.
+     * @var string
+     */
+    protected $ariaValueMinimumSuffixBefore;
+
+    /**
+     * The prefix content of minimum range state of field, after it.
+     * @var string
+     */
+    protected $ariaValueMinimumPrefixAfter;
+
+    /**
+     * The suffix content of minimum range state of field, after it.
+     * @var string
+     */
+    protected $ariaValueMinimumSuffixAfter;
+
+    /**
+     * The content of horizontal orientation state of element, before it.
+     * @var string
+     */
+    protected $ariaOrientationHorizontalBefore;
+
+    /**
+     * The content of horizontal orientation state of element, after it.
+     * @var string
+     */
+    protected $ariaOrientationHorizontalAfter;
+
+    /**
+     * The content of vertical orientation state of element, before it.
+     * @var string
+     */
+    protected $ariaOrientationVerticalBefore;
+
+    /**
+     * The content of vertical orientation state of element, after it.
+     * @var string
+     */
+    protected $ariaOrientationVerticalAfter;
+
+    /**
+     * The content of unpressed state of field, before it.
+     * @var string
+     */
+    protected $ariaPressedFalseBefore;
+
+    /**
+     * The content of unpressed state of field, after it.
+     * @var string
+     */
+    protected $ariaPressedFalseAfter;
+
+    /**
+     * The content of mixed pressed state of field, before it.
+     * @var string
+     */
+    protected $ariaPressedMixedBefore;
+
+    /**
+     * The content of mixed pressed state of field, after it.
+     * @var string
+     */
+    protected $ariaPressedMixedAfter;
+
+    /**
+     * The content of pressed state of field, before it.
+     * @var string
+     */
+    protected $ariaPressedTrueBefore;
+
+    /**
+     * The content of pressed state of field, after it.
+     * @var string
+     */
+    protected $ariaPressedTrueAfter;
+
+    /**
+     * The content of required state of field, before it.
+     * @var string
+     */
+    protected $ariaRequiredTrueBefore;
+
+    /**
+     * The content of required state of field, after it.
+     * @var string
+     */
+    protected $ariaRequiredTrueAfter;
+
+    /**
+     * The content of unselected state of field, before it.
+     * @var string
+     */
+    protected $ariaSelectedFalseBefore;
+
+    /**
+     * The content of unselected state of field, after it.
+     * @var string
+     */
+    protected $ariaSelectedFalseAfter;
+
+    /**
+     * The content of selected state of field, before it.
+     * @var string
+     */
+    protected $ariaSelectedTrueBefore;
+
+    /**
+     * The content of selected state of field, after it.
+     * @var string
+     */
+    protected $ariaSelectedTrueAfter;
+
+    /**
+     * The content of ascending sort state of element, before it.
+     * @var string
+     */
+    protected $ariaSortAscendingBefore;
+
+    /**
+     * The content of ascending sort state of element, after it.
+     * @var string
+     */
+    protected $ariaSortAscendingAfter;
+
+    /**
+     * The content of descending sort state of element, before it.
+     * @var string
+     */
+    protected $ariaSortDescendingBefore;
+
+    /**
+     * The content of descending sort state of element, after it.
+     * @var string
+     */
+    protected $ariaSortDescendingAfter;
+
+    /**
+     * The content of sorted state of element, before it.
+     * @var string
+     */
+    protected $ariaSortOtherBefore;
+
+    /**
+     * The content of sorted state of element, after it.
+     * @var string
+     */
+    protected $ariaSortOtherAfter;
+
+    /**
      * The list element of shortcuts, before the whole content of page.
      * @var \hatemile\util\html\HTMLDOMElement
      */
@@ -298,6 +803,204 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         $this->attributeRoleSuffixAfter = $configure->getParameter(
             'attribute-role-suffix-after'
         );
+        $this->ariaAutoCompleteBothBefore = $configure->getParameter(
+            'aria-autocomplete-both-before'
+        );
+        $this->ariaAutoCompleteBothAfter = $configure->getParameter(
+            'aria-autocomplete-both-after'
+        );
+        $this->ariaAutoCompleteInlineBefore = $configure->getParameter(
+            'aria-autocomplete-inline-before'
+        );
+        $this->ariaAutoCompleteInlineAfter = $configure->getParameter(
+            'aria-autocomplete-inline-after'
+        );
+        $this->ariaAutoCompleteListBefore = $configure->getParameter(
+            'aria-autocomplete-list-before'
+        );
+        $this->ariaAutoCompleteListAfter = $configure->getParameter(
+            'aria-autocomplete-list-after'
+        );
+        $this->ariaBusyTrueBefore = $configure->getParameter(
+            'aria-busy-true-before'
+        );
+        $this->ariaBusyTrueAfter = $configure->getParameter(
+            'aria-busy-true-after'
+        );
+        $this->ariaCheckedFalseBefore = $configure->getParameter(
+            'aria-checked-false-before'
+        );
+        $this->ariaCheckedFalseAfter = $configure->getParameter(
+            'aria-checked-false-after'
+        );
+        $this->ariaCheckedMixedBefore = $configure->getParameter(
+            'aria-checked-mixed-before'
+        );
+        $this->ariaCheckedMixedAfter = $configure->getParameter(
+            'aria-checked-mixed-after'
+        );
+        $this->ariaCheckedTrueBefore = $configure->getParameter(
+            'aria-checked-true-before'
+        );
+        $this->ariaCheckedTrueAfter = $configure->getParameter(
+            'aria-checked-true-after'
+        );
+        $this->ariaDropeffectCopyBefore = $configure->getParameter(
+            'aria-dropeffect-copy-before'
+        );
+        $this->ariaDropeffectCopyAfter = $configure->getParameter(
+            'aria-dropeffect-copy-after'
+        );
+        $this->ariaDropeffectExecuteBefore = $configure->getParameter(
+            'aria-dropeffect-execute-before'
+        );
+        $this->ariaDropeffectExecuteAfter = $configure->getParameter(
+            'aria-dropeffect-execute-after'
+        );
+        $this->ariaDropeffectLinkBefore = $configure->getParameter(
+            'aria-dropeffect-link-before'
+        );
+        $this->ariaDropeffectLinkAfter = $configure->getParameter(
+            'aria-dropeffect-link-after'
+        );
+        $this->ariaDropeffectMoveBefore = $configure->getParameter(
+            'aria-dropeffect-move-before'
+        );
+        $this->ariaDropeffectMoveAfter = $configure->getParameter(
+            'aria-dropeffect-move-after'
+        );
+        $this->ariaDropeffectPopupBefore = $configure->getParameter(
+            'aria-dropeffect-popup-before'
+        );
+        $this->ariaDropeffectPopupAfter = $configure->getParameter(
+            'aria-dropeffect-popup-after'
+        );
+        $this->ariaExpandedFalseBefore = $configure->getParameter(
+            'aria-expanded-false-before'
+        );
+        $this->ariaExpandedFalseAfter = $configure->getParameter(
+            'aria-expanded-false-after'
+        );
+        $this->ariaExpandedTrueBefore = $configure->getParameter(
+            'aria-expanded-true-before'
+        );
+        $this->ariaExpandedTrueAfter = $configure->getParameter(
+            'aria-expanded-true-after'
+        );
+        $this->ariaGrabbedFalseBefore = $configure->getParameter(
+            'aria-grabbed-false-before'
+        );
+        $this->ariaGrabbedFalseAfter = $configure->getParameter(
+            'aria-grabbed-false-after'
+        );
+        $this->ariaGrabbedTrueBefore = $configure->getParameter(
+            'aria-grabbed-true-before'
+        );
+        $this->ariaGrabbedTrueAfter = $configure->getParameter(
+            'aria-grabbed-true-after'
+        );
+        $this->ariaHaspopupTrueBefore = $configure->getParameter(
+            'aria-haspopup-true-before'
+        );
+        $this->ariaHaspopupTrueAfter = $configure->getParameter(
+            'aria-haspopup-true-after'
+        );
+        $this->ariaLevelPrefixBefore = $configure->getParameter(
+            'aria-level-prefix-before'
+        );
+        $this->ariaLevelSuffixBefore = $configure->getParameter(
+            'aria-level-suffix-before'
+        );
+        $this->ariaLevelPrefixAfter = $configure->getParameter(
+            'aria-level-prefix-after'
+        );
+        $this->ariaLevelSuffixAfter = $configure->getParameter(
+            'aria-level-suffix-after'
+        );
+        $this->ariaValueMaximumPrefixBefore = $configure->getParameter(
+            'aria-value-maximum-prefix-before'
+        );
+        $this->ariaValueMaximumSuffixBefore = $configure->getParameter(
+            'aria-value-maximum-suffix-before'
+        );
+        $this->ariaValueMaximumPrefixAfter = $configure->getParameter(
+            'aria-value-maximum-prefix-after'
+        );
+        $this->ariaValueMaximumSuffixAfter = $configure->getParameter(
+            'aria-value-maximum-suffix-after'
+        );
+        $this->ariaValueMinimumPrefixBefore = $configure->getParameter(
+            'aria-value-minimum-prefix-before'
+        );
+        $this->ariaValueMinimumSuffixBefore = $configure->getParameter(
+            'aria-value-minimum-suffix-before'
+        );
+        $this->ariaValueMinimumPrefixAfter = $configure->getParameter(
+            'aria-value-minimum-prefix-after'
+        );
+        $this->ariaValueMinimumSuffixAfter = $configure->getParameter(
+            'aria-value-minimum-suffix-after'
+        );
+        $this->ariaOrientationHorizontalBefore = $configure->getParameter(
+            'aria-orientation-horizontal-before'
+        );
+        $this->ariaOrientationHorizontalAfter = $configure->getParameter(
+            'aria-orientation-horizontal-after'
+        );
+        $this->ariaOrientationVerticalBefore = $configure->getParameter(
+            'aria-orientation-vertical-before'
+        );
+        $this->ariaOrientationVerticalAfter = $configure->getParameter(
+            'aria-orientation-vertical-after'
+        );
+        $this->ariaPressedFalseBefore = $configure->getParameter(
+            'aria-pressed-false-before'
+        );
+        $this->ariaPressedFalseAfter = $configure->getParameter(
+            'aria-pressed-false-after'
+        );
+        $this->ariaPressedMixedBefore = $configure->getParameter(
+            'aria-pressed-mixed-before'
+        );
+        $this->ariaPressedMixedAfter = $configure->getParameter(
+            'aria-pressed-mixed-after'
+        );
+        $this->ariaPressedTrueBefore = $configure->getParameter(
+            'aria-pressed-true-before'
+        );
+        $this->ariaPressedTrueAfter = $configure->getParameter(
+            'aria-pressed-true-after'
+        );
+        $this->ariaRequiredTrueBefore = $configure->getParameter(
+            'aria-required-true-before'
+        );
+        $this->ariaRequiredTrueAfter = $configure->getParameter(
+            'aria-required-true-after'
+        );
+        $this->ariaSelectedFalseBefore = $configure->getParameter(
+            'aria-selected-false-before'
+        );
+        $this->ariaSelectedFalseAfter = $configure->getParameter(
+            'aria-selected-false-after'
+        );
+        $this->ariaSelectedTrueBefore = $configure->getParameter(
+            'aria-selected-true-before'
+        );
+        $this->ariaSelectedTrueAfter = $configure->getParameter(
+            'aria-selected-true-after'
+        );
+        $this->ariaSortAscendingBefore = $configure->getParameter(
+            'aria-sort-ascending-before'
+        );
+        $this->ariaSortAscendingAfter = $configure->getParameter(
+            'aria-sort-ascending-after'
+        );
+        $this->ariaSortDescendingBefore = $configure->getParameter(
+            'aria-sort-descending-before'
+        );
+        $this->ariaSortDescendingAfter = $configure->getParameter(
+            'aria-sort-descending-after'
+        );
         $this->listShortcutsAdded = false;
         $this->listShortcutsBefore = null;
         $this->listShortcutsAfter = null;
@@ -354,7 +1057,8 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
      * @param string role The role.
      * @return string The description of role.
      */
-    protected function getRoleDescription($role) {
+    protected function getRoleDescription($role)
+    {
         $parameter = 'role-' . strtolower($role);
         if ($this->configure->hasParameter($parameter)) {
             return $this->configure->getParameter($parameter);
@@ -686,6 +1390,79 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         $this->forceReadSimple($element, $textBefore, $textAfter, $dataOf);
     }
 
+    /**
+     * Display that the element has WAI-ARIA drag-and-drop state.
+     * @param \hatemile\util\html\HTMLDOMElement $element The element with
+     * WAI-ARIA drag-and-drop state.
+     */
+    protected function displayWAIARIADragandDrop(HTMLDOMElement $element)
+    {
+        if ($element->hasAttribute('aria-dropeffect')) {
+            $attributeValue = $element->getAttribute('aria-dropeffect');
+            if ($attributeValue === 'copy') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaDropeffectCopyBefore,
+                    $this->ariaDropeffectCopyAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_DROPEFFECT_OF
+                );
+            } elseif ($attributeValue === 'move') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaDropeffectMoveBefore,
+                    $this->ariaDropeffectMoveAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_DROPEFFECT_OF
+                );
+            } elseif ($attributeValue === 'link') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaDropeffectLinkBefore,
+                    $this->ariaDropeffectLinkAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_DROPEFFECT_OF
+                );
+            } elseif ($attributeValue === 'execute') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaDropeffectExecuteBefore,
+                    $this->ariaDropeffectExecuteAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_DROPEFFECT_OF
+                );
+            } elseif ($attributeValue === 'popup') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaDropeffectPopupBefore,
+                    $this->ariaDropeffectPopupAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_DROPEFFECT_OF
+                );
+            }
+        }
+        if ($element->hasAttribute('aria-grabbed')) {
+            $attributeValue = $element->getAttribute('aria-grabbed');
+            if ($attributeValue === 'true') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaGrabbedTrueBefore,
+                    $this->ariaGrabbedTrueAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_GRABBED_OF
+                );
+            } elseif ($attributeValue === 'false') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaGrabbedFalseBefore,
+                    $this->ariaGrabbedFalseAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_GRABBED_OF
+                );
+            }
+        }
+    }
+
     public function displayShortcut(HTMLDOMElement $element)
     {
         if ($element->hasAttribute('accesskey')) {
@@ -839,6 +1616,269 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         foreach ($elements as $element) {
             if (CommonFunctions::isValidElement($element)) {
                 $this->displayCellHeader($element);
+            }
+        }
+    }
+
+    public function displayWAIARIAStates(HTMLDOMElement $element)
+    {
+        if (
+            ($element->hasAttribute('aria-busy'))
+            && ($element->getAttribute('aria-busy') === 'true')
+        ) {
+            $this->forceReadSimple(
+                $element,
+                $this->ariaBusyTrueBefore,
+                $this->ariaBusyTrueAfter,
+                AccessibleDisplayScreenReaderImplementation::DATA_ARIA_BUSY_OF
+            );
+        }
+        if ($element->hasAttribute('aria-checked')) {
+            $attributeValue = $element->getAttribute('aria-checked');
+            if ($attributeValue === 'true') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaCheckedTrueBefore,
+                    $this->ariaCheckedTrueAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_CHECKED_OF
+                );
+            } elseif ($attributeValue === 'false') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaCheckedFalseBefore,
+                    $this->ariaCheckedFalseAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_CHECKED_OF
+                );
+            } elseif ($attributeValue === 'mixed') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaCheckedMixedBefore,
+                    $this->ariaCheckedMixedAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_CHECKED_OF
+                );
+            }
+        }
+        if ($element->hasAttribute('aria-expanded')) {
+            $attributeValue = $element->getAttribute('aria-expanded');
+            if ($attributeValue === 'true') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaExpandedTrueBefore,
+                    $this->ariaExpandedTrueAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_EXPANDED_OF
+                );
+            } elseif ($attributeValue === 'false') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaExpandedFalseBefore,
+                    $this->ariaExpandedFalseAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_EXPANDED_OF
+                );
+            }
+        }
+        if (
+            ($element->hasAttribute('aria-haspopup'))
+            && ($element->getAttribute('aria-haspopup') === 'true')
+        ) {
+            $this->forceReadSimple(
+                $element,
+                $this->ariaHaspopupTrueBefore,
+                $this->ariaHaspopupTrueAfter,
+                AccessibleDisplayScreenReaderImplementation
+                        ::DATA_ARIA_HASPOPUP_OF
+            );
+        }
+        if ($element->hasAttribute('aria-level')) {
+            $this->forceRead(
+                $element,
+                $element->getAttribute('aria-level'),
+                $this->ariaLevelPrefixBefore,
+                $this->ariaLevelSuffixBefore,
+                $this->ariaLevelPrefixAfter,
+                $this->ariaLevelSuffixAfter,
+                AccessibleDisplayScreenReaderImplementation::DATA_ARIA_LEVEL_OF
+            );
+        }
+        if ($element->hasAttribute('aria-orientation')) {
+            $attributeValue = $element->getAttribute('aria-orientation');
+            if ($attributeValue === 'vertical') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaOrientationVerticalBefore,
+                    $this->ariaOrientationVerticalAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_ORIENTATION_OF
+                );
+            } elseif ($attributeValue === 'horizontal') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaOrientationHorizontalBefore,
+                    $this->ariaOrientationHorizontalAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_ORIENTATION_OF
+                );
+            }
+        }
+        if ($element->hasAttribute('aria-pressed')) {
+            $attributeValue = $element->getAttribute('aria-pressed');
+            if ($attributeValue === 'true') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaPressedTrueBefore,
+                    $this->ariaPressedTrueAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_PRESSED_OF
+                );
+            } elseif ($attributeValue === 'false') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaPressedFalseBefore,
+                    $this->ariaPressedFalseAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_PRESSED_OF
+                );
+            } elseif ($attributeValue === 'mixed') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaPressedMixedBefore,
+                    $this->ariaPressedMixedAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_PRESSED_OF
+                );
+            }
+        }
+        if ($element->hasAttribute('aria-selected')) {
+            $attributeValue = $element->getAttribute('aria-selected');
+            if ($attributeValue === 'true') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaSelectedTrueBefore,
+                    $this->ariaSelectedTrueAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_SELECTED_OF
+                );
+            } elseif ($attributeValue === 'false') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaSelectedFalseBefore,
+                    $this->ariaSelectedFalseAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_SELECTED_OF
+                );
+            }
+        }
+        if ($element->hasAttribute('aria-sort')) {
+            $attributeValue = $element->getAttribute('aria-sort');
+            if ($attributeValue === 'ascending') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaSortAscendingBefore,
+                    $this->ariaSortAscendingAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_SORT_OF
+                );
+            } elseif ($attributeValue === 'descending') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaSortDescendingBefore,
+                    $this->ariaSortDescendingAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_SORT_OF
+                );
+            } elseif ($attributeValue === 'other') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaSortOtherBefore,
+                    $this->ariaSortOtherAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_SORT_OF
+                );
+            }
+        }
+        if (
+            ($element->hasAttribute('aria-required'))
+            && ($element->getAttribute('aria-required') === 'true')
+        ) {
+            $this->forceReadSimple(
+                $element,
+                $this->ariaRequiredTrueBefore,
+                $this->ariaRequiredTrueAfter,
+                AccessibleDisplayScreenReaderImplementation
+                        ::DATA_ARIA_REQUIRED_OF
+            );
+        }
+        if ($element->hasAttribute('aria-valuemin')) {
+            $this->forceRead(
+                $element,
+                $element->getAttribute('aria-valuemin'),
+                $this->ariaValueMinimumPrefixBefore,
+                $this->ariaValueMinimumSuffixBefore,
+                $this->ariaValueMinimumPrefixAfter,
+                $this->ariaValueMinimumSuffixAfter,
+                AccessibleDisplayScreenReaderImplementation
+                        ::DATA_ARIA_RANGE_MIN_OF
+            );
+        }
+        if ($element->hasAttribute('aria-valuemax')) {
+            $this->forceRead(
+                $element,
+                $element->getAttribute('aria-valuemax'),
+                $this->ariaValueMaximumPrefixBefore,
+                $this->ariaValueMaximumSuffixBefore,
+                $this->ariaValueMaximumPrefixAfter,
+                $this->ariaValueMaximumSuffixAfter,
+                AccessibleDisplayScreenReaderImplementation
+                        ::DATA_ARIA_RANGE_MAX_OF
+            );
+        }
+        if ($element->hasAttribute('aria-autocomplete')) {
+            $attributeValue = $element->getAttribute('aria-autocomplete');
+            if ($attributeValue === 'both') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaAutoCompleteBothBefore,
+                    $this->ariaAutoCompleteBothAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_AUTOCOMPLETE_OF
+                );
+            } elseif ($attributeValue === 'inline') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaAutoCompleteListBefore,
+                    $this->ariaAutoCompleteListAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_AUTOCOMPLETE_OF
+                );
+            } elseif ($attributeValue === 'list') {
+                $this->forceReadSimple(
+                    $element,
+                    $this->ariaAutoCompleteInlineBefore,
+                    $this->ariaAutoCompleteInlineAfter,
+                    AccessibleDisplayScreenReaderImplementation
+                            ::DATA_ARIA_AUTOCOMPLETE_OF
+                );
+            }
+        }
+        $this->displayWAIARIADragandDrop($element);
+    }
+
+    public function displayAllWAIARIAStates()
+    {
+        $elements = $this->parser->find(
+            '[aria-busy=true],[aria-checked],[aria-dropeffect],' .
+            '[aria-expanded],[aria-grabbed],[aria-haspopup],[aria-level],' .
+            '[aria-orientation],[aria-pressed],[aria-selected],[aria-sort],' .
+            '[aria-required=true],[aria-valuemin],[aria-valuemax],' .
+            '[aria-autocomplete]'
+        )->listResults();
+        foreach ($elements as $element) {
+            if (CommonFunctions::isValidElement($element)) {
+                $this->displayWAIARIAStates($element);
             }
         }
     }
