@@ -70,4 +70,15 @@ interface AccessibleDisplay
      * Display the WAI-ARIA attributes of all elements of page.
      */
     public function displayAllWAIARIAStates();
+
+    /**
+     * Display the attributes of link.
+     * @param \hatemile\util\html\HTMLDOMElement $link The link element.
+     */
+    public function displayLinkAttributes(HTMLDOMElement $link);
+
+    /**
+     * Display the attributes of all links of page.
+     */
+    public function displayAllLinksAttributes();
 }

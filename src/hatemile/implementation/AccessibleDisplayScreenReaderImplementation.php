@@ -98,11 +98,24 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
     const DATA_ATTRIBUTE_ACCESSKEY_OF = 'data-attributeaccesskeyof';
 
     /**
+     * The name of attribute that links the content of download link.
+     * @var string
+     */
+    const DATA_ATTRIBUTE_DOWNLOAD_OF = 'data-attributedownloadof';
+
+    /**
      * The name of attribute that links the content of header cell with the
      * data cell.
      * @var string
      */
     const DATA_ATTRIBUTE_HEADERS_OF = 'data-headersof';
+
+    /**
+     * The name of attribute that links the content of link that open a new
+     * instance.
+     * @var string
+     */
+    const DATA_ATTRIBUTE_TARGET_OF = 'data-attributetargetof';
 
     /**
      * The name of attribute that links the content of autocomplete state of
@@ -269,6 +282,18 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
     protected $attributeAccesskeySuffixAfter;
 
     /**
+     * The text of link that download a file, before it.
+     * @var string
+     */
+    protected $attributeDownloadBefore;
+
+    /**
+     * The text of link that download a file, after it.
+     * @var string
+     */
+    protected $attributeDownloadAfter;
+
+    /**
      * The prefix text of header cell, before it content.
      * @var string
      */
@@ -315,6 +340,18 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
      * @var string
      */
     protected $attributeRoleSuffixAfter;
+
+    /**
+     * The text of link that open new instance, before it.
+     * @var string
+     */
+    protected $attributeTargetBlankBefore;
+
+    /**
+     * The text of link that open new instance, after it.
+     * @var string
+     */
+    protected $attributeTargetBlankAfter;
 
     /**
      * The content of autocomplete inline and list state of field, before it.
@@ -779,6 +816,12 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         $this->attributeAccesskeySuffixAfter = $configure->getParameter(
             'attribute-accesskey-suffix-after'
         );
+        $this->attributeDownloadBefore = $configure->getParameter(
+            'attribute-download-before'
+        );
+        $this->attributeDownloadAfter = $configure->getParameter(
+            'attribute-download-after'
+        );
         $this->attributeHeadersPrefixBefore = $configure->getParameter(
             'attribute-headers-prefix-before'
         );
@@ -802,6 +845,12 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         );
         $this->attributeRoleSuffixAfter = $configure->getParameter(
             'attribute-role-suffix-after'
+        );
+        $this->attributeTargetBlankBefore = $configure->getParameter(
+            'attribute-target-blank-before'
+        );
+        $this->attributeTargetBlankAfter = $configure->getParameter(
+            'attribute-target-blank-after'
         );
         $this->ariaAutoCompleteBothBefore = $configure->getParameter(
             'aria-autocomplete-both-before'
@@ -1879,6 +1928,43 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         foreach ($elements as $element) {
             if (CommonFunctions::isValidElement($element)) {
                 $this->displayWAIARIAStates($element);
+            }
+        }
+    }
+
+    public function displayLinkAttributes(HTMLDOMElement $link)
+    {
+        if ($link->hasAttribute('download')) {
+            $this->forceReadSimple(
+                $link,
+                $this->attributeDownloadBefore,
+                $this->attributeDownloadAfter,
+                AccessibleDisplayScreenReaderImplementation
+                        ::DATA_ATTRIBUTE_DOWNLOAD_OF
+            );
+        }
+        if (
+            ($link->hasAttribute('target'))
+            && ($link->getAttribute('target') === '_blank')
+        ) {
+            $this->forceReadSimple(
+                $link,
+                $this->attributeTargetBlankBefore,
+                $this->attributeTargetBlankAfter,
+                AccessibleDisplayScreenReaderImplementation
+                        ::DATA_ATTRIBUTE_TARGET_OF
+            );
+        }
+    }
+
+    public function displayAllLinksAttributes()
+    {
+        $elements = $this->parser->find(
+            'a[download],a[target="_blank"]'
+        )->listResults();
+        foreach ($elements as $element) {
+            if (CommonFunctions::isValidElement($element)) {
+                $this->displayLinkAttributes($element);
             }
         }
     }
