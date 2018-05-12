@@ -5,7 +5,8 @@
     "homepage": "https://github.com/hatemile/hatemile-for-php",
     "type": "library",
     "require": {
-        "electrolinux/phpquery": "^0.9.6"
+        "electrolinux/phpquery": "^0.9.6",
+        "sabberworm/php-css-parser": "^8.1.0"
     },
     "license": "Apache-2.0",
     "authors": [
