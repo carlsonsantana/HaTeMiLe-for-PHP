@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE symbols [
+<!ENTITY quot '"'>
+<!ENTITY amp '&#38;'>
+<!ENTITY lt '<'>
+]>
+<symbols>
+    <symbol symbol="!" description="symbol-exclamation-mark" />
+    <symbol symbol="&quot;" description="symbol-double-quotes" />
+    <symbol symbol="#" description="symbol-number" />
+    <symbol symbol="$" description="symbol-dollar" />
+    <symbol symbol="%" description="symbol-percent" />
+    <symbol symbol="&amp;" description="symbol-ampersand" />
+    <symbol symbol="'" description="symbol-single-quote" />
+    <symbol symbol="(" description="symbol-open-parenthesis" />
+    <symbol symbol=")" description="symbol-close-parenthesis" />
+    <symbol symbol="*" description="symbol-asterisk" />
+    <symbol symbol="+" description="symbol-plus" />
+    <symbol symbol="," description="symbol-comma" />
+    <symbol symbol="-" description="symbol-hyphen" />
+    <symbol symbol="." description="symbol-dot" />
+    <symbol symbol="/" description="symbol-slash" />
+    <symbol symbol=":" description="symbol-colon" />
+    <symbol symbol=";" description="symbol-semicolon" />
+    <symbol symbol="&lt;" description="symbol-less-than" />
+    <symbol symbol="=" description="symbol-equals" />
+    <symbol symbol=">" description="symbol-greater-than" />
+    <symbol symbol="?" description="symbol-question-mark" />
+    <symbol symbol="@" description="symbol-at" />
+    <symbol symbol="[" description="symbol-open-bracket" />
+    <symbol symbol="\" description="symbol-backslash" />
+    <symbol symbol="]" description="symbol-close-bracket" />
+    <symbol symbol="^" description="symbol-caret" />
+    <symbol symbol="_" description="symbol-underscore" />
+    <symbol symbol="`" description="symbol-grave-accent" />
+    <symbol symbol="{" description="symbol-open-brace" />
+    <symbol symbol="|" description="symbol-vertical-bar" />
+    <symbol symbol="}" description="symbol-close-brace" />
+    <symbol symbol="~" description="symbol-tilde" />
+</symbols>
