@@ -73,7 +73,6 @@ abstract class VanillaHTMLDOMNode implements HTMLDOMNode
         }
         if (!$added) {
             $nativeParent->appendChild($newNode->getData());
-            $this->getParentElement()->appendElement($newNode);
         }
         return $this;
     }
