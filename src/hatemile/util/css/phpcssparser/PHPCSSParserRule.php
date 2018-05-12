@@ -23,17 +23,27 @@ use \hatemile\util\css\StyleSheetRule;
 use \hatemile\util\css\phpcssparser\PHPCSSParserDeclaration;
 use \Sabberworm\CSS\RuleSet\DeclarationBlock;
 
+/**
+ * The PHPCSSParserRule class is official implementation of StyleSheetRule for
+ * Sabberworm PHP CSS Parser.
+ */
 class PHPCSSParserRule implements StyleSheetRule
 {
 
     /**
-     *
+     * The Sabberworm PHP CSS declaration block;
      * @var \Sabberworm\CSS\RuleSet\DeclarationBlock
      */
     protected $rule;
 
-    public function __construct(DeclarationBlock $param) {
-        $this->rule = $param;
+    /**
+     * Initializes a new object that encapsulate the Sabberworm PHP CSS
+     * declaration block.
+     * @param \Sabberworm\CSS\RuleSet\DeclarationBlock $declarationBlock The
+     * Sabberworm PHP CSS declaration block.
+     */
+    public function __construct(DeclarationBlock $declarationBlock) {
+        $this->rule = $declarationBlock;
     }
 
     public function hasProperty($propertyName)

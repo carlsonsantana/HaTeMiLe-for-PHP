@@ -18,18 +18,26 @@ require_once join(DIRECTORY_SEPARATOR, array(
 use \hatemile\util\css\StyleSheetDeclaration;
 use \Sabberworm\CSS\Rule\Rule;
 
+/**
+ * The PHPCSSParserDeclaration class is official implementation of
+ * StyleSheetDeclaration for Sabberworm PHP CSS Parser.
+ */
 class PHPCSSParserDeclaration implements StyleSheetDeclaration
 {
 
     /**
-     *
+     * The Sabberworm PHP CSS Rule.
      * @var \Sabberworm\CSS\Rule\Rule
      */
     protected $declaration;
 
-    public function __construct(Rule $param)
+    /**
+     * Initializes a new object that encapsulate the Sabberworm PHP CSS Rule.
+     * @param \Sabberworm\CSS\Rule\Rule $rule The Sabberworm PHP CSS Rule.
+     */
+    public function __construct(Rule $rule)
     {
-        $this->declaration = $param;
+        $this->declaration = $rule;
     }
 
     public function getValue()

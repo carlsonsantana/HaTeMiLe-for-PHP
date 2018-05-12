@@ -35,15 +35,21 @@ use \hatemile\util\html\HTMLDOMParser;
 class PHPCSSParser implements StyleSheetParser
 {
     /**
+     * The CSS document.
      * @var \Sabberworm\CSS\CSSList\Document
      */
     protected $cssDocument;
 
-    public function __construct($cssCodeOrCSSDocument, $currentURL = null)
+    /**
+     * Initializes a new object that encapsulate the Sabberworm PHP CSS Parser
+     * parser.
+     * @param \hatemile\util\html\HTMLDOMParser|string $cssCodeOrHTMLParser
+     * The HTML parser or CSS code of page.
+     * @param string $currentURL The current URL of page.
+     */
+    public function __construct($cssCodeOrHTMLParser, $currentURL = null)
     {
-        if ($cssCodeOrCSSDocument instanceof \Sabberworm\CSS\CSSList\Document) {
-            $this->cssDocument = $cssCodeOrCSSDocument;
-        } elseif ($cssCodeOrCSSDocument instanceof HTMLDOMParser) {
+        if ($cssCodeOrHTMLParser instanceof HTMLDOMParser) {
             if ($currentURL === null) {
                 if (filter_input(INPUT_SERVER, 'HTTPS') !== 'on') {
                     $currentURL = 'https://';
@@ -59,11 +65,11 @@ class PHPCSSParser implements StyleSheetParser
                 );
             }
             $this->cssDocument = $this->createParser(
-                $cssCodeOrCSSDocument,
+                $cssCodeOrHTMLParser,
                 $currentURL
             );
         } else {
-            $cssParser = new \Sabberworm\CSS\Parser($cssCodeOrCSSDocument);
+            $cssParser = new \Sabberworm\CSS\Parser($cssCodeOrHTMLParser);
             $this->cssDocument = $cssParser->parse();
         }
     }
@@ -124,10 +130,10 @@ class PHPCSSParser implements StyleSheetParser
     }
 
     /**
-     * 
+     * Create the CSS document.
      * @param \hatemile\util\html\HTMLDOMParser $htmlParser The HTML parser.
      * @param string $currentURL The current URL of page.
-     * @return \Sabberworm\CSS\CSSList\Document 
+     * @return \Sabberworm\CSS\CSSList\Document The CSS document.
      */
     protected function createParser(HTMLDOMParser $htmlParser, $currentURL)
     {
