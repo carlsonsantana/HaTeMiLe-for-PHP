@@ -271,7 +271,11 @@ class VanillaHTMLDOMElement extends VanillaHTMLDOMNode implements HTMLDOMElement
             }
         }
         if ($result !== null) {
-            return new VanillaHTMLDOMElement($result);
+            if ($result instanceof \DOMElement) {
+                return new VanillaHTMLDOMElement($result);
+            } elseif ($child instanceof \DOMText) {
+                return new VanillaHTMLDOMTextNode($result);
+            }
         }
         return null;
     }
