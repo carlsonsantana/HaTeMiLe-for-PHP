@@ -55,12 +55,13 @@ abstract class VanillaHTMLDOMNode implements HTMLDOMNode
 
     public function insertAfter(HTMLDOMNode $newNode)
     {
-        $children = $this->getParentElement()->getData()->childNodes;
+        $nativeParent = $this->getParentElement()->getData();
+        $children = $nativeParent->childNodes;
         $found = false;
         $added = false;
         foreach ($children as $child) {
             if ($found) {
-                $this->getParentElement()->getData()->insertBefore(
+                $nativeParent->insertBefore(
                     $newNode->getData(),
                     $child
                 );
@@ -71,6 +72,7 @@ abstract class VanillaHTMLDOMNode implements HTMLDOMNode
             }
         }
         if (!$added) {
+            $nativeParent->appendChild($newNode->getData());
             $this->getParentElement()->appendElement($newNode);
         }
         return $this;
