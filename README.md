@@ -12,6 +12,13 @@ HaTeMiLe (HTML Accessible) is a library that can convert a HTML code in a HTML c
 * [Improve the acessibility of forms](https://github.com/hatemile/hatemile-for-php/wiki/Improve-the-acessibility-of-forms);
 * [Provide accessibility resources to navigate](https://github.com/hatemile/hatemile-for-php/wiki/Provide-accessibility-resources-to-navigate).
 
+## Documentation
+
+To generate the full API documentation of HaTeMiLe of PHP:
+
+1. [Install phpDocumentor](http://docs.phpdoc.org/getting-started/installing.html);
+2. [Execute the phpDocumentor in HaTeMiLe of PHP directory](http://docs.phpdoc.org/guides/running-phpdocumentor.html).
+
 ## Example
     <?php
     ob_start();
