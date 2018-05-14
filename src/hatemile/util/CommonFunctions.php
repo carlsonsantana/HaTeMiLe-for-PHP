@@ -19,7 +19,7 @@ require_once join(DIRECTORY_SEPARATOR, array(
 use \hatemile\util\html\HTMLDOMElement;
 
 /**
- * The CommonFuncionts class contains the used methods by HaTeMiLe classes.
+ * The CommonFunctions class contains the used methods by HaTeMiLe classes.
  */
 class CommonFunctions
 {
