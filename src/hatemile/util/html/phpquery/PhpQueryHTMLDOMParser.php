@@ -45,9 +45,8 @@ class PhpQueryHTMLDOMParser implements HTMLDOMParser
     /**
      * Initializes a new object that encapsulate the parser of phpQuery
      * library.
-     * @param string|\phpQueryObject $codeOrParser The html code of page or the
-     * parser from phpQuery library.
-     * @param \hatemile\util\Configure $configure The configuration of HaTeMiLe.
+     * @param string|\phpQueryObject $codeOrParser The html code or the parser
+     * from phpQuery library.
      */
     public function __construct($codeOrParser)
     {
