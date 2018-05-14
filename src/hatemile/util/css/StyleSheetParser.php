@@ -20,7 +20,7 @@ interface StyleSheetParser
     /**
      * Returns the rules of parser by properties.
      * @param string[] $properties The properties.
-     * @return \hatemile\util\css\StyleSheetRule The rules.
+     * @return \hatemile\util\css\StyleSheetRule[] The rules.
      */
     public function getRules($properties);
 }
