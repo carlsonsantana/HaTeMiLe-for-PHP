@@ -62,7 +62,7 @@ interface HTMLDOMNode
     /**
      * Prepend a text content in node.
      * @param string $text The text content.
-     * @return \hatemile\util\html\HTMLDOMNod This node.
+     * @return \hatemile\util\html\HTMLDOMNode This node.
      */
     public function prependText($text);
 
