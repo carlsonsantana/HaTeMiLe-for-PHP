@@ -64,8 +64,8 @@ class CommonFunctions
      * Increase a item in a list.
      * @param string $list The list.
      * @param string $stringToIncrease The value of item.
-     * @return string True if the list contains the item or false is not
-     * contains.
+     * @return string The HTML list with the item added, if the item not was
+     * contained in list.
      */
     public static function increaseInList($list, $stringToIncrease)
     {
