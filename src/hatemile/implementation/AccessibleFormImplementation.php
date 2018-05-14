@@ -384,14 +384,14 @@ class AccessibleFormImplementation implements AccessibleForm
 
     public function markAllAutoCompleteFields()
     {
-        $elements = $this->parser->find(
+        $autoCompleteFields = $this->parser->find(
             'input[autocomplete],textarea[autocomplete],' .
             'form[autocomplete] input, form[autocomplete] textarea,[list],' .
             '[form]'
         )->listResults();
-        foreach ($elements as $element) {
-            if (CommonFunctions::isValidElement($element)) {
-                $this->markAutoCompleteField($element);
+        foreach ($autoCompleteFields as $autoCompleteField) {
+            if (CommonFunctions::isValidElement($autoCompleteField)) {
+                $this->markAutoCompleteField($autoCompleteField);
             }
         }
     }

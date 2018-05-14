@@ -80,84 +80,87 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
      * @return \hatemile\util\html\HTMLDOMElement[][] The list that represents
      * the table.
      */
-    protected function generatePart(HTMLDOMElement $part)
+    protected function getModelTable(HTMLDOMElement $part)
     {
         $rows = $this->parser->find($part)->findChildren('tr')->listResults();
         $table = array();
         foreach ($rows as $row) {
-            array_push($table, $this->generateColspan(
+            array_push($table, $this->getModelRow(
                 $this->parser->find($row)->findChildren('td,th')->listResults()
             ));
         }
-        return $this->generateRowspan($table);
+        return $this->getValidModelTable($table);
     }
 
     /**
      * Returns a list that represents the table with the rowspans.
-     * @param \hatemile\util\html\HTMLDOMElement[][] $rows The list that
-     * represents the table without the rowspans.
+     * @param \hatemile\util\html\HTMLDOMElement[][] $originalTable The list
+     * that represents the table without the rowspans.
      * @return \hatemile\util\html\HTMLDOMElement[][] The list that represents
      * the table with the rowspans.
      */
-    protected function generateRowspan($rows)
+    protected function getValidModelTable($originalTable)
     {
-        $copy = array_merge($rows);
-        $table = array();
-        if (!empty($rows)) {
-            for ($i = 0, $lengthRows = sizeof($rows); $i < $lengthRows; $i++) {
-                $columnIndex = 0;
-                if (sizeof($table) <= $i) {
-                    $table[$i] = array();
+        $newTable = array();
+        if (!empty($originalTable)) {
+            $lengthTable = sizeof($originalTable);
+            for ($rowIndex = 0; $rowIndex < $lengthTable; $rowIndex++) {
+                $cellsAdded = 0;
+                if (sizeof($newTable) <= $rowIndex) {
+                    $newTable[$rowIndex] = array();
                 }
-                $cells = array_merge($copy[$i]);
-                $lengthCells = sizeof($cells);
-                for ($j = 0; $j < $lengthCells; $j++) {
-                    $cell = $cells[$j];
-                    $m = $j + $columnIndex;
-                    $row = $table[$i];
-                    while (!empty($row[$m])) {
-                        $columnIndex++;
-                        $m = $j + $columnIndex;
+                $originalRow = array_merge($originalTable[$rowIndex]);
+                $lengthRow = sizeof($originalRow);
+                for ($cellIndex = 0; $cellIndex < $lengthRow; $cellIndex++) {
+                    $cell = $originalRow[$cellIndex];
+                    $newCellIndex = $cellIndex + $cellsAdded;
+                    $newRow = $newTable[$rowIndex];
+                    while (!empty($newRow[$newCellIndex])) {
+                        $cellsAdded++;
+                        $newCellIndex = $cellIndex + $cellsAdded;
                     }
-                    $row[$m] = $cell;
+                    $newRow[$newCellIndex] = $cell;
                     if ($cell->hasAttribute('rowspan')) {
                         $rowspan = intval($cell->getAttribute('rowspan'));
-                        for ($k = 1; $k < $rowspan; $k++) {
-                            $n = $i + $k;
-                            if (empty($table[$n])) {
-                                $table[$n] = array();
+                        for (
+                            $newRowIndex = $rowIndex + 1;
+                            $rowspan > 1;
+                            $rowspan--,
+                            $newRowIndex++
+                        ) {
+                            if (empty($newTable[$newRowIndex])) {
+                                $newTable[$newRowIndex] = array();
                             }
-                            $table[$n][$m] = $cell;
+                            $newTable[$newRowIndex][$newCellIndex] = $cell;
                         }
                     }
-                    $table[$i] = $row;
+                    $newTable[$rowIndex] = $newRow;
                 }
             }
         }
-        return $table;
+        return $newTable;
     }
 
     /**
      * Returns a list that represents the line of table with the colspans.
-     * @param \hatemile\util\html\HTMLDOMElement[] $row The list that represents
-     * the line of table without the colspans.
+     * @param \hatemile\util\html\HTMLDOMElement[] $originalRow The list that
+     * represents the line of table without the colspans.
      * @return \hatemile\util\html\HTMLDOMElement[] The list that represents the
      * line of table with the colspans.
      */
-    protected function generateColspan($row)
+    protected function getModelRow($originalRow)
     {
-        $copy = array_merge($row);
-        $cells = array_merge($row);
-        for ($i = 0, $size = sizeof($row); $i < $size; $i++) {
-            $cell = $cells[$i];
+        $newRow = array_merge($originalRow);
+        for ($i = 0, $size = sizeof($originalRow); $i < $size; $i++) {
+            $cell = $originalRow[$i];
             if ($cell->hasAttribute('colspan')) {
                 $colspan = intval($cell->getAttribute('colspan'));
                 for ($j = 1; $j < $colspan; $j++) {
-                    array_splice($copy, $i + $j, 0, array($cell));
+                    array_splice($newRow, $i + $j, 0, array($cell));
                 }
             }
         }
-        return $copy;
+        return $newRow;
     }
 
     /**
@@ -192,7 +195,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
      * @param int $index The index of columns.
      * @return string[] The list with ids of rows of same column.
      */
-    protected function returnListIdsColumns($header, $index)
+    protected function getCellsHeadersIds($header, $index)
     {
         $ids = array();
         foreach ($header as $row) {
@@ -208,12 +211,13 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
      * @param \hatemile\util\html\HTMLDOMElement $element The table body or
      * table footer.
      */
-    protected function fixBodyOrFooter(HTMLDOMElement $element)
-    {
-        $table = $this->generatePart($element);
-        foreach ($table as $cells) {
+    protected function associateDataCellsWithHeaderCellsOfRow(
+        HTMLDOMElement $element
+    ) {
+        $table = $this->getModelTable($element);
+        foreach ($table as $row) {
             $headersIds = array();
-            foreach ($cells as $cell) {
+            foreach ($row as $cell) {
                 if ($cell->getTagName() === 'TH') {
                     $this->idGenerator->generateId($cell);
                     array_push($headersIds, $cell->getAttribute('id'));
@@ -222,7 +226,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
                 }
             }
             if (!empty($headersIds)) {
-                foreach ($cells as $cell) {
+                foreach ($row as $cell) {
                     if ($cell->getTagName() === 'TD') {
                         $headers = $cell->getAttribute('headers');
                         foreach ($headersIds as $headerId) {
@@ -242,7 +246,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
      * Set the scope of header cells of table header.
      * @param \hatemile\util\html\HTMLDOMElement $tableHeader The table header.
      */
-    protected function fixHeader(HTMLDOMElement $tableHeader)
+    protected function prepareHeaderCells(HTMLDOMElement $tableHeader)
     {
         $cells = $this->parser->find($tableHeader)->findChildren(
             'tr'
@@ -266,24 +270,24 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
             'tfoot'
         )->firstResult();
         if ($header !== null) {
-            $this->fixHeader($header);
+            $this->prepareHeaderCells($header);
 
-            $headerCells = $this->generatePart($header);
-            if (($body !== null) && ($this->validateHeader($headerCells))) {
-                $lengthHeader = sizeof($headerCells[0]);
-                $fakeTable = $this->generatePart($body);
+            $headerRows = $this->getModelTable($header);
+            if (($body !== null) && ($this->validateHeader($headerRows))) {
+                $lengthHeader = sizeof($headerRows[0]);
+                $fakeTable = $this->getModelTable($body);
                 if ($footer !== null) {
                     $fakeTable = array_merge(
                         $fakeTable,
-                        $this->generatePart($footer)
+                        $this->getModelTable($footer)
                     );
                 }
-                foreach ($fakeTable as $cells) {
-                    if (sizeof($cells) === $lengthHeader) {
+                foreach ($fakeTable as $row) {
+                    if (sizeof($row) === $lengthHeader) {
                         $i = 0;
-                        foreach ($cells as $cell) {
-                            $headersIds = $this->returnListIdsColumns(
-                                $headerCells,
+                        foreach ($row as $cell) {
+                            $headersIds = $this->getCellsHeadersIds(
+                                $headerRows,
                                 $i
                             );
                             $headers = $cell->getAttribute('headers');
@@ -301,10 +305,10 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
             }
         }
         if ($body !== null) {
-            $this->fixBodyOrFooter($body);
+            $this->associateDataCellsWithHeaderCellsOfRow($body);
         }
         if ($footer !== null) {
-            $this->fixBodyOrFooter($footer);
+            $this->associateDataCellsWithHeaderCellsOfRow($footer);
         }
     }
 
