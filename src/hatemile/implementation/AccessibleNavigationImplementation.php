@@ -64,14 +64,14 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
 
     /**
      * The id of list element that contains the links for the headings, before
-     * the whole page.
+     * the whole content of page.
      * @var string
      */
     const ID_CONTAINER_HEADING_BEFORE = 'container-heading-before';
 
     /**
      * The id of list element that contains the links for the headings, after
-     * the whole page.
+     * the whole content of page.
      * @var string
      */
     const ID_CONTAINER_HEADING_AFTER = 'container-heading-after';
@@ -462,7 +462,7 @@ class AccessibleNavigationImplementation implements AccessibleNavigation
     }
 
     /**
-     * Inform if the headings of page are sintatic correct.
+     * Check that the headings of page are sintatic correct.
      * @return bool True if the headings of page are sintatic correct or false
      * if not.
      */

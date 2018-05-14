@@ -71,8 +71,7 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
     const ID_CONTAINER_SHORTCUTS_AFTER = 'container-shortcuts-after';
 
     /**
-     * The HTML class of text of description of container of shortcuts
-     * descriptions.
+     * The HTML class of text of description of container shortcuts.
      * @var string
      */
     const CLASS_TEXT_SHORTCUTS = 'text-shortcuts';
@@ -1189,7 +1188,7 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
 
     /**
      * Returns the description of role.
-     * @param string role The role.
+     * @param string $role The role.
      * @return string The description of role.
      */
     protected function getRoleDescription($role)
@@ -1225,8 +1224,7 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
 
     /**
      * Returns the description of element.
-     * @param \hatemile\util\html\HTMLDOMElement $element The element with
-     * description.
+     * @param \hatemile\util\html\HTMLDOMElement $element The element.
      * @return string The description of element.
      */
     protected function getDescription(HTMLDOMElement $element)

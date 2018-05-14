@@ -63,7 +63,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
     protected $idGenerator;
 
     /**
-     * Initializes a new object that manipulate the accessibility of the tables
+     * Initializes a new object that improve the accessibility of associations
      * of parser.
      * @param \hatemile\util\html\HTMLDOMParser $parser The HTML parser.
      */
@@ -204,7 +204,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
     }
 
     /**
-     * Fix the table body or table footer.
+     * Associate the data cell with header cell of row.
      * @param \hatemile\util\html\HTMLDOMElement $element The table body or
      * table footer.
      */
@@ -239,7 +239,7 @@ class AccessibleAssociationImplementation implements AccessibleAssociation
     }
 
     /**
-     * Fix the table header.
+     * Set the scope of header cells of table header.
      * @param \hatemile\util\html\HTMLDOMElement $tableHeader The table header.
      */
     protected function fixHeader(HTMLDOMElement $tableHeader)
