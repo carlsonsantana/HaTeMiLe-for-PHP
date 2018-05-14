@@ -217,3 +217,10 @@ To generate the full API documentation of HaTeMiLe of PHP:
 ## Contributing
 
 If you want contribute with HaTeMiLe for PHP, read [contributing guidelines](CONTRIBUTING.md).
+
+## See also
+* [HaTeMiLe for CSS](https://github.com/hatemile/hatemile-for-css)
+* [HaTeMiLe for JavaScript](https://github.com/hatemile/hatemile-for-javascript)
+* [HaTeMiLe for Java](https://github.com/hatemile/hatemile-for-java)
+* [HaTeMiLe for Python](https://github.com/hatemile/hatemile-for-python)
+* [HaTeMiLe for Ruby](https://github.com/hatemile/hatemile-for-ruby)
