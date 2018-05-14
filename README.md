@@ -213,3 +213,7 @@ To generate the full API documentation of HaTeMiLe of PHP:
     $accessibleNavigation->provideNavigationByAllSkippers();
 
     echo $parser->getHTML();
+
+## Contributing
+
+If you want contribute with HaTeMiLe for PHP, read [contributing guidelines](CONTRIBUTING.md).
