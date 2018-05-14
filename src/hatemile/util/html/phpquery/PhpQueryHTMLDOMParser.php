@@ -173,7 +173,7 @@ class PhpQueryHTMLDOMParser implements HTMLDOMParser
 
     public function clearParser()
     {
-        pq('*')->remove();
+        \pq('*')->remove();
         $this->document = null;
     }
 }
