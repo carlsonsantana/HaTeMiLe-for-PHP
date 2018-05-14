@@ -34,13 +34,13 @@ require_once join(DIRECTORY_SEPARATOR, array(
     dirname(dirname(__FILE__)),
     'util',
     'css',
-    'StyleSheetParser.php'
+    'StyleSheetRule.php'
 ));
 require_once join(DIRECTORY_SEPARATOR, array(
     dirname(dirname(__FILE__)),
     'util',
-    'css',
-    'StyleSheetRule.php'
+    'html',
+    'HTMLDOMElement.php'
 ));
 require_once join(DIRECTORY_SEPARATOR, array(
     dirname(dirname(__FILE__)),
