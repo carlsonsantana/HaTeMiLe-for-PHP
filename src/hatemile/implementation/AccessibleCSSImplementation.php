@@ -452,7 +452,7 @@ class AccessibleCSSImplementation implements AccessibleCSS
         return (
             in_array(
                 $element->getTagName(),
-                AccessibleCSSImplementation::VALID_INHERIT_TAGS
+                AccessibleCSSImplementation::$VALID_INHERIT_TAGS
             )
             && (!$element->hasAttribute(CommonFunctions::DATA_IGNORE))
         );
@@ -469,7 +469,7 @@ class AccessibleCSSImplementation implements AccessibleCSS
     {
         return in_array(
             $element->getTagName(),
-            AccessibleCSSImplementation::VALID_TAGS
+            AccessibleCSSImplementation::$VALID_TAGS
         );
     }
 
@@ -1050,7 +1050,7 @@ class AccessibleCSSImplementation implements AccessibleCSS
                 if (
                     \preg_match(
                         AccessibleCSSImplementation
-                                ::REGULAR_EXPRESSION_SPEAK_AS,
+                                ::$REGULAR_EXPRESSION_SPEAK_AS,
                         $propertyValue
                     )
                 ) {
