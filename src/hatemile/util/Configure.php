@@ -63,7 +63,8 @@ class Configure
      * Adapted from {@link https://bit.ly/2HXPSDH}.
      * @return string[] The locales of user ordened by preference.
      */
-    protected function getLocales() {
+    protected function getLocales()
+    {
         // Parse the Accept-Language according to:
         // http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4
         $langParse = null;
@@ -123,7 +124,8 @@ class Configure
      * @return bool True if the configuration has the parameter or false if the
      * configuration not has the parameter.
      */
-    public function hasParameter($parameter) {
+    public function hasParameter($parameter)
+    {
         return array_key_exists($parameter, $this->parameters);
     }
 

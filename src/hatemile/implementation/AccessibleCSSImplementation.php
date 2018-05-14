@@ -801,7 +801,8 @@ class AccessibleCSSImplementation implements AccessibleCSS
      * Speak one letter at a time for each word for elements and descendants.
      * @param \hatemile\util\html\HTMLDOMElement $element The element.
      */
-    protected function speakAsSpellOutInherit(HTMLDOMElement $element) {
+    protected function speakAsSpellOutInherit(HTMLDOMElement $element)
+    {
         $this->reverseSpeakAs($element, 'spell-out');
 
         $this->isolateTextNode($element);

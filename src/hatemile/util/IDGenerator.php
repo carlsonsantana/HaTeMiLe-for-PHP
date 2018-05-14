@@ -41,7 +41,8 @@ class IDGenerator
      * Initializes a new object that generate ids for elements.
      * @param string $prefixPart A part of prefix id.
      */
-    public function __construct($prefixPart = null) {
+    public function __construct($prefixPart = null)
+    {
         if ($prefixPart === null) {
             $this->prefixId = 'id-hatemile-' . $this->getRandom() . '-';
         } else {
@@ -60,7 +61,8 @@ class IDGenerator
      * Returns the random prefix.
      * @return string The random prefix.
      */
-    protected function getRandom() {
+    protected function getRandom()
+    {
         return \md5(\uniqid(\rand(), true)) . \md5(\uniqid(\rand(), true));
     }
 
@@ -68,7 +70,8 @@ class IDGenerator
      * Generate a id for a element.
      * @param \hatemile\util\html\HTMLDOMElement $element The element.
      */
-    public function generateId(HTMLDOMElement $element) {
+    public function generateId(HTMLDOMElement $element)
+    {
         if (!$element->hasAttribute('id')) {
             $element->setAttribute(
                 'id',

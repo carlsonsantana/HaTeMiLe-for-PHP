@@ -42,7 +42,8 @@ class PHPCSSParserRule implements StyleSheetRule
      * @param \Sabberworm\CSS\RuleSet\DeclarationBlock $declarationBlock The
      * Sabberworm PHP CSS declaration block.
      */
-    public function __construct(DeclarationBlock $declarationBlock) {
+    public function __construct(DeclarationBlock $declarationBlock)
+    {
         $this->rule = $declarationBlock;
     }
 
