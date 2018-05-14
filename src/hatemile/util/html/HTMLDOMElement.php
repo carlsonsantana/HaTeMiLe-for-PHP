@@ -33,8 +33,8 @@ interface HTMLDOMElement extends HTMLDOMNode
     /**
      * Returns the value of a attribute.
      * @param string $name The name of attribute.
-     * @return string The value of the attribute, if the element not contains
-     * the attribute returns null.
+     * @return string The value of the attribute or null if the element not
+     * contains the attribute.
      */
     public function getAttribute($name);
 
@@ -52,7 +52,7 @@ interface HTMLDOMElement extends HTMLDOMNode
     public function removeAttribute($name);
 
     /**
-     * Returns if the element has an attribute.
+     * Check that the element has an attribute.
      * @param string $name The name of attribute.
      * @return bool True if the element has the attribute or false if the
      * element not has the attribute.
@@ -60,7 +60,7 @@ interface HTMLDOMElement extends HTMLDOMNode
     public function hasAttribute($name);
 
     /**
-     * Returns if the element has attributes.
+     * Check that the element has attributes.
      * @return bool True if the element has attributes or false if the element
      * not has attributes.
      */

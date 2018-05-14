@@ -24,7 +24,7 @@ use \hatemile\util\html\vanilla\VanillaHTMLDOMNode;
 
 /**
  * The VanillaHTMLDOMTextNode class is official implementation of
- * \hatemile\util\html\HTMLDOMTextNode for the DOMText.
+ * HTMLDOMTextNode for the DOMText.
  */
 class VanillaHTMLDOMTextNode extends VanillaHTMLDOMNode implements
     HTMLDOMTextNode
