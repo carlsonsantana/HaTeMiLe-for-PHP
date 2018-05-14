@@ -223,7 +223,7 @@ class AccessibleCSSImplementation implements AccessibleCSS
      * The regular expression to validate speak-as property.
      * @var string
      */
-    /*public static $REGULAR_EXPRESSION_SPEAK_AS = (
+    public static $REGULAR_EXPRESSION_SPEAK_AS = (
         '/^((normal)|(inherit)|(initial)|(digits)|(literal\\-punctuation)|' .
         '(no\\-punctuation)|(spell\\-out)|((digits) ((literal\\-punctuation)|' .
         '(no\\-punctuation)|(spell\\-out)))|(((literal\\-punctuation)|' .
@@ -238,7 +238,7 @@ class AccessibleCSSImplementation implements AccessibleCSS
         '(digits))|((spell\\-out) (digits) ((literal\\-punctuation)|' .
         '(no\\-punctuation)))|((spell\\-out) ((literal\\-punctuation)' .
         '|(no\\-punctuation)) (digits)))$/'
-    );*/
+    );
 
     /**
      * The HTML parser.
