@@ -1135,6 +1135,12 @@ class AccessibleDisplayScreenReaderImplementation implements AccessibleDisplay
         $this->ariaSortDescendingAfter = $configure->getParameter(
             'aria-sort-descending-after'
         );
+        $this->ariaSortOtherBefore = $configure->getParameter(
+            'aria-sort-other-before'
+        );
+        $this->ariaSortOtherAfter = $configure->getParameter(
+            'aria-sort-other-after'
+        );
         $this->listShortcutsAdded = false;
         $this->listShortcutsBefore = null;
         $this->listShortcutsAfter = null;
