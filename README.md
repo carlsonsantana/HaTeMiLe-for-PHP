@@ -48,7 +48,7 @@ use hatemile\util\html\phpquery\PhpQueryHTMLDOMParser;
 
 Instanciate the configuration, the parsers and solution classes and execute them:
 
-```java
+```php
 $configure = new Configure();
 
 $parser = new PhpQueryHTMLDOMParser($content);
